@@ -83,7 +83,7 @@
 <meta name="keywords" content="openssl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenSSL心脏滴血漏洞">
-<meta property="og:url" content="http://yoursite.com/2016/03/15/2016-03-15-ssl-heart/index.html">
+<meta property="og:url" content="http://lansheng.me/2016/03/15/2016-03-15-ssl-heart/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="OpenSSL心脏滴血漏洞 CVE-2014-0160 心脏出血漏洞（英语：Heartbleed bug），也简称为心血漏洞，是一个出现在加密程序库OpenSSL的程序错误，首次于2014年4月披露。该程序库广泛用于实现互联网的传输层安全（TLS）协议。只要使用的是存在缺陷的OpenSSL实例，无论是服务器还是客户端，都可能因此而受到攻击。此问题的原因是在实现TLS的心跳扩展时没有对输入进行适当验">
 <meta property="og:locale" content="default">
@@ -100,7 +100,7 @@
     root: '/',
     scheme: 'Mist',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/03/15/2016-03-15-ssl-heart/"/>
+  <link rel="canonical" href="http://lansheng.me/2016/03/15/2016-03-15-ssl-heart/"/>
 
 
 
@@ -243,10 +243,10 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/15/2016-03-15-ssl-heart/">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2016/03/15/2016-03-15-ssl-heart/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lanshenghao">
+      <meta itemprop="name" content="lankstra">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -428,6 +428,109 @@
 
         </div>
         
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lankstra</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TLS-SSL原理简介"><span class="nav-text">TLS/SSL原理简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#心脏滴血漏洞原理分析"><span class="nav-text">心脏滴血漏洞原理分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
       </div>
     </main>
 
@@ -437,7 +540,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">lanshenghao</span>
+  <span class="author" itemprop="copyrightHolder">lankstra</span>
 
   
 </div>
