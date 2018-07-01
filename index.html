@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -76,15 +76,9 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2018-06-27T02:48:41.122Z" itemprop="datePublished">5 days ago</time>
+            <time datetime="2018-06-27T02:48:41.122Z" itemprop="datePublished">Wed Jun 27 2018 10:48:41 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            a few seconds read (About 0 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
@@ -108,20 +102,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-12-30T16:00:00.000Z" itemprop="datePublished">6 months ago</time>
+            <time datetime="2017-12-30T16:00:00.000Z" itemprop="datePublished">Sun Dec 31 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            a few seconds read (About 18 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="linux-kernel-data-structure"><a href="#linux-kernel-data-structure" class="headerlink" title="linux kernel data structure"></a>linux kernel data structure</h2><h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><h3 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h3><h3 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h3><h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2>
+        <h2 id="linux-kernel-data-structure"><a href="#linux-kernel-data-structure" class="headerlink" title="linux kernel data structure"></a>linux kernel data structure</h2>
+        <p class="article-more-link">
+            <a href="/2017/12/31/2017-12-31-linux-data_struct/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -140,162 +131,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-12-23T16:00:00.000Z" itemprop="datePublished">6 months ago</time>
+            <time datetime="2017-12-23T16:00:00.000Z" itemprop="datePublished">Sun Dec 24 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            27 minutes read (About 4025 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="linux-kernel"><a href="#linux-kernel" class="headerlink" title="linux kernel"></a>linux kernel</h2><h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>进程就是处于执行期的程序（目标码存放在其某种存储介质上）但进程并不仅仅局限于一段可执行程序代码（Unix称其为代码段，text section）。通常进程还要包含其他资源，像打开的文件，挂起的信号，内核内部数据，处理器状态，一个或多个具有内存映射的内存地址空间及一个或多个执行线程（thread of execution）。</p>
-<p>执行线程（thread），是在进程中活动的对象。每个线程都拥有一个独立的程序计数器，进程栈和一组进程寄存器。内核调度的对象是线程，而不是进程。对linux而言，线程是一种特殊的进程。</p>
-<h4 id="进程描述符及任务结构"><a href="#进程描述符及任务结构" class="headerlink" title="进程描述符及任务结构"></a>进程描述符及任务结构</h4><p>内核把进程的列表存放在任务队列（task list）的双向循环链表中。链表中每一项都是类型为task_struct、成为进程描述符（process descriptor）的结构，该结构定义在&lt;linux/sched.h&gt;。</p>
-<p><img src="/images/task_struct.png" alt="task_struct"></p>
-<h5 id="分配进程描述符"><a href="#分配进程描述符" class="headerlink" title="分配进程描述符"></a>分配进程描述符</h5><p>linux通过slab分配器分配task_struct结构，这样可以达到对象复用和缓存着色（cache coloring）。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread_info</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">task</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">exec_domain</span> *<span class="title">exec_domain</span>;</span></span><br><span class="line">    __u32 flags;</span><br><span class="line">    __u32 status;</span><br><span class="line">    __u32 cpu;</span><br><span class="line">    <span class="keyword">int</span> preempt_count;</span><br><span class="line">    <span class="keyword">mm_segmemt_t</span> addr_limit;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">restart_block</span> <span class="title">restart_block</span>;</span></span><br><span class="line">    <span class="keyword">void</span> *sysenter_return;</span><br><span class="line">    <span class="keyword">int</span> uaccess_err;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h6 id="进程内核栈"><a href="#进程内核栈" class="headerlink" title="进程内核栈"></a>进程内核栈</h6><p><img src="/images/thread_info.png" alt="thread_info"></p>
-<h5 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h5><ul>
-<li>TASK_RUNNING（运行）</li>
-<li>TASK_INTERRUPTIBLE（可中断）</li>
-<li>TASK_UNINTERRUPTIBLE（不可中断）</li>
-<li>__TASK_TRACED  被其他进程跟踪的进程。</li>
-<li>__TASK_STOPPED（停止）</li>
-</ul>
-<p><img src="/images/process status change.png" alt="process status change"></p>
-<h5 id="进程上下文"><a href="#进程上下文" class="headerlink" title="进程上下文"></a>进程上下文</h5><p>可执行程序代码是进程的重要组成部分。这些代码从一个可执行文件载入到进程的地址空间执行。一般程序在用户空间执行。挡一个程序执行了系统调用或出发了某个异常，它就陷入了内核空间。此时，我们称内核“代表进程执行”并处于进程上下文中。在此上下文中current宏是有效的。除非在此间隙有更高优先级的进程需要执行并由调度器做出了相应调整，否则内核退出时，程序回复在用户空间会继续执行。</p>
-<h5 id="线程实现"><a href="#线程实现" class="headerlink" title="线程实现"></a>线程实现</h5><p>从linux内核角度，没有线程的概念。linux把所有的线程都当做进程来实现。线程仅仅被视为一个与其他进程共享某些资源的进程。每个线程都拥有唯一隶属于自己的task_struct，所以在内核中，它看起来就像是一个普通的进程（只是线程和其他一些进程共享某些资源，如地址空间）。</p>
-<h5 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h5><p>线程的创建和普通进程的创建类似，只不过在调用<code>clone()</code>的时候需要传递一些参数标志来指明需要共享的资源：</p>
-<p><code>clone(CLONE_VM | CLONE_FS |  CLONE_FILES | CLONE_SIGHAND, 0);</code></p>
-<p>上面的代码产生的结果和<code>fork()</code>差不多，只是父子俩共享地址空间、文件系统资源、文件描述符和信号处理程序。</p>
-<p>普通的<code>fork()</code>实现是：</p>
-<p><code>clone(SIGCHLD, 0);</code></p>
-<p>而<code>vfork()</code>的实现是：</p>
-<p><code>clone(CLONE_VFORK | CLONE_VM | SIGCHLD, 0);</code></p>
-<h5 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h5><p>内核线程（kernel thread）。内核线程和普通的进程间的区别在于内核线程没有独立的地址空间（实际上指向地址空间的mm指针被设置为NULL）。他们只在内核空间运行，不切换到用户空间。可以被调度，也可以被抢占。</p>
-<h5 id="进程终结"><a href="#进程终结" class="headerlink" title="进程终结"></a>进程终结</h5><p>进程调用<code>exit()</code>系统调用。—&gt;<code>do_exit()</code></p>
-<ol>
-<li>将task_struct标志成员置PF_EXITING</li>
-<li>调用del_timer_sync()</li>
-<li>如果进程记账开启，<code>do_exit()</code>会调用<code>acct_update_integrals()</code>输出记账信息</li>
-<li>调用<code>exit_mm()</code>释放进程占用的mm_struct</li>
-<li>调用<code>sem__exit()</code>。如果进程排队等待IPC信号，它则离开队列。</li>
-<li>调用<code>exit_files()</code> 、<code>exit_fs()</code>分别递减文件描述符、文件系统数据的引用计数。</li>
-<li>将task_struct的exit_code置为<code>exit()</code>提供的退出码</li>
-<li>调用<code>exit_notify()</code>向父进程发送信号，给子进程重新找养父，养父为线程组中的其他线程或者为init进程，并把进程状态（task_struct中exit_state）设置成EXIT_ZOMBIE</li>
-<li><code>do_exit()</code>调用<code>schedule()</code>切换到新的进程</li>
-</ol>
-<p>至此，进程相关的资源被释放掉，并处于EXIT_ZOMBIE状态。所占用的所有内存就是内核栈、thread_info和task_struct结构。存在的唯一目的就是向它的父进程提供信息。父进程检索到信息后，或者通知内核那是无关信息后，由进程所持有的剩余内存被释放，归还给系统使用。</p>
-<h5 id="删除进程描述符"><a href="#删除进程描述符" class="headerlink" title="删除进程描述符"></a>删除进程描述符</h5><p>在调用<code>do_exit()</code>之后，尽管线程已经僵死不能再运行，但系统保留了它的进程描述符，可以让系统有办法在子进程中介后仍能获取信息。因此，进程终结时所需的清理工作和进程描述符的删除被分开执行。在父进程获得以终结的子进程信息后，或者内核通知并不关注信息后，子进程的task_struct结构才被释放。</p>
-<p><code>wait()</code>一族函数都是通过系统调用<code>wait4()</code>来实现的。挂起调用他的进程，直到其中一个子进程退出，此时函数会返回该子进程的PID。此外，调用该函数时提供的指针会包含子函数退出时的退出代码。</p>
-<p>当最终需要释放进程描述符时，<code>release_task()</code>会被调用：</p>
-<ol>
-<li>它调用<code>_exit_signal()</code>，该函数调用<code>_unhash_process()</code>，后者又调用<code>detach_pid()</code>从pidhash上删除该进程，同时也要从任务列表中删除该进程。</li>
-<li><code>_exit_signal()</code>释放目前僵死进程所使用的所有剩余资源并最终统计记录。</li>
-<li>如果这个进程是线程组最后一个进程，并且领头进程已经死掉，那么<code>release_task()</code>就通知僵死的领头进程的父进程。</li>
-<li><code>release_task()</code>调用<code>put_task_struct()</code>释放进程内核栈和<code>thread_info</code>结构所占的页，并释放<code>task_struct</code>所占的slab告诉缓存。</li>
-</ol>
-<h4 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h4><h5 id="多任务"><a href="#多任务" class="headerlink" title="多任务"></a>多任务</h5><p>非抢占式多任务（cooperative multitasking）、抢占式多任务（preemptive multitasking）。</p>
-<p>抢占（preemption）</p>
-<p>进程的时间片（timeslice）</p>
-<p>进程主动挂起自己：让步（yielding）</p>
-<h5 id="进程的优先级"><a href="#进程的优先级" class="headerlink" title="进程的优先级"></a>进程的优先级</h5><p>nice值，范围是从-20~+19，默认值为0；越大的nice值意味着更低的优先级。</p>
-<h5 id="公平调度"><a href="#公平调度" class="headerlink" title="公平调度"></a>公平调度</h5><p>完全公平调度（CFS）：进程调度的效果应如同系统具备一个理想的完美多任务处理器。在这种系统中，每个进程将能获得1/n的处理器时间 — n是指可运行进程的数量。</p>
-<p>允许每个进程运行一段时间、循环轮转、选择运行最少的进程作为下一个运行的进程。</p>
-<ul>
-<li><p>时间记账</p>
-</li>
-<li><p>进程选择</p>
-</li>
-<li><p>调度器入口</p>
-</li>
-<li><p>睡眠和唤醒</p>
-</li>
-</ul>
-<h5 id="时间记账"><a href="#时间记账" class="headerlink" title="时间记账"></a>时间记账</h5><p>系统分配一个时间片给每一个进程。每次系统时钟节拍发生时，时间片就会减少一个节拍周期。当一个进程的时间片被减少到0时，它就会被另一个尚未减到0的时间片可运行进程抢占。</p>
-<ol>
-<li>调度器实体结构&lt;linux/sched.h&gt;</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sched_entity</span> &#123;</span></span><br><span class="line">	<span class="comment">/* For load-balancing: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">load_weight</span>		<span class="title">load</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>			runnable_weight;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span>			<span class="title">run_node</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>		<span class="title">group_node</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span>			on_rq;</span><br><span class="line"></span><br><span class="line">	u64				exec_start;</span><br><span class="line">	u64				sum_exec_runtime;</span><br><span class="line">	u64				vruntime;</span><br><span class="line">	u64				prev_sum_exec_runtime;</span><br><span class="line"></span><br><span class="line">	u64				nr_migrations;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sched_statistics</span>		<span class="title">statistics</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>调度器实体结构作为一个名为se的成员变量，嵌入进程描述符struct task_struct内。</p>
-<ol start="2">
-<li>虚拟实时</li>
-</ol>
-<p><code>vruntime</code>变量存放进程的虚拟运行时间（ns）。</p>
-<p>cfs_rq（cfs的run queue）中的每一个进程都有一个虚拟时钟记录，vruntime。如果一个进程得以执行，随着时间的增长（也就是系统时钟一个个tick的到来），其vruntime将不断增大。没有得到执行的进程vruntime不变。</p>
-<p>调度器总是选择vruntime跑得最慢的那个进程来执行。为了区别优先级，优先级高的进程vruntime增长的慢。</p>
-<p><code>分配给进程的运行时间=调度周期*进程权重/所有进程权重之和</code></p>
-<p>调度周期：将所有处于TASK_RUNNING的进程都调度一遍的时间。</p>
-<p>举例：进程A、B，权重为1、2，调度周期为30ms，分配给A的CPU时间为：30ms*(1/(1+2))=10ms</p>
-<p><code>vruntime=实际运行时间*NICE_0_LOAD/进程权重</code></p>
-<h5 id="进程选择"><a href="#进程选择" class="headerlink" title="进程选择"></a>进程选择</h5><p>CFS使用红黑树来组织可运行进程队列，并利用其迅速找到最小vruntime值得进程。（红黑树最左侧的节点）</p>
-<p>新进程vruntime的选择：每个CPU的运行队列cfs_rq都维护一个min_vruntime，记录该队列中所有进程的vruntime最小值，新进程的初始vruntime值以此队列中的min_vruntime为基础设置。</p>
-<p>sched_child_runs_first:规定fork之后让子进程先于父进程运行；</p>
-<p>sched_features的START_DEBIT位：规定新进程的第一次运行要有延迟。</p>
-<p>子进程在创建时，vruntime初值为min_vruntime；然后如果sched_features中设置了START_DEBIT位，vruntime会在min_vruntime的基础上增大一些。设置完子进程的vruntime后，检查sched_child_runs_first参数，如果为1，就比较父进程和子进程的vruntime，如果父进程的vruntime小，就对换父子进程的vruntime，保证子进程先于父进程运行。</p>
-<h5 id="调度器入口"><a href="#调度器入口" class="headerlink" title="调度器入口"></a>调度器入口</h5><p>schedule()</p>
-<h5 id="睡眠与唤醒"><a href="#睡眠与唤醒" class="headerlink" title="睡眠与唤醒"></a>睡眠与唤醒</h5><h4 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h4><p>内核提供了用户进程与内核进行交互的一组接口。（Linux中常称为syscall）<img src="/images/syscall.png" alt="syscall"></p>
-<p>通知内核的机制是靠软中断实现的：通过引发一个异常来促使系统切换到内核态去执行异常处理程序。x86系统上预定义的软中断时中断号128，通过int 0x80指令触发该中断，系统切换到内核态并执行第128号异常处理程序，这个处理程序叫syscall()。</p>
-<p><code>copy_to_user()</code></p>
-<p><code>copy_from_user()</code></p>
-<h5 id="系统调用上下文"><a href="#系统调用上下文" class="headerlink" title="系统调用上下文"></a>系统调用上下文</h5><p>内核在执行系统调用的时候处于进程上下文。current指针指向当前任务，即引发系统调用的那个进程。</p>
-<h4 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h4><h5 id="页"><a href="#页" class="headerlink" title="页"></a>页</h5><p>内核把物理页作为内存管理的基本单元。内存管理单元(MMU)通常以页为单位进行处理。从虚拟内存角度来看，页是最小单位。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">page</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> flags; <span class="comment">//页的状态，是否为脏，是否锁定。</span></span><br><span class="line">    <span class="keyword">atomic_t</span> _count; <span class="comment">//页的引用计数。</span></span><br><span class="line">    <span class="keyword">atomic_t</span> _mapcount;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">private</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">address_space</span> *<span class="title">mapping</span>;</span></span><br><span class="line">    <span class="keyword">pgoff_t</span> index;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">lru</span>;</span></span><br><span class="line">    <span class="keyword">void</span> *<span class="keyword">virtual</span>; <span class="comment">//页的虚拟地址。</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h5 id="区"><a href="#区" class="headerlink" title="区"></a>区</h5><ul>
-<li>ZONE_DMA</li>
-<li>ZONE_DMA32</li>
-<li>ZONE_NORMAL</li>
-<li>ZONE_HIGHMEM</li>
-</ul>
-<h5 id="slab层"><a href="#slab层" class="headerlink" title="slab层"></a>slab层</h5><h4 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h4><p>虚拟文件系统（VFS），作为内核子系统，为用户空间提供了文件和文件系统相关的接口。</p>
-<h5 id="目录模型"><a href="#目录模型" class="headerlink" title="目录模型"></a>目录模型</h5><p><img src="/images/dir.jpg" alt="dir"></p>
-<h5 id="VFS层次"><a href="#VFS层次" class="headerlink" title="VFS层次"></a>VFS层次</h5><p>VFS（Virtual Filesystem Switch）</p>
-<p><img src="/images/layers.jpg" alt="layers"></p>
-<h5 id="VFS的概念"><a href="#VFS的概念" class="headerlink" title="VFS的概念"></a>VFS的概念</h5><p>VFS中有四个主要对象类型：</p>
-<ul>
-<li>superblock：代表一个具体的已安装文件系统</li>
-<li>inode：代表一个具体的文件（VFS中有inode概念，文件系统中也有inode概念）</li>
-<li>dentry：代表一个目录项，文件目录中的一个点，可以是目录也可以是文件</li>
-<li>file object：代表由进程打开的文件</li>
-</ul>
-<p>VFS将目录作为一个文件来处理，所以不存在目录对象。目录项不同于目录，但目录是另一种形式的文件。</p>
-<h5 id="superblock"><a href="#superblock" class="headerlink" title="superblock"></a>superblock</h5><p>超级块对象：各文件系统都必须实现超级块对象，用于存储特定文件系统的信息，对应于存放在磁盘特定扇区中的文件系统超级块获文件系统控制块。</p>
-<h5 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h5><p>索引节点对象：包含了内核在操作文件或目录时需要的全部信息。（除文件名）</p>
-<ul>
-<li>文件的字节数</li>
-<li>文件拥有者的User ID</li>
-<li>文件的Group ID</li>
-<li>文件的读、写、执行权限</li>
-<li>文件的时间戳，共有三个：<ul>
-<li>ctime指inode上一次变动的时间</li>
-<li>mtime指文件内容上一次变动的时间</li>
-<li>atime指文件上一次打开的时间</li>
-</ul>
-</li>
-<li>链接数，即有多少文件名指向这个inode</li>
-<li>文件数据block的位置</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stat</span> file.txt</span><br><span class="line">ls -i file.txt</span><br></pre></td></tr></table></figure>
-<h5 id="dentry"><a href="#dentry" class="headerlink" title="dentry"></a>dentry</h5><p>目录项对象：所包含文件的文件名，以及该文件名对应的inode号。</p>
-<p>目录文件的读权限（r）和写权限（w），都是针对目录文件本身。目录文件内只有文件名和inode号，所以只有读权限（r），只能获取文件名，无法获取其他信息，因为其他信息存储在inode节点中，而读取inode节点内的信息需要目录文件的执行权限（x）。</p>
-<h5 id="硬链接与软链接"><a href="#硬链接与软链接" class="headerlink" title="硬链接与软链接"></a>硬链接与软链接</h5><p>硬链接实际上是dentry项的一个拷贝，它们都指向同一个inode节点。inode链接数记录了hard link指向的计数。新增一个硬链接，会增加inode信息中的链接数，删除一个硬链接，则减少。在创建目录时，会生成当前目录和父目录”.” “..”。前者的inode号码就是当前目录的inode号码，后者为父目录的inode号码。</p>
-<p><code>ln 源文件 目标文件</code></p>
-<p><img src="/images/hard_link.jpg" alt="hard_link"></p>
-<p>软链接（symbolic link）类似于windows中的快捷方式。软链接与源文件inode号不一样，但是软链接中的内容是源文件的路径。读取软链接时，系统会自动导向源文件。</p>
-<p><code>ln -S 源文件 目标文件</code></p>
-<h5 id="进程对文件的管理"><a href="#进程对文件的管理" class="headerlink" title="进程对文件的管理"></a>进程对文件的管理</h5><p>进程描述符task_struct中有两个与文件相关的变量：fs与files。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/* Filesystem information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span>		*<span class="title">fs</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Open file information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span>		*<span class="title">files</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> users; <span class="comment">//用户数目</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> lock;  <span class="comment">//保护该结构体的锁</span></span><br><span class="line">	<span class="keyword">seqcount_t</span> seq;</span><br><span class="line">	<span class="keyword">int</span> umask; <span class="comment">//掩码</span></span><br><span class="line">	<span class="keyword">int</span> in_exec; <span class="comment">//当前正在执行的文件</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">path</span> <span class="title">root</span>, <span class="title">pwd</span>;</span> <span class="comment">//根目录路径、当前工作目录路径</span></span><br><span class="line">&#125; __randomize_layout;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> &#123;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * read mostly part</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">atomic_t</span> count;</span><br><span class="line">	<span class="keyword">bool</span> resize_in_progress;</span><br><span class="line">	<span class="keyword">wait_queue_head_t</span> resize_wait;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> __<span class="title">rcu</span> *<span class="title">fdt</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> <span class="title">fdtab</span>;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * written part on a separate cache line in SMP</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> file_lock ____cacheline_aligned_in_smp;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> next_fd;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> close_on_exec_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> open_fds_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> full_fds_bits_init[<span class="number">1</span>];</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file</span> __<span class="title">rcu</span> * <span class="title">fd_array</span>[<span class="title">NR_OPEN_DEFAULT</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>files_struct结构体由进程描述符files指向。fd_array数组指针指向已打开的文件对象。如果一个进程所打开文件超过NR_OPEN_DEFAULT，内核将分配一个新数组，并将fdt指向它。</p>
-<p>fs_struct由进程描述符中fs指向。</p>
-<h4 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h4><p>内存描述符mm_struct。</p>
-<h5 id="虚拟内存区域"><a href="#虚拟内存区域" class="headerlink" title="虚拟内存区域"></a>虚拟内存区域</h5><p>vm_area_struct (Virtual memory areas, VMAs)</p>
-<p><img src="/images/address_space.gif" alt="address_space"></p>
-
+        <h2 id="linux-kernel"><a href="#linux-kernel" class="headerlink" title="linux kernel"></a>linux kernel</h2>
+        <p class="article-more-link">
+            <a href="/2017/12/24/2017-12-24-linux-kernel/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -314,48 +160,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-11-11T16:00:00.000Z" itemprop="datePublished">8 months ago</time>
+            <time datetime="2017-11-11T16:00:00.000Z" itemprop="datePublished">Sun Nov 12 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            7 minutes read (About 1030 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><h4 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.节点是红色或黑色</span><br><span class="line">2.根是黑色</span><br><span class="line">3.所有叶子都是黑色（叶子是NIL节点）</span><br><span class="line">4.从每个叶子到根的所有路径上不能有两个连续的红色节点 *</span><br><span class="line">5.从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点 *</span><br></pre></td></tr></table></figure>
-<p>这是一颗红黑树：</p>
-<p><img src="/images/rbtree.png" alt=""></p>
-<h4 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h4><p>红黑树也是二叉查找树，因此查找操作与普通二叉查找树操作相同。红黑树插入和删除操作会导致不再匹配红黑树性质，需要进行颜色变更和旋转调整红黑树，使其恢复性质。</p>
-<h4 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1）如果是空树则插入根节点并标黑，结束</span><br><span class="line">2）树不为空，插入节点后标红</span><br><span class="line">	a）如果插入节点的父节点是黑色，结束</span><br><span class="line">	b）插入节点的父节点是红色（违反性质4）</span><br><span class="line">		1.叔父节点是黑色或NIL，旋转操作，重新着色，结束</span><br><span class="line">		2.叔父节点是红色，将父节点和叔父节点染黑，祖父节点染红，并重新检查</span><br></pre></td></tr></table></figure>
-<p>我们分析当插入节点N后，父节点为红色时的情况。（违背红黑树性质4）</p>
-<p>1.叔父节点是红色。将父节点和叔父节点染黑，祖父节点染红，从祖父节点检查是否违背性质4，递归进行 1) 2)</p>
-<p><img src="/images/u-red.png" alt=""></p>
-<p>2.叔父节点是黑色（或NIL），插入节点是其父节点的右儿子。对P、N进行左旋操作。进行3)</p>
-<p><img src="/images/u-black.png" alt=""></p>
-<p>3.叔父节点是黑色（或NIL），插入节点是其父节点的左儿子。对G、P进行右旋操作，P、G颜色对换。</p>
-<p><img src="/images/u-black2.png" alt=""></p>
-<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1）如果要删除的节点有两个非空儿子，可以转换成有0个或1个非空子节点</span><br><span class="line">2）如果删除节点是红色，则删除(路径上黑色节点数不变，不影响红黑树性质)</span><br><span class="line">3）如果删除节点是黑色带红色子节点，则删黑色节点，子节点替代被删节点并染黑</span><br><span class="line">4）如果删除节点是黑色并且儿子节点为黑色--&gt;复杂情况</span><br></pre></td></tr></table></figure>
-<p>1) 2) 3)的操作较简单。</p>
-<p>对于情况4），将节点删除后用黑色子节点替换，此时如果要保持路径上黑节点数不变，可以认为该节点带有双重黑色的性质，称为<em>双黑</em>。</p>
-<p>(假设图中1 2 3 4 5 6节点为NIL，删除N节点后用NIL替换，并带有双重黑色)</p>
-<p><img src="/images/rb_delete.png" alt=""></p>
-<p>下面讨论情况4）的N节点删除：</p>
-<p>1.当兄弟节点S为红色。对P、S节点进行左旋，对换颜色。此时尚未完成，后续需要继续调整3 4 5。</p>
-<p><img src="/images/rb_delete2.png" alt=""></p>
-<p>2.N的父亲、兄弟和侄子都是黑色。这种情况需要将兄弟节点S染红，P变为双重黑色节点，向上传递。</p>
-<p><img src="/images/rb_delete3.png" alt=""></p>
-<p>3.N的父节点为红色，兄弟节点及侄子节点都为黑色。这种情况需要交换P和S的颜色，并不影响不通过N的路径上黑色节点的数量，但在N的路径上增加了一个黑色节点，补充了被删除的黑色节点，此时N的双重黑色可以去掉。</p>
-<p><img src="/images/rb_delete4.png" alt=""></p>
-<p>4.兄弟节点是黑色，近侄节点为红，远侄节点为黑。这种情况对SL和S做右旋转，交换颜色。此时所有路径黑色节点数不变，后续情形5.</p>
-<p><img src="/images/rb-delete5.png" alt=""></p>
-<p>5.兄弟节点为黑色，远侄节点为红色。这种情况下对P、S进行左旋转，交换颜色，并染黑S右节点（旋转前的远侄节点）</p>
-<p><img src="/images/rb-delete6.png" alt=""></p>
-
+        <p class="article-more-link">
+            <a href="/2017/11/12/red-black-tree/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -374,148 +189,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-09-20T16:00:00.000Z" itemprop="datePublished">9 months ago</time>
+            <time datetime="2017-09-20T16:00:00.000Z" itemprop="datePublished">Thu Sep 21 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            7 minutes read (About 1114 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="x86-64汇编"><a href="#x86-64汇编" class="headerlink" title="x86_64汇编"></a>x86_64汇编</h3><p>x86_64汇编简介</p>
-<h3 id="AT-amp-T与Intel汇编代码格式"><a href="#AT-amp-T与Intel汇编代码格式" class="headerlink" title="AT&amp;T与Intel汇编代码格式"></a>AT&amp;T与Intel汇编代码格式</h3><p>在unix与linux系统中，更多采用了AT&amp;T格式的汇编。两者区别：  </p>
-<ol>
-<li>AT&amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。  </li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>AT&amp;T格式</th>
-<th>Intel格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pushl %eax</td>
-<td>push eax</td>
-</tr>
-</tbody>
-</table>
-<ol start="2">
-<li>在AT&amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要加前缀。</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">AT&amp;T格式</th>
-<th style="text-align:left">Intel格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">pushl $1</td>
-<td style="text-align:left">push 1</td>
-</tr>
-</tbody>
-</table>
-<ol start="3">
-<li>AT&amp;T 和 Intel 格式中的源操作数和目标操作数的位置正好相反。在 Intel 汇编格式中，目标操作数在源操作数的左边；而在 AT&amp;T 汇编格式中，目标操作数在源操作数的右边。例如：</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">AT&amp;T 格式</th>
-<th style="text-align:left">Intel格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">addl $1, %eax</td>
-<td style="text-align:left">add eax, 1</td>
-</tr>
-</tbody>
-</table>
-<ol start="4">
-<li>在 AT&amp;T 汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀’b’、’w’、’l’分别表示操作数为字节（byte，8 比特）、字（word，16 比特）和长字（long，32比特）；而在 Intel 汇编格式中，操作数的字长是用 “byte ptr” 和 “word ptr” 等前缀来表示的。例如：  </li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">AT&amp;T 格式</th>
-<th style="text-align:left">Intel格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">movb val, %al</td>
-<td style="text-align:left">mov al, byte ptr val</td>
-</tr>
-</tbody>
-</table>
-<ol start="5">
-<li>在 AT&amp;T 汇编格式中，内存操作数的寻址方式是<br><code>section:disp(base, index, scale)</code><br>而在 Intel 汇编格式中，内存操作数的寻址方式为：<br><code>section:[base + index*scale + disp]</code><br>由于 Linux 工作在保护模式下，用的是 32 位线性地址，所以在计算地址时不用考虑段基址和偏移量，而是采用如下的地址计算方法：<br><code>disp + base + index * scale</code>  </li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">AT&amp;T 格式</th>
-<th style="text-align:left">Intel格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">movl -4(%ebp), %eax</td>
-<td style="text-align:left">mov eax, [ebp - 4]</td>
-</tr>
-<tr>
-<td style="text-align:left">movl array(, %eax, 4), %eax</td>
-<td style="text-align:left">mov eax, [eax*4 + array]</td>
-</tr>
-<tr>
-<td style="text-align:left">movw array(%ebx, %eax, 4), %cx</td>
-<td style="text-align:left">mov cx, [ebx + 4*eax + array]</td>
-</tr>
-<tr>
-<td style="text-align:left">movb $4, %fs:(%eax)</td>
-<td style="text-align:left">mov fs:eax, 4</td>
-</tr>
-</tbody>
-</table>
-<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>X84中原有8个32位通用寄存器%eax，%ebx，%ecx，%edx，%esi，%edi，%ebp，%esp, 在X86_64中<br>分别被扩展为64位，并且多了8个寄存器。因此X86_64的寄存器如下：</p>
-<ul>
-<li>rax, eax, ax, ah, al;</li>
-<li>rbx, ebx, bx, bh, bl;</li>
-<li>rcx, ecx, cx, ch, cl;</li>
-<li>rdx, edx, dx, dh, dl;</li>
-<li>rsi, esi, si;</li>
-<li>rdi, edi, di;</li>
-<li>rbp, ebp;</li>
-<li>rsp, esp;</li>
-<li>r8-r15;</li>
-</ul>
-<p>GCC中对这些寄存器的调用规则如下：</p>
-<ul>
-<li>%rax 作为函数返回值使用。</li>
-<li>%rsp 栈指针寄存器，指向栈顶</li>
-<li>%rdi，%rsi，%rdx，%rcx，%r8，%r9 用作函数参数，依次对应第1参数，第2参数。。。</li>
-<li>%rbx，%rbp，%r12，%r13，%14，%15 用作数据存储，遵循被调用者使用规则，简单说就是随便用，调用子函数之前要备份它，以防他被修改</li>
-<li>%r10，%r11 用作数据存储，遵循调用者使用规则，简单说就是使用之前要先保存原值</li>
-</ul>
-<div style="text-align:center"><br><img src="/images/register_map.png" width="50%"><br></div>  
-
-<h3 id="栈桢结构与函数调用"><a href="#栈桢结构与函数调用" class="headerlink" title="栈桢结构与函数调用"></a>栈桢结构与函数调用</h3><p>C语言属于面向过程语言，他最大特点就是把一个程序分解成若干过程（函数），比如：入口函数是main，然后调用各个子函数。在对应机器语言中，GCC把过程转化成栈帧（frame），简单的说，每个栈帧对应一个过程。X86-32典型栈帧结构中，由%ebp指向栈帧开始，%esp指向栈顶。  </p>
-<div style="text-align:center"><br><img src="/images/stack_frame.png" width="50%"><br></div>  
-
-<p>举个例子:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = i + j;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sum=%d\n"</span>, a+b);</span><br><span class="line">    <span class="keyword">return</span> (a+b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    foo(a, b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">6</span>;</span><br><span class="line">    bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>main:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _main</span><br><span class="line">_main proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="number">0</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="number">5</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="number">6</span></span><br><span class="line"><span class="keyword">call</span>    _bar</span><br><span class="line"><span class="keyword">xor</span>     <span class="built_in">eax</span>, <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line"></span><br><span class="line">_main endp</span><br><span class="line"></span><br><span class="line">__text ends</span><br></pre></td></tr></table></figure></p>
-<p>foo:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _foo</span><br><span class="line">_foo proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_14= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">14h</span></span><br><span class="line">var_10= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">10h</span></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">20h</span></span><br><span class="line"><span class="keyword">lea</span>     <span class="built_in">rax</span>, aSumD      <span class="comment">; "sum=%d\n"</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="built_in">edi</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_4]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_8]</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_10], <span class="number">2</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_C]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_10]</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rdi</span>, <span class="built_in">rax</span>        <span class="comment">; char *</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">al</span>, <span class="number">0</span></span><br><span class="line"><span class="keyword">call</span>    _printf</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_C]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_10]</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_14], <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">eax</span>, <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">20h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line">_foo endp</span><br></pre></td></tr></table></figure></p>
-<p>bar:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _bar</span><br><span class="line">_bar proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="number">1</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="number">2</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">edi</span>, [<span class="built_in">rbp</span>+var_4]</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_8]</span><br><span class="line"><span class="keyword">call</span>    _foo</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line">_bar endp</span><br></pre></td></tr></table></figure></p>
-
+        <h3 id="x86-64汇编"><a href="#x86-64汇编" class="headerlink" title="x86_64汇编"></a>x86_64汇编</h3><p>x86_64汇编简介<br>
+        <p class="article-more-link">
+            <a href="/2017/09/21/2017-09-21-x86-assembly/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -534,57 +218,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-08-05T16:00:00.000Z" itemprop="datePublished">a year ago</time>
+            <time datetime="2017-08-05T16:00:00.000Z" itemprop="datePublished">Sun Aug 06 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            3 minutes read (About 495 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="socks5协议介绍"><a href="#socks5协议介绍" class="headerlink" title="socks5协议介绍"></a>socks5协议介绍</h3><p>socks5协议比较简单，<a href="https://www.ietf.org/rfc/rfc1928.txt" target="_blank" rel="noopener">rfc1928</a> 只有9页。socks5协议是常见的代理协议之一，几乎所有浏览器都支持socks5协议。</p>
-<h3 id="握手阶段"><a href="#握手阶段" class="headerlink" title="握手阶段"></a>握手阶段</h3><p>客户端与服务器在握手阶段协商认证方式，如采用用户名/密码方式，或者不采用认证方式。<br>客户端发送的消息结构如下（数字表示占用字节数）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+----------+</span><br><span class="line">|VER | NMETHODS | METHODS  |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| 1  |    1     |  1~255   |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><code>VER</code>表示当前协议版本号，也就是<code>5</code></li>
-<li><code>NMETHODS</code>表示<code>METHODS</code>字段占用的字节数</li>
-<li><code>METHODS</code>表示客户端支持的所有认证方式，每一个字节表示一种认证方式</li>
-</ul>
-<p>服务器收到客户端的协商请求后，会检查服务器支持的认证方式，并回复客户端消息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+--------+</span><br><span class="line">|VER | METHOD |</span><br><span class="line">+----+--------+</span><br><span class="line">| 1  |   1    |</span><br><span class="line">+----+--------+</span><br></pre></td></tr></table></figure></p>
-<p>无认证的协商握手阶段流程举例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">client -&gt; server: 0x05 0x01 0x00</span><br><span class="line">server -&gt; client: 0x05 0x00</span><br></pre></td></tr></table></figure></p>
-<h3 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a>建立连接</h3><p>握手完成后，客户端会向服务器发起请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-----+-------+------+----------+----------+</span><br><span class="line">|VER | CMD |  RSV  | ATYP | DST.ADDR | DST.PORT |</span><br><span class="line">+----+-----+-------+------+----------+----------+</span><br><span class="line">| 1  |  1  |   1   |  1   | Variable |    2     |</span><br><span class="line">+----+-----+-------+------+----------+----------+</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><code>CMD</code>: 是<code>command</code>的缩写<ul>
-<li><code>0x01</code>: 表示建立TCP连接</li>
-<li><code>0x03</code>: 关联UDP请求</li>
-</ul>
-</li>
-<li><code>RSV</code>: 保留字段，值为<code>0x00</code></li>
-<li><code>ATYP</code>: 表示<code>address type</code>，取值<ul>
-<li><code>0x01</code>: IPv4</li>
-<li><code>0x03</code>: 域名</li>
-<li><code>0x04</code>: IPv6</li>
-</ul>
-</li>
-<li><code>DST.ADDR</code> :<code>destination address</code> 的缩写，取值随 <code>ATYP</code> 变化：<ul>
-<li><code>ATYP == 0x01</code>：4 个字节的 IPv4 地址</li>
-<li><code>ATYP == 0x03</code>：1 个字节表示域名长度，紧随其后的是对应的域名</li>
-<li><code>ATYP == 0x04</code>：16 个字节的 IPv6 地址</li>
-</ul>
-</li>
-<li><code>DST.PORT</code> 字段：目的服务器的端口。</li>
-</ul>
-<p>收到客户端请求后，服务器回应消息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-----+-------+------+----------+----------+</span><br><span class="line">|VER | REP |  RSV  | ATYP | BND.ADDR | BND.PORT |</span><br><span class="line">+----+-----+-------+------+----------+----------+</span><br><span class="line">| 1  |  1  |   1   |  1   | Variable |    2     |</span><br><span class="line">+----+-----+-------+------+----------+----------+</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><code>REP</code> 字段：用以告知客户端请求处理情况。</li>
-<li>其它字段和请求中字段的取值类型一样。</li>
-</ul>
-<h3 id="传输阶段"><a href="#传输阶段" class="headerlink" title="传输阶段"></a>传输阶段</h3><p>socks5协议在完成握手和建立连接之后，就只做简单的转发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">client &lt;- 握手 -&gt; server</span><br><span class="line">client &lt;- 建立连接 -&gt; server</span><br><span class="line">client &lt;- 传输 -&gt; server &lt;- 传输 -&gt; destination</span><br></pre></td></tr></table></figure></p>
-
+        <h3 id="socks5协议介绍"><a href="#socks5协议介绍" class="headerlink" title="socks5协议介绍"></a>socks5协议介绍</h3><p>socks5协议比较简单，<a href="https://www.ietf.org/rfc/rfc1928.txt" target="_blank" rel="noopener">rfc1928</a> 只有9页。socks5协议是常见的代理协议之一，几乎所有浏览器都支持socks5协议。<br>
+        <p class="article-more-link">
+            <a href="/2017/08/06/2017-08-06-sock5-proto/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -603,35 +247,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-06-14T16:00:00.000Z" itemprop="datePublished">a year ago</time>
+            <time datetime="2017-06-14T16:00:00.000Z" itemprop="datePublished">Thu Jun 15 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            5 minutes read (About 754 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络中最基本的成分是神经元(neuron)模型。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的点位；如果某神经元的点位超过了一个“阈值”(threshold)，那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。  </p>
-<h3 id="M-P神经元模型"><a href="#M-P神经元模型" class="headerlink" title="M-P神经元模型"></a>M-P神经元模型</h3><p>神经元接收到来自$n$个其他神经元传递过来的输入信号$x_i$，这些输入信号通过带权重$w_i$的连接进行传递，神经元接收到的总输入值将与神经元的阈值进行比较，然后通过激活函数处理以产生神经元的输出。  </p>
-<div style="text-align:center"><br><img src="/images/neuron.png" width="50%"><br>$$y = f(\sum_{i=1}^nw_ix_i - θ)$$<br></div>
-
-<h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>阶跃函数</p>
-<div style="text-align:center"><br>$$f(x) = \begin{cases} 1, &amp; x \geq 0 \\<br>0, &amp; x &lt; 0 \\<br>\end{cases} $$<br></div><br>单极性sigmoid函数<br><div style="text-align:center">$$f(x) = \frac{1}{1+e^{-x}}$$</div><br>双极性sigmoid函数<br><div style="text-align:center">$$f(x) = tanh(x) = \frac{1 - e^{-x}}{1+e^{-x}}$$</div>
-
-<h3 id="感知机与多层网络"><a href="#感知机与多层网络" class="headerlink" title="感知机与多层网络"></a>感知机与多层网络</h3><p><div style="text-align:center"><img src="/images/perceptron.png" width="50%"></div><br>感知机(Perceptron)由两层神经元组成，输入层接收外部输入信号后传递给输出层，输出层是M-P神经元。<br>感知机能容易地实现逻辑与、或、非运算。感知机的输出$y=f(\sum_{i}w_ix_i-θ)$，假定$f$是阶跃函数，有</p>
-<ul>
-<li>与运算$(x_1∩x_2)$:令$w_1=w_2=1,θ=2$,则$y=f(1\cdot x_1+1\cdot x_2-2)$,仅在$x_1=x_2=1$时，$y=1$;</li>
-<li>或运算$(x_1∪x_2)$:令$w_1=w_2=1,θ=0.5$,则$y=f(1\cdot x_1+1\cdot x_2-0.5)$,当$x_1=1$或$x_2=1$时，$y=1$;</li>
-<li>非运算$(┐x_1)$:令$w_1=-0.6,w_2=0,θ=-0.5$,则$y=f(-0.6\cdot x_1+0\cdot x_2+0.5)$,当$x_1=1$时，$y=0$;当$x_1=0$时，$y=1$.</li>
-</ul>
-<p>当给定训练数据集，权重$w_i(i=1,2,….,n)$以及阈值$θ$可以通过学习得到。对于训练样例$(\textbf{x},y)$,若当前感知机的输出为$\hat{y}$,则感知机权重的调整为:<br>$$w_i←w_i+Δw_i$$ $$Δw_i=\eta(y-\hat{y})x_i$$<br>其中$\eta\in(0,1)$称为学习率(learning rate).<br>要解决非线性可分问题，需要考虑使用多层功能神经元。输出层与输入层之间的一层神经元，被称为隐层或隐含层(hidden layer),隐含层和输出层神经元都是拥有激活函数的功能神经元。  </p>
-<h3 id="误差逆传播算法"><a href="#误差逆传播算法" class="headerlink" title="误差逆传播算法"></a>误差逆传播算法</h3><p>多层网络的学习能力比单层感知机强很多，要训练多层网络，需要更强大的学习算法。误差逆传播（error BackPropagation,简称BP）算法就是典型。现实任务中使用神经网络时，大多是在使用BP算法进行训练。<br>给定训练集$D={(x_1,y_1),(x_2,y_2),…,(x_m,y_m)},x_i∈R^d,y_i∈R^l$,即输入实例由d各属性描述，输出l维实值向量。</p>
-
+        <h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络中最基本的成分是神经元(neuron)模型。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的点位；如果某神经元的点位超过了一个“阈值”(threshold)，那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。<br>
+        <p class="article-more-link">
+            <a href="/2017/06/15/2017-06-15-neural-net/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -650,43 +276,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">Tue Oct 11 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            6 minutes read (About 831 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。</p>
-<p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDAB ABCDABCDABDE”<br>pat[] = “ABCDABD”<br>Output: Pattern found at index 15</p>
-<h3 id="1-部分匹配表"><a href="#1-部分匹配表" class="headerlink" title="1.部分匹配表"></a>1.部分匹配表</h3><p>前缀与后缀： “前缀”指除了最后一个字符以外，一个字符串的全部头部组合；”后缀”指除了第一个字符以外，一个字符串的全部尾部组合。</p>
-<p>举例：字符串 ABCAB<br>前缀：A,AB,ABC,ABCA<br>后缀：B,AB,CAB,BCAB  </p>
-<p>部分匹配值是前缀与后缀的最长共有元素的长度，上例最长共有元素为”AB”，所以字符串”ABCAB”的部分匹配值是2</p>
-<p>字符串的部分匹配表<br>字符串对应一个相同长度的数组，其中每个数字代表的是从字符串开始到当前位的字符子串的部分匹配值<br>举例:<br>“ABCDABD”<br>“0000120”</p>
-<p>下面来介绍如何计算模式串的部分匹配表<br>pat “AAAA”,<br>next[] is [0, 1, 2, 3]</p>
-<p>pat “ABCDE”,<br>next[] is [0, 0, 0, 0, 0]</p>
-<p>pat “AAABAAA”,<br>next[] is [0, 1, 2, 0, 1, 2, 3]</p>
-<p>举例说明,当pat[] = “AAAA”<br>pat[0] = “A”<br>前缀x,后缀x<br>最大公共元素长度0<br>next[0] = 0</p>
-<p>pat[0-1] = “AA”<br>前缀<strong>A</strong>,后缀<strong>A</strong><br>最大公共元素长度1<br>next[1] = 1</p>
-<p>pat[0-2] = “AAA”<br>前缀A,<strong>AA</strong>,后缀A,<strong>AA</strong><br>最大公共元素长度2<br>next[2] = 1</p>
-<p>pat[0-3] = “AAAA”<br>前缀A,AA,<strong>AAA</strong>,后缀A,AA,<strong>AAA</strong><br>最大公共元素长度3<br>next[3] = 3</p>
-<p>所以字符串pat[] = “AAAA”的部分匹配表为<font color="blue">[0, 1, 2, 3]</font>.  </p>
-<h3 id="2-kmp算法"><a href="#2-kmp算法" class="headerlink" title="2.kmp算法"></a>2.kmp算法</h3><p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDABEABCDABCDABDE”<br>pat[] = “ABCDABD”  </p>
-<p>2.1 计算模式串pat的部分匹配表next<br>next[] = [0, 0, 0, 0, 1, 2, 0]  </p>
-<p>2.2 字符串txt与模式串pat的第一位进行比较，如果不匹配，则将txt的后一位字符与pat第一位字符比较。<br>“<font color="blue">B</font>BC ABCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD”  </p>
-<p>“B<font color="blue">B</font>C ABCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD”<br>…</p>
-<p>2.3 当txt的字符与pat字符匹配时，同时后移两个字符串的字符进行比较。<br>“BBC <font color="blue">A</font>BCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD” </p>
-<p>“BBC A<font color="blue">B</font>CDABEABCDABCDABDE”<br>“A<font color="blue">B</font>CDABD” </p>
-<p>2.4 当失配时，<strong>模式串向右移动的位数为：失配字符所在位置 - 失配字符前一位对应的next值</strong><br>“BBC ABCDAB<font color="blue">E</font>ABCDABCDABDE”<br>“ABCDAB<font color="blue">D</font>“  </p>
-<p>2.5 pat移动字符的位数 = 失配字符所在位置6 - 失配字符前一位字符对应的next[5]值2 = 4,从适配字符D处往回移动4个字符，到达C，进行比较<br>“BBC ABCDAB<font color="blue">E</font>ABCDABCDABDE”<br>“AB<font color="blue">C</font>DABD”  </p>
-<p>2.6 不断循环上述步骤，直到匹配到模式串末尾，或者不匹配  </p>
-<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CalcNext</span><span class="params">(<span class="keyword">char</span> *pat, <span class="keyword">int</span> *next)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="built_in">strlen</span>(pat);</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (i &lt; m) &#123;</span><br><span class="line">        <span class="keyword">if</span> (pat[i] == pat[len]) &#123;</span><br><span class="line">            len++;</span><br><span class="line">            next[i++] = len;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i &lt; m &amp;&amp; pat[i] != pat[len]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (len) len = next[len - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next[i++] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">char</span> *txt, <span class="keyword">char</span> *pat)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="built_in">strlen</span>(txt);</span><br><span class="line">    <span class="keyword">int</span> n = <span class="built_in">strlen</span>(pat);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> *next = (<span class="keyword">int</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*n);</span><br><span class="line">    CalcNext(pat, next);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; m) &#123;</span><br><span class="line">        <span class="keyword">if</span> (txt[i] == pat[j]) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (j == n) <span class="keyword">return</span> i - j;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (j &lt; m &amp;&amp; txt[i] != pat[j]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j) j = next[j - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *txt = <span class="string">"BBC ABCDAB ABCDABCDABDE"</span>;</span><br><span class="line">    <span class="keyword">char</span> *pat = <span class="string">"ABCDABD"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, kmp(txt, pat));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。<br>
+        <p class="article-more-link">
+            <a href="/2016/10/11/2016-10-11-kmp-algo/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -705,25 +305,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">Fri May 20 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            3 minutes read (About 475 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="dijkstra算法浅析"><a href="#dijkstra算法浅析" class="headerlink" title="dijkstra算法浅析"></a>dijkstra算法浅析</h3><p>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.  </p>
-<p>x∈S &lt;=&gt;x∈V且从s到x的最短路径已经找到<br>初始：S={s}, S=V时算法结束<br>从s到u相对于S的最短路径：从s到u且仅经过S中顶点的最短路径<br>dist[u]:从s到u相对于S最短路径的长度<br>short[u]:从s到u的最短路径的长度<br>dist[u]&gt;=short[u]  </p>
-<p>输入：有向图G=(V,E,W), V={1,2,…,n}, s=1<br>输出：从s到每个顶点的最短路径<br>1.初始S={1}<br>2.对于i∈V-S,计算1到i的相对于S的最短路，长度dist[i]<br>3.选择V-S中dist值最小的j,将j加入S,修改V-S中顶点的dist值.<br>4.继续上述过程，直到S=V为止  </p>
-<p>伪码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">S &lt;- &#123;s&#125;  </span><br><span class="line">dist[s] &lt;- <span class="number">0</span>  </span><br><span class="line"><span class="keyword">for</span> i ∈ V-&#123;s&#125; do  </span><br><span class="line">    dist[i] &lt;- w(s, i) //s到i没边，w(s,i)=∞  </span><br><span class="line"><span class="keyword">while</span> V-S != Ø do  </span><br><span class="line">    <span class="comment"># 从V-S取相对S的最短路径顶点j  </span></span><br><span class="line">    S &lt;- S∪&#123;j&#125;  </span><br><span class="line">    <span class="keyword">for</span> i ∈ V-S do  </span><br><span class="line">        <span class="keyword">if</span> dist[j] + w(j,i) &lt; dist[i]  </span><br><span class="line">            dist[i] &lt;- dist[j] + w(j, i)</span><br></pre></td></tr></table></figure></p>
-<p><div style="text-align:center"><br><img src="/images/dij.png" width="50%"><br></div><br>代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEXNUM 6</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INFINITY 10000        </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> path[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> distance[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> visited[VERTEXNUM];</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> graph[VERTEXNUM][VERTEXNUM] = &#123;</span><br><span class="line"><span class="comment">//  0           1          2          3          4          5</span></span><br><span class="line">    <span class="number">0</span>,          <span class="number">1</span>,         INFINITY,  <span class="number">4</span>,         <span class="number">4</span>,         INFINITY, <span class="comment">//0</span></span><br><span class="line">    <span class="number">1</span>,          <span class="number">0</span>,         INFINITY,  <span class="number">2</span>,         INFINITY,  INFINITY, <span class="comment">//1</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">0</span>,         <span class="number">2</span>,         INFINITY,  <span class="number">1</span>,        <span class="comment">//2</span></span><br><span class="line">    <span class="number">4</span>,          <span class="number">2</span>,         <span class="number">2</span>,         <span class="number">0</span>,         <span class="number">3</span>,         INFINITY, <span class="comment">//3</span></span><br><span class="line">    <span class="number">4</span>,          INFINITY,  INFINITY,  <span class="number">3</span>,         <span class="number">0</span>,         <span class="number">3</span>,        <span class="comment">//4</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">1</span>,         INFINITY,  <span class="number">3</span>,         <span class="number">0</span>         <span class="comment">//5</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, vertex, min_edge, edges;</span><br><span class="line"></span><br><span class="line">    visited[source] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        distance[i] = graph[source][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    distance[source] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (edges = <span class="number">0</span>; edges &lt; VERTEXNUM; edges++)</span><br><span class="line">    &#123;</span><br><span class="line">        min_edge = INFINITY;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; min_edge &gt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                vertex = j;</span><br><span class="line">                min_edge = distance[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        visited[vertex] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; distance[vertex] + graph[vertex][j] &lt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                distance[j] = distance[vertex] + graph[vertex][j];</span><br><span class="line">                path[j] = vertex;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    dijkstra(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"dist[%d]=%d\t"</span>, i, distance[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"path[%d]=%d\t"</span>, i, path[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
+        <h3 id="dijkstra算法浅析"><a href="#dijkstra算法浅析" class="headerlink" title="dijkstra算法浅析"></a>dijkstra算法浅析</h3><p>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.<br>
+        <p class="article-more-link">
+            <a href="/2016/05/20/2016-05-20-dijkstra-algo/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -742,23 +334,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-04-03T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-04-03T16:00:00.000Z" itemprop="datePublished">Mon Apr 04 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            2 minutes read (About 283 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>python文件操作</p>
-<h4 id="python批量更改文件名"><a href="#python批量更改文件名" class="headerlink" title="python批量更改文件名"></a>python批量更改文件名</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_name</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> count;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(path) <span class="keyword">and</span> <span class="keyword">not</span> os.path.isdir(path):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(path):</span><br><span class="line">        filepath = os.path.split(path)</span><br><span class="line">        filename = os.path.splitext(filepath[<span class="number">-1</span>])</span><br><span class="line">        file_ext = filename[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> file_ext == <span class="string">'.txt'</span>:</span><br><span class="line">            os.rename(path, filepath[<span class="number">0</span>]+<span class="string">'/'</span>+<span class="string">'ex_'</span>+str(count)+file_ext)</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> os.path.isdir(path):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> os.listdir(path):</span><br><span class="line">            change_name(os.path.join(path, x))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">count = <span class="number">1</span></span><br><span class="line">file_dir = <span class="string">'C:/Users/lansheng/Desktop/py'</span></span><br><span class="line">change_name(file_dir)</span><br></pre></td></tr></table></figure>
-<h4 id="用md5查找文件夹下相同文件并删除"><a href="#用md5查找文件夹下相同文件并删除" class="headerlink" title="用md5查找文件夹下相同文件并删除"></a>用md5查找文件夹下相同文件并删除</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> clock <span class="keyword">as</span> now</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getmd5</span><span class="params">(filename)</span>:</span></span><br><span class="line">    file_txt = open(filename, <span class="string">'rb'</span>).read()</span><br><span class="line">    md5 = hashlib.md5()</span><br><span class="line">    md5.update(file_txt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> md5.hexdigest()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">path = <span class="string">'.'</span></span><br><span class="line">all_md5 = []</span><br><span class="line">total_file = <span class="number">0</span></span><br><span class="line">delete_file = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_dump</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> total_file</span><br><span class="line">    <span class="keyword">global</span> delete_file</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> parent, dirnames, filenames <span class="keyword">in</span> os.walk(path):</span><br><span class="line">        <span class="keyword">for</span> filename <span class="keyword">in</span> filenames:</span><br><span class="line">            total_file += <span class="number">1</span></span><br><span class="line">            real_path = os.path.join(parent, filename)</span><br><span class="line">            <span class="comment">#print real_path</span></span><br><span class="line"></span><br><span class="line">            filemd5 = getmd5(real_path)</span><br><span class="line">            <span class="keyword">if</span> filemd5 <span class="keyword">in</span> all_md5:</span><br><span class="line">                delete_file += <span class="number">1</span></span><br><span class="line">                <span class="comment">#do delete</span></span><br><span class="line">                os.remove(real_path)</span><br><span class="line">                <span class="keyword">print</span> <span class="string">'remove:'</span>,real_path</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                all_md5.append(filemd5)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_emptydir</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> os.path.isdir(path):</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> os.listdir(path):</span><br><span class="line">            d = os.path.join(path, p)</span><br><span class="line">            <span class="keyword">if</span>(os.path.isdir(d) == <span class="keyword">True</span>):</span><br><span class="line">                del_emptydir(d)					<span class="comment">#recursive</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.listdir(path):</span><br><span class="line">        os.rmdir(path)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'remove dir:'</span>, path</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">start = now()</span><br><span class="line"></span><br><span class="line">del_dump(path)</span><br><span class="line"><span class="comment">#del_emptydir(path)</span></span><br><span class="line"></span><br><span class="line">end = now()</span><br><span class="line"></span><br><span class="line">time_last = end - start</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'total file: '</span>, total_file</span><br><span class="line"><span class="keyword">print</span> <span class="string">'delete file: '</span>, delete_file</span><br><span class="line"><span class="keyword">print</span> <span class="string">'cost time: '</span>, time_last, <span class="string">'s'</span></span><br></pre></td></tr></table></figure>
-
+        <p>python文件操作<br>
+        <p class="article-more-link">
+            <a href="/2016/04/04/2016-04-04-python-fileop/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -773,10 +359,10 @@
         
 <nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">
     <div class="pagination-previous is-invisible is-hidden-mobile">
-        <a href="/page/0/">Назад</a>
+        <a href="/page/0/">Prev</a>
     </div>
     <div class="pagination-next">
-        <a href="/page/2/">Далее</a>
+        <a href="/page/2/">Next</a>
     </div>
     <ul class="pagination-list is-hidden-mobile">
         
@@ -844,21 +430,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

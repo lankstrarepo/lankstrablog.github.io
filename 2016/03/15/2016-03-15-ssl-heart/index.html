@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -75,21 +75,16 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-03-14T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-03-14T16:00:00.000Z" itemprop="datePublished">Tue Mar 15 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            9 minutes read (About 1349 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <p>OpenSSL心脏滴血漏洞 CVE-2014-0160</p>
 <p>心脏出血漏洞（英语：Heartbleed bug），也简称为心血漏洞，是一个出现在加密程序库OpenSSL的程序错误，首次于2014年4月披露。该程序库广泛用于实现互联网的传输层安全（TLS）协议。只要使用的是存在缺陷的OpenSSL实例，无论是服务器还是客户端，都可能因此而受到攻击。此问题的原因是在实现TLS的心跳扩展时没有对输入进行适当验证（缺少边界检查），因此漏洞的名称来源于“心跳”（heartbeat）。该程序错误属于缓冲区过读，即可以读取的数据比应该允许读取的还多。</p>
+<a id="more"></a>
 <p>漏洞原因：OpenSSL 在实现 TLS/DTLS 心跳扩展协议 (RFC6520) 时没有检查客户端载荷与载荷长度值是否匹配  </p>
 <h3 id="TLS-SSL原理简介"><a href="#TLS-SSL原理简介" class="headerlink" title="TLS/SSL原理简介"></a>TLS/SSL原理简介</h3><p>SSL/TLS协议的基本思路是采用公钥加密法，客户端先向服务器端索要公钥，然后用公钥加密信息，服务器收到密文后，用自己的私钥解密。  </p>
 <p>SSL/TLS协议的基本过程<br>握手阶段</p>
@@ -215,21 +210,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

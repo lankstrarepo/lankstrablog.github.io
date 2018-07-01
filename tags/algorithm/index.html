@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -83,48 +83,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-11-11T16:00:00.000Z" itemprop="datePublished">8 months ago</time>
+            <time datetime="2017-11-11T16:00:00.000Z" itemprop="datePublished">Sun Nov 12 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            7 minutes read (About 1030 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><h4 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.节点是红色或黑色</span><br><span class="line">2.根是黑色</span><br><span class="line">3.所有叶子都是黑色（叶子是NIL节点）</span><br><span class="line">4.从每个叶子到根的所有路径上不能有两个连续的红色节点 *</span><br><span class="line">5.从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点 *</span><br></pre></td></tr></table></figure>
-<p>这是一颗红黑树：</p>
-<p><img src="/images/rbtree.png" alt=""></p>
-<h4 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h4><p>红黑树也是二叉查找树，因此查找操作与普通二叉查找树操作相同。红黑树插入和删除操作会导致不再匹配红黑树性质，需要进行颜色变更和旋转调整红黑树，使其恢复性质。</p>
-<h4 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1）如果是空树则插入根节点并标黑，结束</span><br><span class="line">2）树不为空，插入节点后标红</span><br><span class="line">	a）如果插入节点的父节点是黑色，结束</span><br><span class="line">	b）插入节点的父节点是红色（违反性质4）</span><br><span class="line">		1.叔父节点是黑色或NIL，旋转操作，重新着色，结束</span><br><span class="line">		2.叔父节点是红色，将父节点和叔父节点染黑，祖父节点染红，并重新检查</span><br></pre></td></tr></table></figure>
-<p>我们分析当插入节点N后，父节点为红色时的情况。（违背红黑树性质4）</p>
-<p>1.叔父节点是红色。将父节点和叔父节点染黑，祖父节点染红，从祖父节点检查是否违背性质4，递归进行 1) 2)</p>
-<p><img src="/images/u-red.png" alt=""></p>
-<p>2.叔父节点是黑色（或NIL），插入节点是其父节点的右儿子。对P、N进行左旋操作。进行3)</p>
-<p><img src="/images/u-black.png" alt=""></p>
-<p>3.叔父节点是黑色（或NIL），插入节点是其父节点的左儿子。对G、P进行右旋操作，P、G颜色对换。</p>
-<p><img src="/images/u-black2.png" alt=""></p>
-<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1）如果要删除的节点有两个非空儿子，可以转换成有0个或1个非空子节点</span><br><span class="line">2）如果删除节点是红色，则删除(路径上黑色节点数不变，不影响红黑树性质)</span><br><span class="line">3）如果删除节点是黑色带红色子节点，则删黑色节点，子节点替代被删节点并染黑</span><br><span class="line">4）如果删除节点是黑色并且儿子节点为黑色--&gt;复杂情况</span><br></pre></td></tr></table></figure>
-<p>1) 2) 3)的操作较简单。</p>
-<p>对于情况4），将节点删除后用黑色子节点替换，此时如果要保持路径上黑节点数不变，可以认为该节点带有双重黑色的性质，称为<em>双黑</em>。</p>
-<p>(假设图中1 2 3 4 5 6节点为NIL，删除N节点后用NIL替换，并带有双重黑色)</p>
-<p><img src="/images/rb_delete.png" alt=""></p>
-<p>下面讨论情况4）的N节点删除：</p>
-<p>1.当兄弟节点S为红色。对P、S节点进行左旋，对换颜色。此时尚未完成，后续需要继续调整3 4 5。</p>
-<p><img src="/images/rb_delete2.png" alt=""></p>
-<p>2.N的父亲、兄弟和侄子都是黑色。这种情况需要将兄弟节点S染红，P变为双重黑色节点，向上传递。</p>
-<p><img src="/images/rb_delete3.png" alt=""></p>
-<p>3.N的父节点为红色，兄弟节点及侄子节点都为黑色。这种情况需要交换P和S的颜色，并不影响不通过N的路径上黑色节点的数量，但在N的路径上增加了一个黑色节点，补充了被删除的黑色节点，此时N的双重黑色可以去掉。</p>
-<p><img src="/images/rb_delete4.png" alt=""></p>
-<p>4.兄弟节点是黑色，近侄节点为红，远侄节点为黑。这种情况对SL和S做右旋转，交换颜色。此时所有路径黑色节点数不变，后续情形5.</p>
-<p><img src="/images/rb-delete5.png" alt=""></p>
-<p>5.兄弟节点为黑色，远侄节点为红色。这种情况下对P、S进行左旋转，交换颜色，并染黑S右节点（旋转前的远侄节点）</p>
-<p><img src="/images/rb-delete6.png" alt=""></p>
-
+        <p class="article-more-link">
+            <a href="/2017/11/12/red-black-tree/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -143,43 +112,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">Tue Oct 11 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            6 minutes read (About 831 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。</p>
-<p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDAB ABCDABCDABDE”<br>pat[] = “ABCDABD”<br>Output: Pattern found at index 15</p>
-<h3 id="1-部分匹配表"><a href="#1-部分匹配表" class="headerlink" title="1.部分匹配表"></a>1.部分匹配表</h3><p>前缀与后缀： “前缀”指除了最后一个字符以外，一个字符串的全部头部组合；”后缀”指除了第一个字符以外，一个字符串的全部尾部组合。</p>
-<p>举例：字符串 ABCAB<br>前缀：A,AB,ABC,ABCA<br>后缀：B,AB,CAB,BCAB  </p>
-<p>部分匹配值是前缀与后缀的最长共有元素的长度，上例最长共有元素为”AB”，所以字符串”ABCAB”的部分匹配值是2</p>
-<p>字符串的部分匹配表<br>字符串对应一个相同长度的数组，其中每个数字代表的是从字符串开始到当前位的字符子串的部分匹配值<br>举例:<br>“ABCDABD”<br>“0000120”</p>
-<p>下面来介绍如何计算模式串的部分匹配表<br>pat “AAAA”,<br>next[] is [0, 1, 2, 3]</p>
-<p>pat “ABCDE”,<br>next[] is [0, 0, 0, 0, 0]</p>
-<p>pat “AAABAAA”,<br>next[] is [0, 1, 2, 0, 1, 2, 3]</p>
-<p>举例说明,当pat[] = “AAAA”<br>pat[0] = “A”<br>前缀x,后缀x<br>最大公共元素长度0<br>next[0] = 0</p>
-<p>pat[0-1] = “AA”<br>前缀<strong>A</strong>,后缀<strong>A</strong><br>最大公共元素长度1<br>next[1] = 1</p>
-<p>pat[0-2] = “AAA”<br>前缀A,<strong>AA</strong>,后缀A,<strong>AA</strong><br>最大公共元素长度2<br>next[2] = 1</p>
-<p>pat[0-3] = “AAAA”<br>前缀A,AA,<strong>AAA</strong>,后缀A,AA,<strong>AAA</strong><br>最大公共元素长度3<br>next[3] = 3</p>
-<p>所以字符串pat[] = “AAAA”的部分匹配表为<font color="blue">[0, 1, 2, 3]</font>.  </p>
-<h3 id="2-kmp算法"><a href="#2-kmp算法" class="headerlink" title="2.kmp算法"></a>2.kmp算法</h3><p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDABEABCDABCDABDE”<br>pat[] = “ABCDABD”  </p>
-<p>2.1 计算模式串pat的部分匹配表next<br>next[] = [0, 0, 0, 0, 1, 2, 0]  </p>
-<p>2.2 字符串txt与模式串pat的第一位进行比较，如果不匹配，则将txt的后一位字符与pat第一位字符比较。<br>“<font color="blue">B</font>BC ABCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD”  </p>
-<p>“B<font color="blue">B</font>C ABCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD”<br>…</p>
-<p>2.3 当txt的字符与pat字符匹配时，同时后移两个字符串的字符进行比较。<br>“BBC <font color="blue">A</font>BCDABEABCDABCDABDE”<br>“<font color="blue">A</font>BCDABD” </p>
-<p>“BBC A<font color="blue">B</font>CDABEABCDABCDABDE”<br>“A<font color="blue">B</font>CDABD” </p>
-<p>2.4 当失配时，<strong>模式串向右移动的位数为：失配字符所在位置 - 失配字符前一位对应的next值</strong><br>“BBC ABCDAB<font color="blue">E</font>ABCDABCDABDE”<br>“ABCDAB<font color="blue">D</font>“  </p>
-<p>2.5 pat移动字符的位数 = 失配字符所在位置6 - 失配字符前一位字符对应的next[5]值2 = 4,从适配字符D处往回移动4个字符，到达C，进行比较<br>“BBC ABCDAB<font color="blue">E</font>ABCDABCDABDE”<br>“AB<font color="blue">C</font>DABD”  </p>
-<p>2.6 不断循环上述步骤，直到匹配到模式串末尾，或者不匹配  </p>
-<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CalcNext</span><span class="params">(<span class="keyword">char</span> *pat, <span class="keyword">int</span> *next)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="built_in">strlen</span>(pat);</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (i &lt; m) &#123;</span><br><span class="line">        <span class="keyword">if</span> (pat[i] == pat[len]) &#123;</span><br><span class="line">            len++;</span><br><span class="line">            next[i++] = len;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i &lt; m &amp;&amp; pat[i] != pat[len]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (len) len = next[len - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next[i++] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">char</span> *txt, <span class="keyword">char</span> *pat)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="built_in">strlen</span>(txt);</span><br><span class="line">    <span class="keyword">int</span> n = <span class="built_in">strlen</span>(pat);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> *next = (<span class="keyword">int</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*n);</span><br><span class="line">    CalcNext(pat, next);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; m) &#123;</span><br><span class="line">        <span class="keyword">if</span> (txt[i] == pat[j]) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (j == n) <span class="keyword">return</span> i - j;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (j &lt; m &amp;&amp; txt[i] != pat[j]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j) j = next[j - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *txt = <span class="string">"BBC ABCDAB ABCDABCDABDE"</span>;</span><br><span class="line">    <span class="keyword">char</span> *pat = <span class="string">"ABCDABD"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, kmp(txt, pat));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。<br>
+        <p class="article-more-link">
+            <a href="/2016/10/11/2016-10-11-kmp-algo/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -198,25 +141,17 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">Fri May 20 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            3 minutes read (About 475 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="dijkstra算法浅析"><a href="#dijkstra算法浅析" class="headerlink" title="dijkstra算法浅析"></a>dijkstra算法浅析</h3><p>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.  </p>
-<p>x∈S &lt;=&gt;x∈V且从s到x的最短路径已经找到<br>初始：S={s}, S=V时算法结束<br>从s到u相对于S的最短路径：从s到u且仅经过S中顶点的最短路径<br>dist[u]:从s到u相对于S最短路径的长度<br>short[u]:从s到u的最短路径的长度<br>dist[u]&gt;=short[u]  </p>
-<p>输入：有向图G=(V,E,W), V={1,2,…,n}, s=1<br>输出：从s到每个顶点的最短路径<br>1.初始S={1}<br>2.对于i∈V-S,计算1到i的相对于S的最短路，长度dist[i]<br>3.选择V-S中dist值最小的j,将j加入S,修改V-S中顶点的dist值.<br>4.继续上述过程，直到S=V为止  </p>
-<p>伪码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">S &lt;- &#123;s&#125;  </span><br><span class="line">dist[s] &lt;- <span class="number">0</span>  </span><br><span class="line"><span class="keyword">for</span> i ∈ V-&#123;s&#125; do  </span><br><span class="line">    dist[i] &lt;- w(s, i) //s到i没边，w(s,i)=∞  </span><br><span class="line"><span class="keyword">while</span> V-S != Ø do  </span><br><span class="line">    <span class="comment"># 从V-S取相对S的最短路径顶点j  </span></span><br><span class="line">    S &lt;- S∪&#123;j&#125;  </span><br><span class="line">    <span class="keyword">for</span> i ∈ V-S do  </span><br><span class="line">        <span class="keyword">if</span> dist[j] + w(j,i) &lt; dist[i]  </span><br><span class="line">            dist[i] &lt;- dist[j] + w(j, i)</span><br></pre></td></tr></table></figure></p>
-<p><div style="text-align:center"><br><img src="/images/dij.png" width="50%"><br></div><br>代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEXNUM 6</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INFINITY 10000        </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> path[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> distance[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> visited[VERTEXNUM];</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> graph[VERTEXNUM][VERTEXNUM] = &#123;</span><br><span class="line"><span class="comment">//  0           1          2          3          4          5</span></span><br><span class="line">    <span class="number">0</span>,          <span class="number">1</span>,         INFINITY,  <span class="number">4</span>,         <span class="number">4</span>,         INFINITY, <span class="comment">//0</span></span><br><span class="line">    <span class="number">1</span>,          <span class="number">0</span>,         INFINITY,  <span class="number">2</span>,         INFINITY,  INFINITY, <span class="comment">//1</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">0</span>,         <span class="number">2</span>,         INFINITY,  <span class="number">1</span>,        <span class="comment">//2</span></span><br><span class="line">    <span class="number">4</span>,          <span class="number">2</span>,         <span class="number">2</span>,         <span class="number">0</span>,         <span class="number">3</span>,         INFINITY, <span class="comment">//3</span></span><br><span class="line">    <span class="number">4</span>,          INFINITY,  INFINITY,  <span class="number">3</span>,         <span class="number">0</span>,         <span class="number">3</span>,        <span class="comment">//4</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">1</span>,         INFINITY,  <span class="number">3</span>,         <span class="number">0</span>         <span class="comment">//5</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, vertex, min_edge, edges;</span><br><span class="line"></span><br><span class="line">    visited[source] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        distance[i] = graph[source][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    distance[source] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (edges = <span class="number">0</span>; edges &lt; VERTEXNUM; edges++)</span><br><span class="line">    &#123;</span><br><span class="line">        min_edge = INFINITY;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; min_edge &gt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                vertex = j;</span><br><span class="line">                min_edge = distance[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        visited[vertex] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; distance[vertex] + graph[vertex][j] &lt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                distance[j] = distance[vertex] + graph[vertex][j];</span><br><span class="line">                path[j] = vertex;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    dijkstra(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"dist[%d]=%d\t"</span>, i, distance[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"path[%d]=%d\t"</span>, i, path[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
+        <h3 id="dijkstra算法浅析"><a href="#dijkstra算法浅析" class="headerlink" title="dijkstra算法浅析"></a>dijkstra算法浅析</h3><p>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.<br>
+        <p class="article-more-link">
+            <a href="/2016/05/20/2016-05-20-dijkstra-algo/#more">Read More</a>
+        </p>
     
     </div>
     
@@ -285,21 +220,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -75,21 +75,14 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">Tue Oct 11 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            6 minutes read (About 831 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。</p>
-<p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDAB ABCDABCDABDE”<br>pat[] = “ABCDABD”<br>Output: Pattern found at index 15</p>
+        <h3 id="kmp算法浅析"><a href="#kmp算法浅析" class="headerlink" title="kmp算法浅析"></a>kmp算法浅析</h3><p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。<br><a id="more"></a><br>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDAB ABCDABCDABDE”<br>pat[] = “ABCDABD”<br>Output: Pattern found at index 15</p>
 <h3 id="1-部分匹配表"><a href="#1-部分匹配表" class="headerlink" title="1.部分匹配表"></a>1.部分匹配表</h3><p>前缀与后缀： “前缀”指除了最后一个字符以外，一个字符串的全部头部组合；”后缀”指除了第一个字符以外，一个字符串的全部尾部组合。</p>
 <p>举例：字符串 ABCAB<br>前缀：A,AB,ABC,ABCA<br>后缀：B,AB,CAB,BCAB  </p>
 <p>部分匹配值是前缀与后缀的最长共有元素的长度，上例最长共有元素为”AB”，所以字符串”ABCAB”的部分匹配值是2</p>
@@ -197,21 +190,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -83,20 +83,15 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-02-09T16:00:00.000Z" itemprop="datePublished">2 years ago</time>
+            <time datetime="2016-02-09T16:00:00.000Z" itemprop="datePublished">Wed Feb 10 2016 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            6 minutes read (About 862 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h4 id="基本的套接字编程"><a href="#基本的套接字编程" class="headerlink" title="基本的套接字编程"></a>基本的套接字编程</h4><h4 id="IPv4套接字-网际套接字地址结构"><a href="#IPv4套接字-网际套接字地址结构" class="headerlink" title="IPv4套接字-网际套接字地址结构"></a>IPv4套接字-网际套接字地址结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">    <span class="keyword">in_addr_t</span> s_addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span>         sin_len;</span><br><span class="line">    <span class="keyword">sa_family_t</span>     sin_family;</span><br><span class="line">    <span class="keyword">in_port_t</span>          sin_port;</span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>  <span class="title">sin_addr</span>;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span>             sin_zero[<span class="number">8</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <a id="more"></a>
+<h4 id="基本的套接字编程"><a href="#基本的套接字编程" class="headerlink" title="基本的套接字编程"></a>基本的套接字编程</h4><h4 id="IPv4套接字-网际套接字地址结构"><a href="#IPv4套接字-网际套接字地址结构" class="headerlink" title="IPv4套接字-网际套接字地址结构"></a>IPv4套接字-网际套接字地址结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">    <span class="keyword">in_addr_t</span> s_addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span>         sin_len;</span><br><span class="line">    <span class="keyword">sa_family_t</span>     sin_family;</span><br><span class="line">    <span class="keyword">in_port_t</span>          sin_port;</span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>  <span class="title">sin_addr</span>;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span>             sin_zero[<span class="number">8</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h4 id="通用套接字地址结构"><a href="#通用套接字地址结构" class="headerlink" title="通用套接字地址结构"></a>通用套接字地址结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr</span> &#123;</span></span><br><span class="line">        <span class="keyword">uint8_t</span>     sa_len;</span><br><span class="line">        <span class="keyword">sa_family_t</span> sa_family;</span><br><span class="line">        <span class="keyword">char</span>         sa_data[<span class="number">14</span>];</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
 <h4 id="字节序"><a href="#字节序" class="headerlink" title="字节序"></a><strong>字节序</strong></h4><p>低序字节存储在起始地址，小端(little-endian) <br><br>高序字节存储在起始地址，大端(big-endian)</p>
 <p>host byte order  主机字节序<br><br>network byte order 网络字节序(大端序)</p>
@@ -182,21 +177,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

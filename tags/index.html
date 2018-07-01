@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item is-active"
+               href="/tags">Tag</a>
             
         </div>
         
@@ -77,15 +77,11 @@
         <div class="columns is-variable is-1 is-multiline is-mobile">
             
             <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/read/">#read&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
                 <a class="tag is-light article-tag" href="/tags/markdown/">#markdown&nbsp;(1)</a>
             </span>
             
             <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Java/">#Java&nbsp;(1)</a>
+                <a class="tag is-light article-tag" href="/tags/read/">#read&nbsp;(1)</a>
             </span>
             
             <span class="column is-narrow">
@@ -93,7 +89,7 @@
             </span>
             
             <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/algorithm/">#algorithm&nbsp;(3)</a>
+                <a class="tag is-light article-tag" href="/tags/Java/">#Java&nbsp;(1)</a>
             </span>
             
             <span class="column is-narrow">
@@ -102,6 +98,10 @@
             
             <span class="column is-narrow">
                 <a class="tag is-light article-tag" href="/tags/python/">#python&nbsp;(1)</a>
+            </span>
+            
+            <span class="column is-narrow">
+                <a class="tag is-light article-tag" href="/tags/algorithm/">#algorithm&nbsp;(3)</a>
             </span>
             
             <span class="column is-narrow">
@@ -178,21 +178,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 

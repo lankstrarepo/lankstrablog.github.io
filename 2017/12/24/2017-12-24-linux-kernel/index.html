@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
 
 <link rel="stylesheet" href="/css/style.css">
 <script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -35,7 +32,7 @@
             <a class="navbar-item navbar-logo" href="/">
                 
                     
-                    &lt;lankstra&gt;
+                    Lankstra&#39;s blog
                     
                 
             </a>
@@ -50,6 +47,9 @@
             
             <a class="navbar-item "
                href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tag</a>
             
         </div>
         
@@ -75,20 +75,15 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-12-23T16:00:00.000Z" itemprop="datePublished">6 months ago</time>
+            <time datetime="2017-12-23T16:00:00.000Z" itemprop="datePublished">Sun Dec 24 2017 00:00:00 GMT+0800</time>
         </span>
         
-        
-        <span class="column is-narrow">
-            
-            
-            27 minutes read (About 4025 words)
-        </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="linux-kernel"><a href="#linux-kernel" class="headerlink" title="linux kernel"></a>linux kernel</h2><h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>进程就是处于执行期的程序（目标码存放在其某种存储介质上）但进程并不仅仅局限于一段可执行程序代码（Unix称其为代码段，text section）。通常进程还要包含其他资源，像打开的文件，挂起的信号，内核内部数据，处理器状态，一个或多个具有内存映射的内存地址空间及一个或多个执行线程（thread of execution）。</p>
+        <h2 id="linux-kernel"><a href="#linux-kernel" class="headerlink" title="linux kernel"></a>linux kernel</h2><a id="more"></a>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>进程就是处于执行期的程序（目标码存放在其某种存储介质上）但进程并不仅仅局限于一段可执行程序代码（Unix称其为代码段，text section）。通常进程还要包含其他资源，像打开的文件，挂起的信号，内核内部数据，处理器状态，一个或多个具有内存映射的内存地址空间及一个或多个执行线程（thread of execution）。</p>
 <p>执行线程（thread），是在进程中活动的对象。每个线程都拥有一个独立的程序计数器，进程栈和一组进程寄存器。内核调度的对象是线程，而不是进程。对linux而言，线程是一种特殊的进程。</p>
 <h4 id="进程描述符及任务结构"><a href="#进程描述符及任务结构" class="headerlink" title="进程描述符及任务结构"></a>进程描述符及任务结构</h4><p>内核把进程的列表存放在任务队列（task list）的双向循环链表中。链表中每一项都是类型为task_struct、成为进程描述符（process descriptor）的结构，该结构定义在&lt;linux/sched.h&gt;。</p>
 <p><img src="/images/task_struct.png" alt="task_struct"></p>
@@ -316,21 +311,6 @@
 
     
     
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
     
     
 
