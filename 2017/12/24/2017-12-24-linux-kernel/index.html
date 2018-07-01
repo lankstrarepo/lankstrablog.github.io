@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>linux内核设计与实现 - Lankstra&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+
+
+<link rel="icon" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    &lt;lankstra&gt;
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            linux内核设计与实现
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2017-12-23T16:00:00.000Z" itemprop="datePublished">6 months ago</time>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            27 minutes read (About 4025 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <h2 id="linux-kernel"><a href="#linux-kernel" class="headerlink" title="linux kernel"></a>linux kernel</h2><h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>进程就是处于执行期的程序（目标码存放在其某种存储介质上）但进程并不仅仅局限于一段可执行程序代码（Unix称其为代码段，text section）。通常进程还要包含其他资源，像打开的文件，挂起的信号，内核内部数据，处理器状态，一个或多个具有内存映射的内存地址空间及一个或多个执行线程（thread of execution）。</p>
+<p>执行线程（thread），是在进程中活动的对象。每个线程都拥有一个独立的程序计数器，进程栈和一组进程寄存器。内核调度的对象是线程，而不是进程。对linux而言，线程是一种特殊的进程。</p>
+<h4 id="进程描述符及任务结构"><a href="#进程描述符及任务结构" class="headerlink" title="进程描述符及任务结构"></a>进程描述符及任务结构</h4><p>内核把进程的列表存放在任务队列（task list）的双向循环链表中。链表中每一项都是类型为task_struct、成为进程描述符（process descriptor）的结构，该结构定义在&lt;linux/sched.h&gt;。</p>
+<p><img src="/images/task_struct.png" alt="task_struct"></p>
+<h5 id="分配进程描述符"><a href="#分配进程描述符" class="headerlink" title="分配进程描述符"></a>分配进程描述符</h5><p>linux通过slab分配器分配task_struct结构，这样可以达到对象复用和缓存着色（cache coloring）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread_info</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">task</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">exec_domain</span> *<span class="title">exec_domain</span>;</span></span><br><span class="line">    __u32 flags;</span><br><span class="line">    __u32 status;</span><br><span class="line">    __u32 cpu;</span><br><span class="line">    <span class="keyword">int</span> preempt_count;</span><br><span class="line">    <span class="keyword">mm_segmemt_t</span> addr_limit;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">restart_block</span> <span class="title">restart_block</span>;</span></span><br><span class="line">    <span class="keyword">void</span> *sysenter_return;</span><br><span class="line">    <span class="keyword">int</span> uaccess_err;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h6 id="进程内核栈"><a href="#进程内核栈" class="headerlink" title="进程内核栈"></a>进程内核栈</h6><p><img src="/images/thread_info.png" alt="thread_info"></p>
+<h5 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h5><ul>
+<li>TASK_RUNNING（运行）</li>
+<li>TASK_INTERRUPTIBLE（可中断）</li>
+<li>TASK_UNINTERRUPTIBLE（不可中断）</li>
+<li>__TASK_TRACED  被其他进程跟踪的进程。</li>
+<li>__TASK_STOPPED（停止）</li>
+</ul>
+<p><img src="/images/process status change.png" alt="process status change"></p>
+<h5 id="进程上下文"><a href="#进程上下文" class="headerlink" title="进程上下文"></a>进程上下文</h5><p>可执行程序代码是进程的重要组成部分。这些代码从一个可执行文件载入到进程的地址空间执行。一般程序在用户空间执行。挡一个程序执行了系统调用或出发了某个异常，它就陷入了内核空间。此时，我们称内核“代表进程执行”并处于进程上下文中。在此上下文中current宏是有效的。除非在此间隙有更高优先级的进程需要执行并由调度器做出了相应调整，否则内核退出时，程序回复在用户空间会继续执行。</p>
+<h5 id="线程实现"><a href="#线程实现" class="headerlink" title="线程实现"></a>线程实现</h5><p>从linux内核角度，没有线程的概念。linux把所有的线程都当做进程来实现。线程仅仅被视为一个与其他进程共享某些资源的进程。每个线程都拥有唯一隶属于自己的task_struct，所以在内核中，它看起来就像是一个普通的进程（只是线程和其他一些进程共享某些资源，如地址空间）。</p>
+<h5 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h5><p>线程的创建和普通进程的创建类似，只不过在调用<code>clone()</code>的时候需要传递一些参数标志来指明需要共享的资源：</p>
+<p><code>clone(CLONE_VM | CLONE_FS |  CLONE_FILES | CLONE_SIGHAND, 0);</code></p>
+<p>上面的代码产生的结果和<code>fork()</code>差不多，只是父子俩共享地址空间、文件系统资源、文件描述符和信号处理程序。</p>
+<p>普通的<code>fork()</code>实现是：</p>
+<p><code>clone(SIGCHLD, 0);</code></p>
+<p>而<code>vfork()</code>的实现是：</p>
+<p><code>clone(CLONE_VFORK | CLONE_VM | SIGCHLD, 0);</code></p>
+<h5 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h5><p>内核线程（kernel thread）。内核线程和普通的进程间的区别在于内核线程没有独立的地址空间（实际上指向地址空间的mm指针被设置为NULL）。他们只在内核空间运行，不切换到用户空间。可以被调度，也可以被抢占。</p>
+<h5 id="进程终结"><a href="#进程终结" class="headerlink" title="进程终结"></a>进程终结</h5><p>进程调用<code>exit()</code>系统调用。—&gt;<code>do_exit()</code></p>
+<ol>
+<li>将task_struct标志成员置PF_EXITING</li>
+<li>调用del_timer_sync()</li>
+<li>如果进程记账开启，<code>do_exit()</code>会调用<code>acct_update_integrals()</code>输出记账信息</li>
+<li>调用<code>exit_mm()</code>释放进程占用的mm_struct</li>
+<li>调用<code>sem__exit()</code>。如果进程排队等待IPC信号，它则离开队列。</li>
+<li>调用<code>exit_files()</code> 、<code>exit_fs()</code>分别递减文件描述符、文件系统数据的引用计数。</li>
+<li>将task_struct的exit_code置为<code>exit()</code>提供的退出码</li>
+<li>调用<code>exit_notify()</code>向父进程发送信号，给子进程重新找养父，养父为线程组中的其他线程或者为init进程，并把进程状态（task_struct中exit_state）设置成EXIT_ZOMBIE</li>
+<li><code>do_exit()</code>调用<code>schedule()</code>切换到新的进程</li>
+</ol>
+<p>至此，进程相关的资源被释放掉，并处于EXIT_ZOMBIE状态。所占用的所有内存就是内核栈、thread_info和task_struct结构。存在的唯一目的就是向它的父进程提供信息。父进程检索到信息后，或者通知内核那是无关信息后，由进程所持有的剩余内存被释放，归还给系统使用。</p>
+<h5 id="删除进程描述符"><a href="#删除进程描述符" class="headerlink" title="删除进程描述符"></a>删除进程描述符</h5><p>在调用<code>do_exit()</code>之后，尽管线程已经僵死不能再运行，但系统保留了它的进程描述符，可以让系统有办法在子进程中介后仍能获取信息。因此，进程终结时所需的清理工作和进程描述符的删除被分开执行。在父进程获得以终结的子进程信息后，或者内核通知并不关注信息后，子进程的task_struct结构才被释放。</p>
+<p><code>wait()</code>一族函数都是通过系统调用<code>wait4()</code>来实现的。挂起调用他的进程，直到其中一个子进程退出，此时函数会返回该子进程的PID。此外，调用该函数时提供的指针会包含子函数退出时的退出代码。</p>
+<p>当最终需要释放进程描述符时，<code>release_task()</code>会被调用：</p>
+<ol>
+<li>它调用<code>_exit_signal()</code>，该函数调用<code>_unhash_process()</code>，后者又调用<code>detach_pid()</code>从pidhash上删除该进程，同时也要从任务列表中删除该进程。</li>
+<li><code>_exit_signal()</code>释放目前僵死进程所使用的所有剩余资源并最终统计记录。</li>
+<li>如果这个进程是线程组最后一个进程，并且领头进程已经死掉，那么<code>release_task()</code>就通知僵死的领头进程的父进程。</li>
+<li><code>release_task()</code>调用<code>put_task_struct()</code>释放进程内核栈和<code>thread_info</code>结构所占的页，并释放<code>task_struct</code>所占的slab告诉缓存。</li>
+</ol>
+<h4 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h4><h5 id="多任务"><a href="#多任务" class="headerlink" title="多任务"></a>多任务</h5><p>非抢占式多任务（cooperative multitasking）、抢占式多任务（preemptive multitasking）。</p>
+<p>抢占（preemption）</p>
+<p>进程的时间片（timeslice）</p>
+<p>进程主动挂起自己：让步（yielding）</p>
+<h5 id="进程的优先级"><a href="#进程的优先级" class="headerlink" title="进程的优先级"></a>进程的优先级</h5><p>nice值，范围是从-20~+19，默认值为0；越大的nice值意味着更低的优先级。</p>
+<h5 id="公平调度"><a href="#公平调度" class="headerlink" title="公平调度"></a>公平调度</h5><p>完全公平调度（CFS）：进程调度的效果应如同系统具备一个理想的完美多任务处理器。在这种系统中，每个进程将能获得1/n的处理器时间 — n是指可运行进程的数量。</p>
+<p>允许每个进程运行一段时间、循环轮转、选择运行最少的进程作为下一个运行的进程。</p>
+<ul>
+<li><p>时间记账</p>
+</li>
+<li><p>进程选择</p>
+</li>
+<li><p>调度器入口</p>
+</li>
+<li><p>睡眠和唤醒</p>
+</li>
+</ul>
+<h5 id="时间记账"><a href="#时间记账" class="headerlink" title="时间记账"></a>时间记账</h5><p>系统分配一个时间片给每一个进程。每次系统时钟节拍发生时，时间片就会减少一个节拍周期。当一个进程的时间片被减少到0时，它就会被另一个尚未减到0的时间片可运行进程抢占。</p>
+<ol>
+<li>调度器实体结构&lt;linux/sched.h&gt;</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sched_entity</span> &#123;</span></span><br><span class="line">	<span class="comment">/* For load-balancing: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">load_weight</span>		<span class="title">load</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>			runnable_weight;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span>			<span class="title">run_node</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>		<span class="title">group_node</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span>			on_rq;</span><br><span class="line"></span><br><span class="line">	u64				exec_start;</span><br><span class="line">	u64				sum_exec_runtime;</span><br><span class="line">	u64				vruntime;</span><br><span class="line">	u64				prev_sum_exec_runtime;</span><br><span class="line"></span><br><span class="line">	u64				nr_migrations;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sched_statistics</span>		<span class="title">statistics</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>调度器实体结构作为一个名为se的成员变量，嵌入进程描述符struct task_struct内。</p>
+<ol start="2">
+<li>虚拟实时</li>
+</ol>
+<p><code>vruntime</code>变量存放进程的虚拟运行时间（ns）。</p>
+<p>cfs_rq（cfs的run queue）中的每一个进程都有一个虚拟时钟记录，vruntime。如果一个进程得以执行，随着时间的增长（也就是系统时钟一个个tick的到来），其vruntime将不断增大。没有得到执行的进程vruntime不变。</p>
+<p>调度器总是选择vruntime跑得最慢的那个进程来执行。为了区别优先级，优先级高的进程vruntime增长的慢。</p>
+<p><code>分配给进程的运行时间=调度周期*进程权重/所有进程权重之和</code></p>
+<p>调度周期：将所有处于TASK_RUNNING的进程都调度一遍的时间。</p>
+<p>举例：进程A、B，权重为1、2，调度周期为30ms，分配给A的CPU时间为：30ms*(1/(1+2))=10ms</p>
+<p><code>vruntime=实际运行时间*NICE_0_LOAD/进程权重</code></p>
+<h5 id="进程选择"><a href="#进程选择" class="headerlink" title="进程选择"></a>进程选择</h5><p>CFS使用红黑树来组织可运行进程队列，并利用其迅速找到最小vruntime值得进程。（红黑树最左侧的节点）</p>
+<p>新进程vruntime的选择：每个CPU的运行队列cfs_rq都维护一个min_vruntime，记录该队列中所有进程的vruntime最小值，新进程的初始vruntime值以此队列中的min_vruntime为基础设置。</p>
+<p>sched_child_runs_first:规定fork之后让子进程先于父进程运行；</p>
+<p>sched_features的START_DEBIT位：规定新进程的第一次运行要有延迟。</p>
+<p>子进程在创建时，vruntime初值为min_vruntime；然后如果sched_features中设置了START_DEBIT位，vruntime会在min_vruntime的基础上增大一些。设置完子进程的vruntime后，检查sched_child_runs_first参数，如果为1，就比较父进程和子进程的vruntime，如果父进程的vruntime小，就对换父子进程的vruntime，保证子进程先于父进程运行。</p>
+<h5 id="调度器入口"><a href="#调度器入口" class="headerlink" title="调度器入口"></a>调度器入口</h5><p>schedule()</p>
+<h5 id="睡眠与唤醒"><a href="#睡眠与唤醒" class="headerlink" title="睡眠与唤醒"></a>睡眠与唤醒</h5><h4 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h4><p>内核提供了用户进程与内核进行交互的一组接口。（Linux中常称为syscall）<img src="/images/syscall.png" alt="syscall"></p>
+<p>通知内核的机制是靠软中断实现的：通过引发一个异常来促使系统切换到内核态去执行异常处理程序。x86系统上预定义的软中断时中断号128，通过int 0x80指令触发该中断，系统切换到内核态并执行第128号异常处理程序，这个处理程序叫syscall()。</p>
+<p><code>copy_to_user()</code></p>
+<p><code>copy_from_user()</code></p>
+<h5 id="系统调用上下文"><a href="#系统调用上下文" class="headerlink" title="系统调用上下文"></a>系统调用上下文</h5><p>内核在执行系统调用的时候处于进程上下文。current指针指向当前任务，即引发系统调用的那个进程。</p>
+<h4 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h4><h5 id="页"><a href="#页" class="headerlink" title="页"></a>页</h5><p>内核把物理页作为内存管理的基本单元。内存管理单元(MMU)通常以页为单位进行处理。从虚拟内存角度来看，页是最小单位。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">page</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> flags; <span class="comment">//页的状态，是否为脏，是否锁定。</span></span><br><span class="line">    <span class="keyword">atomic_t</span> _count; <span class="comment">//页的引用计数。</span></span><br><span class="line">    <span class="keyword">atomic_t</span> _mapcount;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">private</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">address_space</span> *<span class="title">mapping</span>;</span></span><br><span class="line">    <span class="keyword">pgoff_t</span> index;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">lru</span>;</span></span><br><span class="line">    <span class="keyword">void</span> *<span class="keyword">virtual</span>; <span class="comment">//页的虚拟地址。</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="区"><a href="#区" class="headerlink" title="区"></a>区</h5><ul>
+<li>ZONE_DMA</li>
+<li>ZONE_DMA32</li>
+<li>ZONE_NORMAL</li>
+<li>ZONE_HIGHMEM</li>
+</ul>
+<h5 id="slab层"><a href="#slab层" class="headerlink" title="slab层"></a>slab层</h5><h4 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h4><p>虚拟文件系统（VFS），作为内核子系统，为用户空间提供了文件和文件系统相关的接口。</p>
+<h5 id="目录模型"><a href="#目录模型" class="headerlink" title="目录模型"></a>目录模型</h5><p><img src="/images/dir.jpg" alt="dir"></p>
+<h5 id="VFS层次"><a href="#VFS层次" class="headerlink" title="VFS层次"></a>VFS层次</h5><p>VFS（Virtual Filesystem Switch）</p>
+<p><img src="/images/layers.jpg" alt="layers"></p>
+<h5 id="VFS的概念"><a href="#VFS的概念" class="headerlink" title="VFS的概念"></a>VFS的概念</h5><p>VFS中有四个主要对象类型：</p>
+<ul>
+<li>superblock：代表一个具体的已安装文件系统</li>
+<li>inode：代表一个具体的文件（VFS中有inode概念，文件系统中也有inode概念）</li>
+<li>dentry：代表一个目录项，文件目录中的一个点，可以是目录也可以是文件</li>
+<li>file object：代表由进程打开的文件</li>
+</ul>
+<p>VFS将目录作为一个文件来处理，所以不存在目录对象。目录项不同于目录，但目录是另一种形式的文件。</p>
+<h5 id="superblock"><a href="#superblock" class="headerlink" title="superblock"></a>superblock</h5><p>超级块对象：各文件系统都必须实现超级块对象，用于存储特定文件系统的信息，对应于存放在磁盘特定扇区中的文件系统超级块获文件系统控制块。</p>
+<h5 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h5><p>索引节点对象：包含了内核在操作文件或目录时需要的全部信息。（除文件名）</p>
+<ul>
+<li>文件的字节数</li>
+<li>文件拥有者的User ID</li>
+<li>文件的Group ID</li>
+<li>文件的读、写、执行权限</li>
+<li>文件的时间戳，共有三个：<ul>
+<li>ctime指inode上一次变动的时间</li>
+<li>mtime指文件内容上一次变动的时间</li>
+<li>atime指文件上一次打开的时间</li>
+</ul>
+</li>
+<li>链接数，即有多少文件名指向这个inode</li>
+<li>文件数据block的位置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stat</span> file.txt</span><br><span class="line">ls -i file.txt</span><br></pre></td></tr></table></figure>
+<h5 id="dentry"><a href="#dentry" class="headerlink" title="dentry"></a>dentry</h5><p>目录项对象：所包含文件的文件名，以及该文件名对应的inode号。</p>
+<p>目录文件的读权限（r）和写权限（w），都是针对目录文件本身。目录文件内只有文件名和inode号，所以只有读权限（r），只能获取文件名，无法获取其他信息，因为其他信息存储在inode节点中，而读取inode节点内的信息需要目录文件的执行权限（x）。</p>
+<h5 id="硬链接与软链接"><a href="#硬链接与软链接" class="headerlink" title="硬链接与软链接"></a>硬链接与软链接</h5><p>硬链接实际上是dentry项的一个拷贝，它们都指向同一个inode节点。inode链接数记录了hard link指向的计数。新增一个硬链接，会增加inode信息中的链接数，删除一个硬链接，则减少。在创建目录时，会生成当前目录和父目录”.” “..”。前者的inode号码就是当前目录的inode号码，后者为父目录的inode号码。</p>
+<p><code>ln 源文件 目标文件</code></p>
+<p><img src="/images/hard_link.jpg" alt="hard_link"></p>
+<p>软链接（symbolic link）类似于windows中的快捷方式。软链接与源文件inode号不一样，但是软链接中的内容是源文件的路径。读取软链接时，系统会自动导向源文件。</p>
+<p><code>ln -S 源文件 目标文件</code></p>
+<h5 id="进程对文件的管理"><a href="#进程对文件的管理" class="headerlink" title="进程对文件的管理"></a>进程对文件的管理</h5><p>进程描述符task_struct中有两个与文件相关的变量：fs与files。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/* Filesystem information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span>		*<span class="title">fs</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Open file information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span>		*<span class="title">files</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> users; <span class="comment">//用户数目</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> lock;  <span class="comment">//保护该结构体的锁</span></span><br><span class="line">	<span class="keyword">seqcount_t</span> seq;</span><br><span class="line">	<span class="keyword">int</span> umask; <span class="comment">//掩码</span></span><br><span class="line">	<span class="keyword">int</span> in_exec; <span class="comment">//当前正在执行的文件</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">path</span> <span class="title">root</span>, <span class="title">pwd</span>;</span> <span class="comment">//根目录路径、当前工作目录路径</span></span><br><span class="line">&#125; __randomize_layout;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> &#123;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * read mostly part</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">atomic_t</span> count;</span><br><span class="line">	<span class="keyword">bool</span> resize_in_progress;</span><br><span class="line">	<span class="keyword">wait_queue_head_t</span> resize_wait;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> __<span class="title">rcu</span> *<span class="title">fdt</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> <span class="title">fdtab</span>;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * written part on a separate cache line in SMP</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> file_lock ____cacheline_aligned_in_smp;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> next_fd;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> close_on_exec_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> open_fds_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> full_fds_bits_init[<span class="number">1</span>];</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file</span> __<span class="title">rcu</span> * <span class="title">fd_array</span>[<span class="title">NR_OPEN_DEFAULT</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>files_struct结构体由进程描述符files指向。fd_array数组指针指向已打开的文件对象。如果一个进程所打开文件超过NR_OPEN_DEFAULT，内核将分配一个新数组，并将fdt指向它。</p>
+<p>fs_struct由进程描述符中fs指向。</p>
+<h4 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h4><p>内存描述符mm_struct。</p>
+<h5 id="虚拟内存区域"><a href="#虚拟内存区域" class="headerlink" title="虚拟内存区域"></a>虚拟内存区域</h5><p>vm_area_struct (Virtual memory areas, VMAs)</p>
+<p><img src="/images/address_space.gif" alt="address_space"></p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/linux/">#linux</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2017/12/31/2017-12-31-linux-data_struct/">linux内核使用的数据结构</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2017/11/12/red-black-tree/">红黑树的插入与删除</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 lankstra&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
