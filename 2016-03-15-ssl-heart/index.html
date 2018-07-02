@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>OpenSSL心脏滴血漏洞 - Lankstra&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+
+
+<link rel="icon" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Lankstra&#39;s blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            OpenSSL心脏滴血漏洞
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2016-03-14T16:00:00.000Z" itemprop="datePublished">Mar 15 2016</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/learn/">learn</a>
+        </span>
+        
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>OpenSSL心脏滴血漏洞 CVE-2014-0160<br><a id="more"></a><br>心脏出血漏洞（英语：Heartbleed bug），也简称为心血漏洞，是一个出现在加密程序库OpenSSL的程序错误，首次于2014年4月披露。该程序库广泛用于实现互联网的传输层安全（TLS）协议。只要使用的是存在缺陷的OpenSSL实例，无论是服务器还是客户端，都可能因此而受到攻击。此问题的原因是在实现TLS的心跳扩展时没有对输入进行适当验证（缺少边界检查），因此漏洞的名称来源于“心跳”（heartbeat）。该程序错误属于缓冲区过读，即可以读取的数据比应该允许读取的还多。</p>
+<p>漏洞原因：OpenSSL 在实现 TLS/DTLS 心跳扩展协议 (RFC6520) 时没有检查客户端载荷与载荷长度值是否匹配  </p>
+<h3 id="TLS-SSL原理简介"><a href="#TLS-SSL原理简介" class="headerlink" title="TLS/SSL原理简介"></a>TLS/SSL原理简介</h3><p>SSL/TLS协议的基本思路是采用公钥加密法，客户端先向服务器端索要公钥，然后用公钥加密信息，服务器收到密文后，用自己的私钥解密。  </p>
+<p>SSL/TLS协议的基本过程<br>握手阶段</p>
+<ol>
+<li>客户端向服务端索要并验证公钥。</li>
+<li>双方协商生成“对话密钥”。</li>
+<li>双方采用“对话密钥”进行通信。  </li>
+</ol>
+<p>握手阶段详细过程<br>1.客户端发送请求（ClientHello）：客户端给出协议版本号、一个客户端生成的随机数，以及客户端支持的加密方式  </p>
+<ul>
+<li>协议版本</li>
+<li>客户端随机数（Client random）</li>
+<li>加密方式</li>
+<li>压缩方法  </li>
+</ul>
+<p>2.服务器回应（ServerHello）：服务端确认双方的加密方式，并给出数字证书、以及一个服务端生成的随机数</p>
+<ul>
+<li>确认协议版本</li>
+<li>服务端随机数（Server random）</li>
+<li>加密方式</li>
+<li>服务器证书  </li>
+</ul>
+<p>3.客户端回应：客户端确认数字证书有效，然后生成一个随机数（Premaster secret），并使用数字证书中的公钥，加密这个随机数发给服务端，利用三个随机数和约定的加密方法生成“对话密钥”  </p>
+<ul>
+<li>一个随机数。用公钥加密（Premaster secret）</li>
+<li>编码改变通知</li>
+<li>客户端握手结束通知  </li>
+</ul>
+<p>4.服务器的最后回应：根据私钥获取客户端发来的随机数，按照约定的加密方法用三个随机数生成”对话密钥“</p>
+<ul>
+<li>编码改变通知</li>
+<li>服务器握手结束通知</li>
+</ul>
+<h3 id="心脏滴血漏洞原理分析"><a href="#心脏滴血漏洞原理分析" class="headerlink" title="心脏滴血漏洞原理分析"></a>心脏滴血漏洞原理分析</h3><p>典型的 SSL/TLS 会话建立过程是，客户端和服务端进行握手，协商加密算法，参数；成功后，进行加密通信，此时也开始心跳包的发送和接收，用于判断对方是否在线。问题出在服务端对心跳包的处理逻辑上。<br>心跳包的机制：当接受者收到心跳包A时，要回复给发送者一个心跳包B，B的载荷要与A的相同。发送者收到B，将之与A比对，相同，则连接有效；不同，则重传该心跳包。<br>心跳请求报文格式，消息类型1字节，载荷长度2字节，载荷（序号+随机值）18字节，padding<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">*  - Message Type, <span class="number">1</span> byte</span><br><span class="line">*  - Payload Length, <span class="number">2</span> bytes (<span class="keyword">unsigned</span> <span class="keyword">int</span>)</span><br><span class="line">*  - Payload, <span class="function">the sequence <span class="title">number</span> <span class="params">(<span class="number">2</span> bytes uint)</span></span></span><br><span class="line">*  - Payload, random bytes (16 bytes uint)</span><br><span class="line">*  - Padding</span><br></pre></td></tr></table></figure></p>
+<p>该问题出在对心跳请求报文的处理上，由于心跳请求报文是客户端发送的，所以是可以进行伪造的。<br>处理心跳请求报文：<br>先将指针p指向心跳请求报文首地址：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tls1_process_heartbeat</span><span class="params">(SSL *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *p = &amp;s-&gt;s3-&gt;rrec.data[<span class="number">0</span>], *pl;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> hbtype;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> payload;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> padding = <span class="number">16</span>;  <span class="comment">/* Use minimum padding */</span></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>取出心跳包类型、客户端设置的载荷长度，并用pl指向载荷首地址：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hbtype = *p++;</span><br><span class="line">n2s(p, payload);</span><br><span class="line">pl = p;</span><br></pre></td></tr></table></figure></p>
+<p>判断如果心跳包类型是请求，就用从心跳请求报文中获取的载荷长度来计算分配空间，准备填充返回消息：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (hbtype == TLS1_HB_REQUEST) &#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *buffer, *bp;</span><br><span class="line">    <span class="keyword">int</span> r;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Allocate memory for the response, size is 1 bytes message type,</span></span><br><span class="line"><span class="comment">     * plus 2 bytes payload length, plus payload, plus padding</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    buffer = OPENSSL_malloc(<span class="number">1</span> + <span class="number">2</span> + payload + padding);</span><br><span class="line">    <span class="keyword">if</span> (buffer == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    bp = buffer;</span><br></pre></td></tr></table></figure></p>
+<p>构造返回报文：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Enter response type, length and copy payload */</span></span><br><span class="line">*bp++ = TLS1_HB_RESPONSE;</span><br><span class="line">s2n(payload, bp);</span><br><span class="line"><span class="built_in">memcpy</span>(bp, pl, payload);</span><br><span class="line">bp += payload;</span><br><span class="line"><span class="comment">/* Random padding */</span></span><br><span class="line"><span class="keyword">if</span> (RAND_bytes(bp, padding) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">    OPENSSL_free(buffer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在构造返回报文时，<code>memcpy(bp, pl, payload);</code>，使用的长度是客户端发送过来请求报文的载荷长度，服务端并没有进行检查。如果构造一个恶意的请求包，设定的长度为payload，实际发送的载荷比payload短或者不发送载荷，这个<code>memcpy</code>将把服务端内存中的其他数据复制到<code>buff</code>中，并返回给客户端。<br>极限情况下，伪造包的payload可以设定的载荷长度为65535（64KB），但不携带任何载荷，服务端将会以每次64KB的速度泄露。</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/openssl/">#openssl</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2016-04-04-python-fileop/">python文件操作</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2016-02-10-unix-socket/">linux下网络套接字编程</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 lankstra&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+                 <!-- & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a> -->
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>

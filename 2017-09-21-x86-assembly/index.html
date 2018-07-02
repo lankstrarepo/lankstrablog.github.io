@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>x86_64汇编 - Lankstra&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+
+
+<link rel="icon" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Lankstra&#39;s blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            x86_64汇编
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2017-09-20T16:00:00.000Z" itemprop="datePublished">Sep 21 2017</time>
+        </span>
+        
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>x86_64汇编简析<br><a id="more"></a></p>
+<h3 id="AT-amp-T与Intel汇编代码格式"><a href="#AT-amp-T与Intel汇编代码格式" class="headerlink" title="AT&amp;T与Intel汇编代码格式"></a>AT&amp;T与Intel汇编代码格式</h3><p>在unix与linux系统中，更多采用了AT&amp;T格式的汇编。两者区别：  </p>
+<ol>
+<li>AT&amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>AT&amp;T格式</th>
+<th>Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pushl %eax</td>
+<td>push eax</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>在AT&amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要加前缀。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">pushl $1</td>
+<td style="text-align:left">push 1</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>AT&amp;T 和 Intel 格式中的源操作数和目标操作数的位置正好相反。在 Intel 汇编格式中，目标操作数在源操作数的左边；而在 AT&amp;T 汇编格式中，目标操作数在源操作数的右边。例如：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">addl $1, %eax</td>
+<td style="text-align:left">add eax, 1</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li>在 AT&amp;T 汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀’b’、’w’、’l’分别表示操作数为字节（byte，8 比特）、字（word，16 比特）和长字（long，32比特）；而在 Intel 汇编格式中，操作数的字长是用 “byte ptr” 和 “word ptr” 等前缀来表示的。例如：  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">movb val, %al</td>
+<td style="text-align:left">mov al, byte ptr val</td>
+</tr>
+</tbody>
+</table>
+<ol start="5">
+<li>在 AT&amp;T 汇编格式中，内存操作数的寻址方式是<br><code>section:disp(base, index, scale)</code><br>而在 Intel 汇编格式中，内存操作数的寻址方式为：<br><code>section:[base + index*scale + disp]</code><br>由于 Linux 工作在保护模式下，用的是 32 位线性地址，所以在计算地址时不用考虑段基址和偏移量，而是采用如下的地址计算方法：<br><code>disp + base + index * scale</code>  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">movl -4(%ebp), %eax</td>
+<td style="text-align:left">mov eax, [ebp - 4]</td>
+</tr>
+<tr>
+<td style="text-align:left">movl array(, %eax, 4), %eax</td>
+<td style="text-align:left">mov eax, [eax*4 + array]</td>
+</tr>
+<tr>
+<td style="text-align:left">movw array(%ebx, %eax, 4), %cx</td>
+<td style="text-align:left">mov cx, [ebx + 4*eax + array]</td>
+</tr>
+<tr>
+<td style="text-align:left">movb $4, %fs:(%eax)</td>
+<td style="text-align:left">mov fs:eax, 4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>X84中原有8个32位通用寄存器%eax，%ebx，%ecx，%edx，%esi，%edi，%ebp，%esp, 在X86_64中<br>分别被扩展为64位，并且多了8个寄存器。因此X86_64的寄存器如下：</p>
+<ul>
+<li>rax, eax, ax, ah, al;</li>
+<li>rbx, ebx, bx, bh, bl;</li>
+<li>rcx, ecx, cx, ch, cl;</li>
+<li>rdx, edx, dx, dh, dl;</li>
+<li>rsi, esi, si;</li>
+<li>rdi, edi, di;</li>
+<li>rbp, ebp;</li>
+<li>rsp, esp;</li>
+<li>r8-r15;</li>
+</ul>
+<p>GCC中对这些寄存器的调用规则如下：</p>
+<ul>
+<li>%rax 作为函数返回值使用。</li>
+<li>%rsp 栈指针寄存器，指向栈顶</li>
+<li>%rdi，%rsi，%rdx，%rcx，%r8，%r9 用作函数参数，依次对应第1参数，第2参数。。。</li>
+<li>%rbx，%rbp，%r12，%r13，%14，%15 用作数据存储，遵循被调用者使用规则，简单说就是随便用，调用子函数之前要备份它，以防他被修改</li>
+<li>%r10，%r11 用作数据存储，遵循调用者使用规则，简单说就是使用之前要先保存原值</li>
+</ul>
+<div style="text-align:center"><br><img src="/images/register_map.png" width="50%"><br></div>  
+
+<h3 id="栈桢结构与函数调用"><a href="#栈桢结构与函数调用" class="headerlink" title="栈桢结构与函数调用"></a>栈桢结构与函数调用</h3><p>C语言属于面向过程语言，他最大特点就是把一个程序分解成若干过程（函数），比如：入口函数是main，然后调用各个子函数。在对应机器语言中，GCC把过程转化成栈帧（frame），简单的说，每个栈帧对应一个过程。X86-32典型栈帧结构中，由%ebp指向栈帧开始，%esp指向栈顶。  </p>
+<div style="text-align:center"><br><img src="/images/stack_frame.png" width="50%"><br></div>  
+
+<p>举个例子:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = i + j;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sum=%d\n"</span>, a+b);</span><br><span class="line">    <span class="keyword">return</span> (a+b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    foo(a, b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">6</span>;</span><br><span class="line">    bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>main:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _main</span><br><span class="line">_main proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="number">0</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="number">5</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="number">6</span></span><br><span class="line"><span class="keyword">call</span>    _bar</span><br><span class="line"><span class="keyword">xor</span>     <span class="built_in">eax</span>, <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line"></span><br><span class="line">_main endp</span><br><span class="line"></span><br><span class="line">__text ends</span><br></pre></td></tr></table></figure></p>
+<p>foo:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _foo</span><br><span class="line">_foo proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_14= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">14h</span></span><br><span class="line">var_10= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">10h</span></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">20h</span></span><br><span class="line"><span class="keyword">lea</span>     <span class="built_in">rax</span>, aSumD      <span class="comment">; "sum=%d\n"</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="built_in">edi</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_4]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_8]</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_10], <span class="number">2</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_C]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_10]</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rdi</span>, <span class="built_in">rax</span>        <span class="comment">; char *</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">al</span>, <span class="number">0</span></span><br><span class="line"><span class="keyword">call</span>    _printf</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_C]</span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_10]</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_14], <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">eax</span>, <span class="built_in">esi</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">20h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line">_foo endp</span><br></pre></td></tr></table></figure></p>
+<p>bar:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">public</span> _bar</span><br><span class="line">_bar proc <span class="built_in">near</span></span><br><span class="line"></span><br><span class="line">var_C= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">0Ch</span></span><br><span class="line">var_8= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">8</span></span><br><span class="line">var_4= <span class="built_in">dword</span> <span class="built_in">ptr</span> -<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">push</span>    <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">rbp</span>, <span class="built_in">rsp</span></span><br><span class="line"><span class="keyword">sub</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_4], <span class="number">1</span></span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_8], <span class="number">2</span></span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">edi</span>, [<span class="built_in">rbp</span>+var_4]</span><br><span class="line"><span class="keyword">mov</span>     <span class="built_in">esi</span>, [<span class="built_in">rbp</span>+var_8]</span><br><span class="line"><span class="keyword">call</span>    _foo</span><br><span class="line"><span class="keyword">mov</span>     [<span class="built_in">rbp</span>+var_C], <span class="built_in">eax</span></span><br><span class="line"><span class="keyword">add</span>     <span class="built_in">rsp</span>, <span class="number">10h</span></span><br><span class="line"><span class="keyword">pop</span>     <span class="built_in">rbp</span></span><br><span class="line"><span class="keyword">retn</span></span><br><span class="line">_bar endp</span><br></pre></td></tr></table></figure></p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/assembly/">#assembly</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/red-black-tree/">红黑树的插入与删除</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2017-08-06-sock5-proto/">socks5协议</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 lankstra&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+                 <!-- & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a> -->
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>

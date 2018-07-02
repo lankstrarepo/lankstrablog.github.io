@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Tag: Java - Lankstra&#39;s blog</title>
+<title>标签: Java - Lankstra&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -49,7 +49,10 @@
                href="/archives">Archives</a>
             
             <a class="navbar-item "
-               href="/tags">Tag</a>
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
             
         </div>
         
@@ -78,31 +81,22 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2016/02/05/2016-02-05-java-io/" itemprop="url">Java IO</a>
+            <a href="/2016-02-05-java-io/" itemprop="url">Java IO</a>
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2016-02-04T16:00:00.000Z" itemprop="datePublished">Fri Feb 05 2016 00:00:00 GMT+0800</time>
+            <time datetime="2016-02-04T16:00:00.000Z" itemprop="datePublished">Feb 5 2016</time>
         </span>
         
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <a id="more"></a>
-<p>IO也写作I/O，可理解为In与Out，即输入与输出。IO体系的基本功能就是：读和写。</p>
-<h4 id="IO流"><a href="#IO流" class="headerlink" title="IO流"></a>IO流</h4><hr>
-<p>读写设备上的数据，硬盘文件，内存，键盘，网络……</p>
-<p>根据数据走向，分为输入流与输出流<br>根据数据类型，分为字节流与字符流</p>
-<h4 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h4><p>字节流可以处理所有类型的数据，如MP3，图片，文字，视频等。读到一个字节就返回一个字节。<br>在java中对应的类以Stream结尾。<br>如：InputStream、 OutputStream</p>
-<h4 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h4><p>字符流仅能处理纯文本数据，如txt文本等。在读取时，读到一个或多个字节，先查找制定的编码表，然后将查到的字符返回。<br>在java中对应的类以Reader、Writer结尾。</p>
-<h4 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h4><p>InputStreamReader             是字节流通向字符流的桥梁<br>OutputStreamWriter          是字符流通向字节流的桥梁</p>
-<h4 id="带缓冲区的流"><a href="#带缓冲区的流" class="headerlink" title="带缓冲区的流"></a>带缓冲区的流</h4><pre><code>BufferedInputStream  BufferedOutputStream      字节流带缓冲区
-BufferedReader       BufferedWriter           字符流带缓冲区     
-
-(BufferedReader带readLine()方法，BufferedWriter带newLine()与flush()方法)
-</code></pre>
+        <p>java IO流<br>
+        <p class="article-more-link">
+            <a href="/2016-02-05-java-io/#more">阅读更多</a>
+        </p>
     
     </div>
     
@@ -121,8 +115,8 @@ BufferedReader       BufferedWriter           字符流带缓冲区
         <div class="columns content">
             <div class="column is-narrow has-text-centered">
                 &copy; 2018 lankstra&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+                 <!-- & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a> -->
             </div>
             <div class="column is-hidden-mobile"></div>
 
@@ -184,7 +178,7 @@ BufferedReader       BufferedWriter           字符流带缓冲区
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -196,11 +190,11 @@ BufferedReader       BufferedWriter           字符流带缓冲区
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

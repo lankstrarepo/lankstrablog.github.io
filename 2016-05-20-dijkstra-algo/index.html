@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>dijkstra算法 - Lankstra&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+
+
+<link rel="icon" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Lankstra&#39;s blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            dijkstra算法
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">May 20 2016</time>
+        </span>
+        
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>dijkstra算法浅析<br><a id="more"></a><br>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.  </p>
+<p>x∈S &lt;=&gt;x∈V且从s到x的最短路径已经找到<br>初始：S={s}, S=V时算法结束<br>从s到u相对于S的最短路径：从s到u且仅经过S中顶点的最短路径<br>dist[u]:从s到u相对于S最短路径的长度<br>short[u]:从s到u的最短路径的长度<br>dist[u]&gt;=short[u]  </p>
+<p>输入：有向图G=(V,E,W), V={1,2,…,n}, s=1<br>输出：从s到每个顶点的最短路径<br>1.初始S={1}<br>2.对于i∈V-S,计算1到i的相对于S的最短路，长度dist[i]<br>3.选择V-S中dist值最小的j,将j加入S,修改V-S中顶点的dist值.<br>4.继续上述过程，直到S=V为止  </p>
+<p>伪码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">S &lt;- &#123;s&#125;  </span><br><span class="line">dist[s] &lt;- <span class="number">0</span>  </span><br><span class="line"><span class="keyword">for</span> i ∈ V-&#123;s&#125; do  </span><br><span class="line">    dist[i] &lt;- w(s, i) //s到i没边，w(s,i)=∞  </span><br><span class="line"><span class="keyword">while</span> V-S != Ø do  </span><br><span class="line">    <span class="comment"># 从V-S取相对S的最短路径顶点j  </span></span><br><span class="line">    S &lt;- S∪&#123;j&#125;  </span><br><span class="line">    <span class="keyword">for</span> i ∈ V-S do  </span><br><span class="line">        <span class="keyword">if</span> dist[j] + w(j,i) &lt; dist[i]  </span><br><span class="line">            dist[i] &lt;- dist[j] + w(j, i)</span><br></pre></td></tr></table></figure></p>
+<p><div style="text-align:center"><br><img src="/images/dij.png" width="50%"><br></div><br>代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEXNUM 6</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INFINITY 10000        </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> path[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> distance[VERTEXNUM];</span><br><span class="line"><span class="keyword">int</span> visited[VERTEXNUM];</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> graph[VERTEXNUM][VERTEXNUM] = &#123;</span><br><span class="line"><span class="comment">//  0           1          2          3          4          5</span></span><br><span class="line">    <span class="number">0</span>,          <span class="number">1</span>,         INFINITY,  <span class="number">4</span>,         <span class="number">4</span>,         INFINITY, <span class="comment">//0</span></span><br><span class="line">    <span class="number">1</span>,          <span class="number">0</span>,         INFINITY,  <span class="number">2</span>,         INFINITY,  INFINITY, <span class="comment">//1</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">0</span>,         <span class="number">2</span>,         INFINITY,  <span class="number">1</span>,        <span class="comment">//2</span></span><br><span class="line">    <span class="number">4</span>,          <span class="number">2</span>,         <span class="number">2</span>,         <span class="number">0</span>,         <span class="number">3</span>,         INFINITY, <span class="comment">//3</span></span><br><span class="line">    <span class="number">4</span>,          INFINITY,  INFINITY,  <span class="number">3</span>,         <span class="number">0</span>,         <span class="number">3</span>,        <span class="comment">//4</span></span><br><span class="line">    INFINITY,   INFINITY,  <span class="number">1</span>,         INFINITY,  <span class="number">3</span>,         <span class="number">0</span>         <span class="comment">//5</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, vertex, min_edge, edges;</span><br><span class="line"></span><br><span class="line">    visited[source] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        distance[i] = graph[source][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    distance[source] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (edges = <span class="number">0</span>; edges &lt; VERTEXNUM; edges++)</span><br><span class="line">    &#123;</span><br><span class="line">        min_edge = INFINITY;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; min_edge &gt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                vertex = j;</span><br><span class="line">                min_edge = distance[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        visited[vertex] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; VERTEXNUM; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; distance[vertex] + graph[vertex][j] &lt; distance[j])</span><br><span class="line">            &#123;</span><br><span class="line">                distance[j] = distance[vertex] + graph[vertex][j];</span><br><span class="line">                path[j] = vertex;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    dijkstra(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"dist[%d]=%d\t"</span>, i, distance[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VERTEXNUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"path[%d]=%d\t"</span>, i, path[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/algorithm/">#algorithm</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2016-10-11-kmp-algo/">kmp算法</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2016-04-04-python-fileop/">python文件操作</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 lankstra&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+                 <!-- & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a> -->
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>

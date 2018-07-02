@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>归档: 2016/3 - Lankstra&#39;s blog</title>
+<title>Java IO - Lankstra&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,22 +70,61 @@
 
     <section class="section">
     <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Java IO
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2016-02-04T16:00:00.000Z" itemprop="datePublished">Feb 5 2016</time>
+        </span>
+        
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>java IO流<br><a id="more"></a><br>IO也写作I/O，可理解为In与Out，即输入与输出。IO体系的基本功能就是：读和写。</p>
+<h4 id="IO流"><a href="#IO流" class="headerlink" title="IO流"></a>IO流</h4><hr>
+<p>读写设备上的数据，硬盘文件，内存，键盘，网络……</p>
+<p>根据数据走向，分为输入流与输出流<br>根据数据类型，分为字节流与字符流</p>
+<h4 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h4><p>字节流可以处理所有类型的数据，如MP3，图片，文字，视频等。读到一个字节就返回一个字节。<br>在java中对应的类以Stream结尾。<br>如：InputStream、 OutputStream</p>
+<h4 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h4><p>字符流仅能处理纯文本数据，如txt文本等。在读取时，读到一个或多个字节，先查找制定的编码表，然后将查到的字符返回。<br>在java中对应的类以Reader、Writer结尾。</p>
+<h4 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h4><p>InputStreamReader             是字节流通向字符流的桥梁<br>OutputStreamWriter          是字符流通向字节流的桥梁</p>
+<h4 id="带缓冲区的流"><a href="#带缓冲区的流" class="headerlink" title="带缓冲区的流"></a>带缓冲区的流</h4><pre><code>BufferedInputStream  BufferedOutputStream      字节流带缓冲区
+BufferedReader       BufferedWriter           字符流带缓冲区     
+
+(BufferedReader带readLine()方法，BufferedWriter带newLine()与flush()方法)
+</code></pre>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Java/">#Java</a></span>
+    
+    </div>
     
     
-        <div class="archive content">
-            <h4 class="title is-4" id="2016">2016</h4>
-            <div class="articles">
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-                <div class="article content>">
-                    <time class="is-text-small" datetime="2016-03-14T16:00:00.000Z" itemprop="datePublished">
-                        Mar 15</time>
-                    <h6 class="title is-6"><a href="/2016-03-15-ssl-heart/">OpenSSL心脏滴血漏洞</a></h6>
-                </div>
+            <a href="/2016-02-10-unix-socket/">linux下网络套接字编程</a>
             
-            </div>
-        </div>
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2016-01-28-candpointer_error/">C和指针中的一处错误</a>
+            
+        </span>
+    </div>
     
-    
+</article>
+
+
+
+
     </div>
 </section>
     <footer class="footer">
