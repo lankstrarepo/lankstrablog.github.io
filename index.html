@@ -93,7 +93,7 @@
     
         <p>linux内核设计与实现<br>
         <p class="article-more-link">
-            <a href="/2017-12-24-linux-kernel/#more">Read More</a>
+            <a href="/2017-12-24-linux-kernel/#more">阅读更多</a>
         </p>
     
     </div>
@@ -127,7 +127,7 @@
     
         <p>详解红黑树的插入与删除<br>
         <p class="article-more-link">
-            <a href="/2017-11-12-red-black-tree/#more">Read More</a>
+            <a href="/2017-11-12-red-black-tree/#more">阅读更多</a>
         </p>
     
     </div>
@@ -161,7 +161,7 @@
     
         <p>linux内核中使用的数据结构详解<br>
         <p class="article-more-link">
-            <a href="/2017-10-29-linux-data_struct/#more">Read More</a>
+            <a href="/2017-10-29-linux-data_struct/#more">阅读更多</a>
         </p>
     
     </div>
@@ -195,7 +195,7 @@
     
         <p>x86_64汇编简析<br>
         <p class="article-more-link">
-            <a href="/2017-09-21-x86-assembly/#more">Read More</a>
+            <a href="/2017-09-21-x86-assembly/#more">阅读更多</a>
         </p>
     
     </div>
@@ -229,7 +229,7 @@
     
         <p>socks5协议简介<br>
         <p class="article-more-link">
-            <a href="/2017-08-06-sock5-proto/#more">Read More</a>
+            <a href="/2017-08-06-sock5-proto/#more">阅读更多</a>
         </p>
     
     </div>
@@ -263,7 +263,7 @@
     
         <p>神经网络学习<br>
         <p class="article-more-link">
-            <a href="/2017-06-15-neural-net/#more">Read More</a>
+            <a href="/2017-06-15-neural-net/#more">阅读更多</a>
         </p>
     
     </div>
@@ -297,7 +297,7 @@
     
         <p>kmp算法浅析<br>
         <p class="article-more-link">
-            <a href="/2016-10-11-kmp-algo/#more">Read More</a>
+            <a href="/2016-10-11-kmp-algo/#more">阅读更多</a>
         </p>
     
     </div>
@@ -331,7 +331,7 @@
     
         <p>dijkstra算法浅析<br>
         <p class="article-more-link">
-            <a href="/2016-05-20-dijkstra-algo/#more">Read More</a>
+            <a href="/2016-05-20-dijkstra-algo/#more">阅读更多</a>
         </p>
     
     </div>
@@ -365,7 +365,7 @@
     
         <p>python文件批量重命名操作<br>
         <p class="article-more-link">
-            <a href="/2016-04-04-python-fileop/#more">Read More</a>
+            <a href="/2016-04-04-python-fileop/#more">阅读更多</a>
         </p>
     
     </div>
@@ -399,7 +399,7 @@
     
         <p>OpenSSL心脏滴血漏洞 CVE-2014-0160<br>
         <p class="article-more-link">
-            <a href="/2016-03-15-ssl-heart/#more">Read More</a>
+            <a href="/2016-03-15-ssl-heart/#more">阅读更多</a>
         </p>
     
     </div>
@@ -433,7 +433,7 @@
     
         <p>基本的套接字编程<br>
         <p class="article-more-link">
-            <a href="/2016-02-10-unix-socket/#more">Read More</a>
+            <a href="/2016-02-10-unix-socket/#more">阅读更多</a>
         </p>
     
     </div>
@@ -467,7 +467,7 @@
     
         <p>java IO流<br>
         <p class="article-more-link">
-            <a href="/2016-02-05-java-io/#more">Read More</a>
+            <a href="/2016-02-05-java-io/#more">阅读更多</a>
         </p>
     
     </div>
@@ -501,7 +501,7 @@
     
         <p>C和指针的一处错误<br>
         <p class="article-more-link">
-            <a href="/2016-01-28-candpointer_error/#more">Read More</a>
+            <a href="/2016-01-28-candpointer_error/#more">阅读更多</a>
         </p>
     
     </div>
@@ -536,7 +536,7 @@
         <p>markdown语法</p>
 <p>[TOC]</p>
         <p class="article-more-link">
-            <a href="/2016-01-10-markdown-rule/#more">Read More</a>
+            <a href="/2016-01-10-markdown-rule/#more">阅读更多</a>
         </p>
     
     </div>
@@ -598,9 +598,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <script>
     MathJax.Hub.Config({
-        "HTML-CSS": {matchFontHeight: false},
+        "HTML-CSS": {matchFontHeight: false,
+                     availableFonts: ["TeX"]},
         SVG: {matchFontHeight: false},
-        CommonHTML: {matchFontHeight: false}
+        CommonHTML: {matchFontHeight: false},
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true
+    },
+
     });
 </script>
 
@@ -619,7 +628,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -631,11 +640,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

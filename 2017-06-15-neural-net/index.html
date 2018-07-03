@@ -93,12 +93,12 @@
         <p>神经网络学习<br><a id="more"></a></p>
 <h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络中最基本的成分是神经元(neuron)模型。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的点位；如果某神经元的点位超过了一个“阈值”(threshold)，那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。  </p>
 <h3 id="M-P神经元模型"><a href="#M-P神经元模型" class="headerlink" title="M-P神经元模型"></a>M-P神经元模型</h3><p>神经元接收到来自$n$个其他神经元传递过来的输入信号$x_i$，这些输入信号通过带权重$w_i$的连接进行传递，神经元接收到的总输入值将与神经元的阈值进行比较，然后通过激活函数处理以产生神经元的输出。  </p>
-<div style="text-align:center"><br><img src="/images/neuron.png" width="50%"><br>$$y = f(\sum_{i=1}^nw_ix_i - θ)$$<br></div>
+<div style="text-align:center"><br><img src="/images/neuron.png"><br>$$y = f(\sum_{i=1}^nw_ix_i - θ)$$<br></div>
 
 <h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>阶跃函数</p>
 <div style="text-align:center"><br>$$f(x) = \begin{cases} 1, &amp; x \geq 0 \\<br>0, &amp; x &lt; 0 \\<br>\end{cases} $$<br></div><br>单极性sigmoid函数<br><div style="text-align:center">$$f(x) = \frac{1}{1+e^{-x}}$$</div><br>双极性sigmoid函数<br><div style="text-align:center">$$f(x) = tanh(x) = \frac{1 - e^{-x}}{1+e^{-x}}$$</div>
 
-<h3 id="感知机与多层网络"><a href="#感知机与多层网络" class="headerlink" title="感知机与多层网络"></a>感知机与多层网络</h3><p><div style="text-align:center"><img src="/images/perceptron.png" width="50%"></div><br>感知机(Perceptron)由两层神经元组成，输入层接收外部输入信号后传递给输出层，输出层是M-P神经元。<br>感知机能容易地实现逻辑与、或、非运算。感知机的输出$y=f(\sum_{i}w_ix_i-θ)$，假定$f$是阶跃函数，有</p>
+<h3 id="感知机与多层网络"><a href="#感知机与多层网络" class="headerlink" title="感知机与多层网络"></a>感知机与多层网络</h3><p><div style="text-align:center"><img src="/images/perceptron.png"></div><br>感知机(Perceptron)由两层神经元组成，输入层接收外部输入信号后传递给输出层，输出层是M-P神经元。<br>感知机能容易地实现逻辑与、或、非运算。感知机的输出$y=f(\sum_{i}w_ix_i-θ)$，假定$f$是阶跃函数，有</p>
 <ul>
 <li>与运算$(x_1∩x_2)$:令$w_1=w_2=1,θ=2$,则$y=f(1\cdot x_1+1\cdot x_2-2)$,仅在$x_1=x_2=1$时，$y=1$;</li>
 <li>或运算$(x_1∪x_2)$:令$w_1=w_2=1,θ=0.5$,则$y=f(1\cdot x_1+1\cdot x_2-0.5)$,当$x_1=1$或$x_2=1$时，$y=1$;</li>
@@ -186,9 +186,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <script>
     MathJax.Hub.Config({
-        "HTML-CSS": {matchFontHeight: false},
+        "HTML-CSS": {matchFontHeight: false,
+                     availableFonts: ["TeX"]},
         SVG: {matchFontHeight: false},
-        CommonHTML: {matchFontHeight: false}
+        CommonHTML: {matchFontHeight: false},
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true
+    },
+
     });
 </script>
 
@@ -207,7 +216,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -219,11 +228,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };
