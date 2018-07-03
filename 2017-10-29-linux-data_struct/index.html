@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>linux内核使用的数据结构 - Lankstra&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+
+
+<link rel="icon" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Lankstra&#39;s blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            linux内核使用的数据结构
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2017-10-28T16:00:00.000Z" itemprop="datePublished">Oct 29 2017</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/learn/">learn</a>
+        </span>
+        
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>linux内核中使用的数据结构详解<br><a id="more"></a></p>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><p>经典的单链表实现，节点结构体中是一个数据域和一个指针域。数据域保存着数据，指针域指向链表的下一个元素。链表相对于数组，链表的节点是可以动态创建并插入，在内存中无须占用连续的内存区域。为了实现不连续的存放，需要指针域将各个节点联系在一起。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">    <span class="keyword">void</span> *data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;node;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/singly_linked_list.png" alt="singly_linked_list"></p>
+<h4 id="链表的插入与删除操作"><a href="#链表的插入与删除操作" class="headerlink" title="链表的插入与删除操作"></a>链表的插入与删除操作</h4><p>单向链表节点的插入操作，需要找到插入的位置，调整前一个节点和插入节点的指针域即可。删除操作，调整前一个节点的指针域即可。<br><img src="/images/singly_linked_list_delins.png" alt="singly_linked_list_delins"></p>
+<p>单向链表有一些缺点，如当已知指向某节点的指针，需要删除该节点时，需要平均O(n)的复杂度来寻找到需要删除节点的前一个节点，再调整指针域进行删除。这时可以增加一个前向的指针域，实现双向链表来解决。</p>
+<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span>&#123;</span></span><br><span class="line">    <span class="keyword">void</span> *data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;dnode;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/doubly_linked_list.png" alt="doubly_linked_list"></p>
+<h4 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h4><p>当我们需要获取到链表尾部节点时，需要遍历整个链表，直至最后一个节点。双向循环链表通过增加一个头节点，将链表的头尾连接起来，形成循环链表，这样更方便获取尾部节点或者从尾到头遍历。<br><img src="/images/circular_linked_list.png" alt="circular_linked_list"></p>
+<h4 id="linux内核中链表的实现"><a href="#linux内核中链表的实现" class="headerlink" title="linux内核中链表的实现"></a>linux内核中链表的实现</h4><p>c语言实现的经典链表实现会带来什么问题？当前有两个结构<code>foo</code>和<code>bar</code>,都是以双向链表形式将各个结构体连接的，结构体中增加了<code>prev</code>和<code>next</code>指针。这就带来了一个问题，当需要插入、删除、遍历<code>foo</code>或者<code>bar</code>的链表时，需要定义两套<code>list_insert</code>、<code>list_delete</code>与<code>list_foreach</code>操作。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> foo_length;</span><br><span class="line">    <span class="keyword">int</span> foo_value;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;foo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">bar</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> bar_count;</span><br><span class="line">    <span class="keyword">int</span> bar_value;</span><br><span class="line">    <span class="keyword">bool</span> is_bar_ready;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bar</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bar</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;bar;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">list_foo_insert</span><span class="params">(foo *head, foo *insert_node)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">list_bar_insert</span><span class="params">(bar *head, bar *insert_node)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>linux内核实现的方式是将链表节点指针域拼装成结构体，再嵌入其他数据结构中。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> foo_length;</span><br><span class="line">    <span class="keyword">int</span> foo_value;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list</span>;</span></span><br><span class="line">&#125;foo;</span><br></pre></td></tr></table></figure></p>
+<p>当需要链表相关操作的函数时，传入的参数就不需要是<code>foo</code>或者<code>bar</code>这样具体的数据结构，而是<code>list_head</code>指针。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LIST_HEAD_INIT(name) &#123; &amp;(name), &amp;(name) &#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LIST_HEAD(name) \</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">name</span> = <span class="title">LIST_HEAD_INIT</span>(<span class="title">name</span>)</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_add</span><span class="params">(struct list_head *<span class="keyword">new</span>, struct list_head *head)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    __list_add(<span class="keyword">new</span>, head, head-&gt;next); <span class="comment">//具体实现include/linux/list.h</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">LIST_HEAD</span><span class="params">(head)</span></span>;</span><br><span class="line">foo foo1, foo2;</span><br><span class="line"><span class="comment">//foo1 and foo2 do something, then add to head</span></span><br><span class="line">list_add(&amp;head, &amp;foo2-&gt;<span class="built_in">list</span>);</span><br><span class="line">list_add(&amp;head, &amp;foo1-&gt;<span class="built_in">list</span>);</span><br></pre></td></tr></table></figure>
+<p>这样就将<code>head</code>、<code>foo1</code>、<code>foo2</code>通过<code>list_head</code>关联起来。如果已知<code>head</code>，那么我们可以获取到<code>foo1</code>和<code>foo2</code>中的<code>list_head</code>。<br><img src="/images/list_head_model.png" alt="list_head_model"><br>如何通过<code>list_head</code>获取到<code>foo1</code>和<code>foo2</code>？linux内核中使用<code>list_entry</code>。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> offsetof(TYPE, MEMBER) ((size_t) &amp;((TYPE *)0)-&gt;MEMBER)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> container_of(ptr, type, member) (&#123;  \</span></span><br><span class="line">	const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr);  \</span><br><span class="line">	(type *)( (<span class="keyword">char</span> *)__mptr - offsetof(type,member) );&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> list_entry(ptr, type, member) \</span></span><br><span class="line">    container_of(ptr, type, member)</span><br></pre></td></tr></table></figure></p>
+<p><code>list_entry</code>第一个参数为指向<code>list_head</code>的指针，第二个参数为宿主结构体的类型，第三个参数为该<code>list_head</code>结构在宿主结构体中的成员名。重新对链表节点的结构进行命名，举例说明如何获取到指向宿主结构体的指针。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dnode</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;dnode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span></span><br><span class="line">    nt foo_length;</span><br><span class="line">    <span class="keyword">int</span> foo_value;</span><br><span class="line">    dnode node;</span><br><span class="line">&#125;foo;</span><br><span class="line"><span class="comment">//通过链表查找或遍历，获取到指向foo结构中node的指针pnode，此时要获取宿主结构体的指针，用list_entry</span></span><br><span class="line">foo *pfoo = list_entry(pnode, foo, node);</span><br></pre></td></tr></table></figure></p>
+<p>分析一下<code>list_entry</code>是如何获取到宿主结构体指针的。<code>container_of</code>通过结构体成员的指针，获取到宿主结构体的指针。该宏最后返回的是(type *)类型，是用结构体中成员的指针减去该成员在结构体中的偏移。<br><img src="/images/container_of.png" alt="container_of"></p>
+<h3 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h3><p>linux内核的哈希实现处理冲突是开链法。初始化时设置固定的哈希桶个数，哈希桶中的每个元素保存的是双向链表的头结点。通过哈希函数，将元素分配到桶中，插入链表，元素冲突时链表会增长。由于哈希的冲突链只是保存冲突的元素，因此选用双向链表。<br>linux内核中哈希冲突链使用的双向链表，头结点是<code>hlist_head</code>,节点是<code>hlist_node</code>。<code>hlist_head</code>中只保存了链表的首个元素的地址，节点<code>hlist_node</code>中，前向节点指针是二级指针，后面我们再分析为什么使二级指针。定义一个哈希表时，使用<code>DEFINE_HASHTABLE</code>,可以看到定义了一个固定大小的<code>hlist_head</code>数组，并初始化所有的元素。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEFINE_HASHTABLE(name, bits)						\</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_head</span> <span class="title">name</span>[1 &lt;&lt; (bits)] =					\</span></span><br><span class="line"><span class="class">			&#123; [0 ... ((1 &lt;&lt; (bits)) - 1)] = HLIST_HEAD_INIT &#125;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">struct hlist_head &#123;</span></span><br><span class="line"><span class="class">	struct hlist_node *first;</span></span><br><span class="line"><span class="class">&#125;;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">struct hlist_node &#123;</span></span><br><span class="line"><span class="class">	struct hlist_node *next, **pprev;</span></span><br><span class="line"><span class="class">&#125;;</span></span><br></pre></td></tr></table></figure></p>
+<p>举个例子，<code>bits=2,hashsize=4</code>,<code>hashtable</code>数组有四个<code>hlist_head</code>元素。现在需要将key为<code>d</code>和<code>h</code>的元素存入哈希表中。使用简单的哈希函数<code>pos(x)=x % hashsize</code>，使用字符的ascii码。key为<code>d</code>需要存入哈希表的0位置，<code>h</code>也需要存入0位置。<code>d</code>和<code>h</code>被串联在0位置的链表中。<br><img src="/images/hashtable.png" alt="hashtable"><br>linux内核使用<code>hlist_head</code>与<code>hlist_node</code>来组成哈希表，而不使用<code>list_head</code>。首先，使用<code>hlist_head</code>哈希的冲突链头结点不需要一个前向指针，可以节省一个指针的大小，对于一个较大的哈希表能节省很多空间。<code>hlist_node</code>中的前向指针使用二级指针，为了保持添加元素时的一致性。如果前向指针不使用二级指针，哈希冲突链的第一个<code>hlist_node</code>结点的向前指针应该是<code>hlist_head *</code>,不是第一个结点，前向指针是<code>hlist_node *</code>，这就会导致链表操作函数实现变得复杂。如果使用二级指针<code>hlist_node **</code>，就不会有前一个节点是头结点或非头结点，类型不一致的复杂情况。从linux内核中的<code>hlist_add_before</code>可以看出，将新的节点插入第一个<code>hlist_node</code>结点的前面，和不是第一个<code>hlist_node</code>结点的前面，实现是一致的。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">hlist_add_head</span><span class="params">(struct hlist_node *n, struct hlist_head *h)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> *<span class="title">first</span> = <span class="title">h</span>-&gt;<span class="title">first</span>;</span></span><br><span class="line">	n-&gt;next = first;</span><br><span class="line">	<span class="keyword">if</span> (first)</span><br><span class="line">		first-&gt;pprev = &amp;n-&gt;next;</span><br><span class="line">	WRITE_ONCE(h-&gt;first, n);</span><br><span class="line">	n-&gt;pprev = &amp;h-&gt;first;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* next must be != NULL */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">hlist_add_before</span><span class="params">(struct hlist_node *n, struct hlist_node *next)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	n-&gt;pprev = next-&gt;pprev;</span><br><span class="line">	n-&gt;next = next;</span><br><span class="line">	next-&gt;pprev = &amp;n-&gt;next;</span><br><span class="line">	WRITE_ONCE(*(n-&gt;pprev), n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/linux/">#linux</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/datastructure/">#datastructure</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2017-11-12-red-black-tree/">红黑树的插入与删除</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2017-09-21-x86-assembly/">x86_64汇编</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 Lankstra&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+                 <!-- & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a> -->
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
