@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Tag: ML/DL - Lankstra&#39;s blog</title>
+<title>异或链表 - Lankstra&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -68,25 +68,17 @@
     </div>
 </nav>
 
-    <section class="section section-heading">
+    <section class="section">
     <div class="container">
-        <div class="content">
-            <h5>#ML/DL</h5>
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="container">
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
+    <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2017-06-15-neural-net/" itemprop="url">神经网络与反向传播算法</a>
+            异或链表
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2017-06-14T16:00:00.000Z" itemprop="datePublished">Jun 15 2017</time>
+            <time datetime="2018-07-08T16:00:00.000Z" itemprop="datePublished">Jul 9 2018</time>
         </span>
         
         <span class="column is-narrow article-category">
@@ -98,21 +90,39 @@
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>神经网络学习<br>
-        <p class="article-more-link">
-            <a href="/2017-06-15-neural-net/#more">Read More</a>
-        </p>
+        <p>发现了一个奇技淫巧，一个指针域实现双向链表。<br><a href="https://zh.wikipedia.org/wiki/%E5%BC%82%E6%88%96%E9%93%BE%E8%A1%A8" target="_blank" rel="noopener">xor linked list </a><br><a id="more"></a><br>异或链表（英语：XOR linked list）是数据结构里面的一种链式存储结构,可以在降低空间复杂度的情况下达到和双向链表一样的目的，使得在任何一个结点都能方便地访问它的前驱结点和后继结点。</p>
+<p>概述<br>普通双向链表的每个结点有三个域 ，分别存储着前一个结点的地址、后一个点的地址，以及数据</p>
+<p> …  A——–&gt;B———–&gt;C———-&gt;D——–&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;–&gt;  next –&gt;  next  –&gt;  next  –&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;–  prev &lt;–  prev  &lt;–  prev  &lt;–<br>异或链表通过异或操作（这里用⊕表示）把前一个结点的地址和后一个结点的地址变成一个地址</p>
+<p> …  A———–&gt;B———–&gt;C————&gt;D———–&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;–&gt;  A⊕C     <->    B⊕D     <->      C⊕E  <-></-></-></-></p>
+<pre><code>link(B) = addr(A)⊕addr(C), link(C) = addr(B)⊕addr(D), …
+</code></pre><p>当从左往右遍历的时候，如果当前结点是C，指针域是内容是B⊕D,通过和前一个结点B的地址做异或操作就能得到下一个结点D的地址，如此重复便能遍历整个链表。</p>
+
     
     </div>
     
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/algorithm/">#algorithm</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2017-12-24-linux-kernel/">linux内核设计与实现</a>
+            
+        </span>
+    </div>
     
 </article>
 
 
 
 
-    
-    
     </div>
 </section>
     <footer class="footer">
