@@ -1819,7 +1819,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d600ff;
+  background: #ffbd9d;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2591,7 +2591,7 @@ h6 {
   margin: 20px 0 10px;
 }
 p {
-  margin: 0 0 25px 0;
+  margin: 0 0 16px 0;
 }
 a {
   border-bottom-color: #ccc;
@@ -2763,7 +2763,7 @@ hr {
   display: none;
 }
 .posts-expand .post {
-  margin-top: 120px;
+  margin-top: 70px;
 }
 .posts-expand .post:first-child {
   margin-top: 0;
@@ -2813,7 +2813,7 @@ hr {
   margin-top: 40px;
 }
 .post-button {
-  margin-top: 20px;
+  margin-top: 16px;
   text-align: left;
 }
 .post-button a {
@@ -2821,7 +2821,7 @@ hr {
   font-size: 14px;
   background: none;
   border: none;
-  border-bottom: 2px solid #666;
+  border-bottom: 1px solid #666;
   transition-property: border;
 }
 @media (max-width: 767px) {

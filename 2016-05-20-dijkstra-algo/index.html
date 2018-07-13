@@ -77,19 +77,19 @@
 
 
 
-<meta name="description" content="dijkstra算法浅析">
+<meta name="description" content="dijkstra算法浅析给定带权有向网络G=(V,E,W),每条边e=&amp;lt;i,j&amp;gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.">
 <meta name="keywords" content="algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dijkstra算法">
 <meta property="og:url" content="http://lansheng.me/2016-05-20-dijkstra-algo/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="dijkstra算法浅析">
+<meta property="og:description" content="dijkstra算法浅析给定带权有向网络G=(V,E,W),每条边e=&amp;lt;i,j&amp;gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://lansheng.me/images/dij.png">
-<meta property="og:updated_time" content="2018-07-02T05:53:31.210Z">
+<meta property="og:updated_time" content="2018-07-13T17:10:21.699Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dijkstra算法">
-<meta name="twitter:description" content="dijkstra算法浅析">
+<meta name="twitter:description" content="dijkstra算法浅析给定带权有向网络G=(V,E,W),每条边e=&amp;lt;i,j&amp;gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.">
 <meta name="twitter:image" content="http://lansheng.me/images/dij.png">
 
 
@@ -308,6 +308,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016-05-20-dijkstra-algo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016-05-20-dijkstra-algo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -332,7 +343,7 @@
       
 
       
-        <p>dijkstra算法浅析<br><a id="more"></a><br>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.  </p>
+        <p>dijkstra算法浅析<br>给定带权有向网络G=(V,E,W),每条边e=&lt;i,j&gt;的权w(e)为非负实数，表示从i到j的距离。源点s∈V.求从s出发到达其他节点的最短路径.<br><a id="more"></a></p>
 <p>x∈S &lt;=&gt;x∈V且从s到x的最短路径已经找到<br>初始：S={s}, S=V时算法结束<br>从s到u相对于S的最短路径：从s到u且仅经过S中顶点的最短路径<br>dist[u]:从s到u相对于S最短路径的长度<br>short[u]:从s到u的最短路径的长度<br>dist[u]&gt;=short[u]  </p>
 <p>输入：有向图G=(V,E,W), V={1,2,…,n}, s=1<br>输出：从s到每个顶点的最短路径<br>1.初始S={1}<br>2.对于i∈V-S,计算1到i的相对于S的最短路，长度dist[i]<br>3.选择V-S中dist值最小的j,将j加入S,修改V-S中顶点的dist值.<br>4.继续上述过程，直到S=V为止  </p>
 <p>伪码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">S &lt;- &#123;s&#125;  </span><br><span class="line">dist[s] &lt;- <span class="number">0</span>  </span><br><span class="line"><span class="keyword">for</span> i ∈ V-&#123;s&#125; do  </span><br><span class="line">    dist[i] &lt;- w(s, i) //s到i没边，w(s,i)=∞  </span><br><span class="line"><span class="keyword">while</span> V-S != Ø do  </span><br><span class="line">    <span class="comment"># 从V-S取相对S的最短路径顶点j  </span></span><br><span class="line">    S &lt;- S∪&#123;j&#125;  </span><br><span class="line">    <span class="keyword">for</span> i ∈ V-S do  </span><br><span class="line">        <span class="keyword">if</span> dist[j] + w(j,i) &lt; dist[i]  </span><br><span class="line">            dist[i] &lt;- dist[j] + w(j, i)</span><br></pre></td></tr></table></figure></p>
@@ -407,6 +418,16 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -549,6 +570,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://lankstra.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://lansheng.me/2016-05-20-dijkstra-algo/';
+          this.page.identifier = '2016-05-20-dijkstra-algo/';
+          this.page.title = 'dijkstra算法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lankstra.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -561,10 +602,6 @@
   
 
 
-
-
-
-  
 
 
 

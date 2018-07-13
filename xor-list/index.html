@@ -306,6 +306,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/xor-list/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="xor-list/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -366,8 +377,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017-12-24-linux-kernel/" rel="next" title="linux内核设计与实现">
-                <i class="fa fa-chevron-left"></i> linux内核设计与实现
+              <a href="/A-star/" rel="next" title="A*算法">
+                <i class="fa fa-chevron-left"></i> A*算法
               </a>
             
           </div>
@@ -402,6 +413,16 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -544,6 +565,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://lankstra.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://lansheng.me/xor-list/';
+          this.page.identifier = 'xor-list/';
+          this.page.title = '异或链表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lankstra.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -556,10 +597,6 @@
   
 
 
-
-
-
-  
 
 
 

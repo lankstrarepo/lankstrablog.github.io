@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="kmp算法浅析">
+<meta name="description" content="在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。">
 <meta name="keywords" content="algorithm,kmp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kmp算法">
 <meta property="og:url" content="http://lansheng.me/2016-10-11-kmp-algo/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="kmp算法浅析">
+<meta property="og:description" content="在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-02T05:53:45.500Z">
+<meta property="og:updated_time" content="2018-07-13T17:08:49.106Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kmp算法">
-<meta name="twitter:description" content="kmp算法浅析">
+<meta name="twitter:description" content="在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。">
 
 
 
@@ -306,6 +306,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016-10-11-kmp-algo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016-10-11-kmp-algo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -330,7 +341,7 @@
       
 
       
-        <p>kmp算法浅析<br><a id="more"></a><br>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。</p>
+        <p>在计算机科学中，Knuth-Morris-Pratt 字符串查找算法（常简称为“KMP算法”）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始，从而避免重新检查先前匹配的字符。<br><a id="more"></a></p>
 <p>给定一个字符串txt，和一个模式串pat：<br>txt[] = “BBC ABCDAB ABCDABCDABDE”<br>pat[] = “ABCDABD”<br>Output: Pattern found at index 15</p>
 <h3 id="1-部分匹配表"><a href="#1-部分匹配表" class="headerlink" title="1.部分匹配表"></a>1.部分匹配表</h3><p>前缀与后缀： “前缀”指除了最后一个字符以外，一个字符串的全部头部组合；”后缀”指除了第一个字符以外，一个字符串的全部尾部组合。</p>
 <p>举例：字符串 ABCAB<br>前缀：A,AB,ABC,ABCA<br>后缀：B,AB,CAB,BCAB  </p>
@@ -425,6 +436,16 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -567,6 +588,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://lankstra.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://lansheng.me/2016-10-11-kmp-algo/';
+          this.page.identifier = '2016-10-11-kmp-algo/';
+          this.page.title = 'kmp算法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lankstra.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -579,10 +620,6 @@
   
 
 
-
-
-
-  
 
 
 
