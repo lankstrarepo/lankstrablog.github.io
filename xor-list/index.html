@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。xor linked list">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-13T12:58:15.124Z">
+<meta property="og:updated_time" content="2018-07-14T05:53:50.522Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="异或链表">
 <meta name="twitter:description" content="发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。xor linked list">
@@ -342,9 +342,8 @@
 
       
         <p>发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。<br><a href="https://zh.wikipedia.org/wiki/%E5%BC%82%E6%88%96%E9%93%BE%E8%A1%A8" target="_blank" rel="noopener">xor linked list </a><br><a id="more"></a><br>异或链表（英语：XOR linked list）是数据结构里面的一种链式存储结构,可以在降低空间复杂度的情况下达到和双向链表一样的目的，使得在任何一个结点都能方便地访问它的前驱结点和后继结点。</p>
-<p>概述<br>普通双向链表的每个结点有三个域 ，分别存储着前一个结点的地址、后一个点的地址，以及数据</p>
-<p> …  A——–&gt;B———–&gt;C———-&gt;D——–&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;–&gt;  next –&gt;  next  –&gt;  next  –&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;–  prev &lt;–  prev  &lt;–  prev  &lt;–<br>异或链表通过异或操作（这里用⊕表示）把前一个结点的地址和后一个结点的地址变成一个地址</p>
-<p> …  A———–&gt;B———–&gt;C————&gt;D———–&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;–&gt;  A⊕C     <->    B⊕D     <->      C⊕E  <-></-></-></-></p>
+<p>概述<br>普通双向链表的每个结点有三个域 ，分别存储着前一个结点的地址、后一个点的地址，以及数据<br> …  A———–&gt;B—————-&gt;C——————&gt;D—————-&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;–&gt;  next –&gt;  next  –&gt;  next  –&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;-  prev &lt;–  prev  &lt;–  prev  &lt;–</p>
+<p>异或链表通过异或操作（这里用⊕表示）把前一个结点的地址和后一个结点的地址变成一个地址<br> …  A————–&gt;B——————&gt;C——————–&gt;D—————-&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;–&gt;  A⊕C     <->    B⊕D     <->      C⊕E  <-></-></-></-></p>
 <pre><code>link(B) = addr(A)⊕addr(C), link(C) = addr(B)⊕addr(D), …
 </code></pre><p>当从左往右遍历的时候，如果当前结点是C，指针域是内容是B⊕D,通过和前一个结点B的地址做异或操作就能得到下一个结点D的地址，如此重复便能遍历整个链表。</p>
 
