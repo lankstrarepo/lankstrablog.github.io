@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flask,web," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CGI, WSGICGIfork-and-exec WSGI (PEP333)def application(environ, start_response) 微型框架核心依赖 -Werkzeug​    request, response -jinja2​    模板 ####Flask对象 12345678910111213141516171819def __init__(self, pack">
+<meta name="keywords" content="flask,web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flask框架的使用">
+<meta property="og:url" content="http://lansheng.me/flask-web/index.html">
+<meta property="og:site_name" content="Lankstra&#39;s blog">
+<meta property="og:description" content="CGI, WSGICGIfork-and-exec WSGI (PEP333)def application(environ, start_response) 微型框架核心依赖 -Werkzeug​    request, response -jinja2​    模板 ####Flask对象 12345678910111213141516171819def __init__(self, pack">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-21T06:27:45.570Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flask框架的使用">
+<meta name="twitter:description" content="CGI, WSGICGIfork-and-exec WSGI (PEP333)def application(environ, start_response) 微型框架核心依赖 -Werkzeug​    request, response -jinja2​    模板 ####Flask对象 12345678910111213141516171819def __init__(self, pack">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","oll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lansheng.me/flask-web/"/>
+
+
+
+
+
+  <title>flask框架的使用 | Lankstra's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+          
+        <span class="site-title">Lankstra's blog</span>
+         
+      </a>
+    </div>
+      
+        <p class="site-subtitle">lankstra</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.me/flask-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lankstra">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lankstra's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flask框架的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T00:00:00+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/learn/" itemprop="url" rel="index">
+                    <span itemprop="name">learn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/flask-web/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="flask-web/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="CGI-WSGI"><a href="#CGI-WSGI" class="headerlink" title="CGI, WSGI"></a>CGI, WSGI</h4><p>CGI<br><code>fork-and-exec</code></p>
+<p>WSGI (PEP333)<br><code>def application(environ, start_response)</code></p>
+<h4 id="微型框架"><a href="#微型框架" class="headerlink" title="微型框架"></a>微型框架</h4><p>核心依赖<br> -Werkzeug<br>​    request, response</p>
+<p>-jinja2<br>​    模板</p>
+<p>####Flask对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, package_name)</span>:</span></span><br><span class="line">    <span class="comment">#: Flask 对象有这样一个字典来保存所有的视图函数</span></span><br><span class="line">    self.view_functions = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#: 这个字典用来保存所有的错误处理视图函数</span></span><br><span class="line">    <span class="comment">#: 字典的 key 是错误类型码</span></span><br><span class="line">    self.error_handlers = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#: 这个列表用来保存在请求被分派之前应当执行的函数</span></span><br><span class="line">    self.before_request_funcs = []</span><br><span class="line"></span><br><span class="line">    <span class="comment">#: 在接收到第一个请求的时候应当执行的函数</span></span><br><span class="line">    self.before_first_request_funcs = []</span><br><span class="line"></span><br><span class="line">    <span class="comment">#: 这个列表中的函数在请求完成之后被调用，响应对象会被传给这些函数</span></span><br><span class="line">    self.after_request_funcs = []</span><br><span class="line"></span><br><span class="line">    <span class="comment">#: 这里设置了一个 url_map 属性，并把它设置为一个 Map 对象</span></span><br><span class="line">    self.url_map = Map()</span><br></pre></td></tr></table></figure>
+<p>矩阵的SVD分解：X=USV’</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>上下文</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_app</td>
+<td>程序上下文</td>
+<td>当前激活程序的实例</td>
+</tr>
+<tr>
+<td>g</td>
+<td>程序上下文</td>
+<td>处理请求时临时存储的对象。每次请求都会重置。</td>
+</tr>
+<tr>
+<td>request</td>
+<td>请求上下文</td>
+<td>请求对象，封装了客户端发出的HTTP请求中的内容</td>
+</tr>
+<tr>
+<td>session</td>
+<td>请求上下文</td>
+<td>用户会话，用于存储请求之间需要“记住”的值的词典</td>
+</tr>
+</tbody>
+</table>
+<h4 id="请求调度"><a href="#请求调度" class="headerlink" title="请求调度"></a>请求调度</h4><p><a href="mailto:`@app.route" target="_blank" rel="noopener">`@app.route</a>()<code></code>app.add_url_route()`</p>
+<h4 id="请求钩子"><a href="#请求钩子" class="headerlink" title="请求钩子"></a>请求钩子</h4><p>在处理请求之前或之后调用通用函数</p>
+<p>• before_first_request:注册一个函数，在处理第一个请求之前运行。  </p>
+<p>• before_request:注册一个函数，在每次请求之前运行。 </p>
+<p>• after_request:注册一个函数，如果没有未处理的异常抛出，在每次请求之后运行。  </p>
+<p>• teardown_request:注册一个函数，即使有未处理的异常抛出，也在每次请求之后运行。 </p>
+<h4 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h4><h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">|-project </span><br><span class="line">    |-app/</span><br><span class="line">    	|-__init__.py <span class="comment"># app.__init__</span></span><br><span class="line">    	|-email.py</span><br><span class="line">    	|-models.py</span><br><span class="line">    	|-templates/</span><br><span class="line">    	|-static/</span><br><span class="line">    	|-main/</span><br><span class="line">    		|-__init__.py <span class="comment"># main.__init__</span></span><br><span class="line">            |-errors.py</span><br><span class="line">            |-forms.py</span><br><span class="line">            |-views.py</span><br><span class="line">		|-auth/</span><br><span class="line">            |-__init__.py <span class="comment"># auth.__init__</span></span><br><span class="line">            |-errors.py</span><br><span class="line">            |-forms.py</span><br><span class="line">            |-views.py</span><br><span class="line">    |-migrations/</span><br><span class="line">    |-tests/</span><br><span class="line">        |-__init__.py</span><br><span class="line">        |-test*.py</span><br><span class="line">    |-venv/</span><br><span class="line">    |-requirements.txt</span><br><span class="line">    |-config.py</span><br><span class="line">    |-manage.py</span><br></pre></td></tr></table></figure>
+<h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;h1&gt;Here is index&lt;/h1&gt;'</span></span><br></pre></td></tr></table></figure>
+<h4 id="werkzeug"><a href="#werkzeug" class="headerlink" title="werkzeug"></a>werkzeug</h4><h4 id="蓝图"><a href="#蓝图" class="headerlink" title="蓝图"></a>蓝图</h4><p>from flask import Blueprint</p>
+<h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4><p>#####flask-sqlalchemy</p>
+<h5 id="分页-paginate"><a href="#分页-paginate" class="headerlink" title="分页 paginate"></a>分页 paginate</h5><p>#####Post(文章)与User(作者)</p>
+<p>一对多关系</p>
+<p>一个作者可以有多篇文章，假设一篇文章只有一个作者。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">posts: </span><br><span class="line">	id: Integer</span><br><span class="line">	body: Text</span><br><span class="line">	time: DateTime</span><br><span class="line">	author_id: Integer, ForeignKey(users.id)</span><br><span class="line">	backref(author): ----&gt;users</span><br><span class="line"></span><br><span class="line">users:</span><br><span class="line">	id: Integer (ref_by: posts.author_id)</span><br><span class="line">	email: String</span><br><span class="line">	username: String</span><br><span class="line">	posts: relationship(&apos;posts&apos;, backref=&apos;author&apos;)</span><br></pre></td></tr></table></figure>
+<p>一对多关系——&gt;（反向）——&gt;多对一关系</p>
+<p>一对多关系——&gt; (限制多一侧只有一个)——&gt;一对一关系</p>
+<p>#####多对多关系—&gt;增加关联表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">student:</span><br><span class="line">	id, name</span><br><span class="line">	(backref: class)</span><br><span class="line"></span><br><span class="line">class:</span><br><span class="line">	id, name</span><br><span class="line">	(backref: student)</span><br><span class="line"></span><br><span class="line">registration: (关联表)</span><br><span class="line">	student_id (ForeignKey)</span><br><span class="line">	class_id   (ForeignKey)</span><br></pre></td></tr></table></figure>
+<h4 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h4><p>flask-wtf</p>
+<h4 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h4><p>flask-login</p>
+<h4 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h4><p>flask-bootstrap</p>
+<h4 id="所有模板可全局访问"><a href="#所有模板可全局访问" class="headerlink" title="所有模板可全局访问"></a>所有模板可全局访问</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@main.app_context_processor</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_permissions</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> dict(Permission=Permission)</span><br></pre></td></tr></table></figure>
+<h4 id="markdown"><a href="#markdown" class="headerlink" title="markdown"></a>markdown</h4><p>Flask-pagedown</p>
+<p>markdown</p>
+<p>bleach</p>
+<h4 id="email"><a href="#email" class="headerlink" title="email"></a>email</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POP3/SMTP</span><br><span class="line">75027422@qq.com</span><br><span class="line">abmxdnylxkcocbdb</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">IMAP/SMTP</span><br><span class="line">fzcyvhejygricbbe</span><br></pre></td></tr></table></figure>
+<h4 id="emoji"><a href="#emoji" class="headerlink" title="emoji"></a>emoji</h4><p>mysql数据库设置utf8mb4</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line">[mysql]</span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8mb4</span><br><span class="line">collation-server=utf8mb4_general_ci</span><br></pre></td></tr></table></figure>
+<p>flask连接时，指定字符集<code>?charset=utf8mb4</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQLALCHEMY_DATABASE_URI = &apos;mysql://user:passwd@127.0.0.1/myflask?charset=utf8mb4&apos;</span><br></pre></td></tr></table></figure>
+<p>即可使用emoji表情</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.drop_all()</span><br><span class="line">db.session.commit()</span><br><span class="line">db.create_all()</span><br><span class="line">db.session.commit()</span><br><span class="line">Role.insert_roles()</span><br></pre></td></tr></table></figure>
+<h4 id="安装虚拟环境出错"><a href="#安装虚拟环境出错" class="headerlink" title="安装虚拟环境出错"></a>安装虚拟环境出错</h4><p><code>locale.Error: unsupported locale setting</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ export LC_ALL=C</span><br></pre></td></tr></table></figure>
+<p>####supervisor操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ supervisorctl status</span><br><span class="line">$ supervisorctl stop usercenter</span><br><span class="line">$ supervisorctl start usercenter</span><br><span class="line">$ supervisorctl restart usercenter</span><br><span class="line">$ supervisorctl reread</span><br><span class="line">$ supervisorctl update</span><br></pre></td></tr></table></figure>
+<h4 id="flask-mail相关错误总结"><a href="#flask-mail相关错误总结" class="headerlink" title="flask-mail相关错误总结"></a>flask-mail相关错误总结</h4><p>没有开启POP3/SMTP服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smtplib.SMTPAuthenticationError: (454, &apos;Authentication failed, please open smtp flag first!&apos;)</span><br></pre></td></tr></table></figure>
+<h4 id="密码错误"><a href="#密码错误" class="headerlink" title="密码错误"></a>密码错误</h4><p>QQ邮箱 <code>开启POP3/SMTP服务</code> 之后需要一个独立的<code>邮箱密码</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smtplib.SMTPAuthenticationError: (535, &apos;Authentication failed&apos;)</span><br></pre></td></tr></table></figure>
+<h4 id="开启-TLS-SSL"><a href="#开启-TLS-SSL" class="headerlink" title="开启 TLS/SSL"></a>开启 TLS/SSL</h4><p>配置名可能错误或没配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smtplib.SMTPServerDisconnected: Connection unexpectedly closed</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MAIL_SERVER = &apos;smtp.qq.com&apos;</span><br><span class="line">MAIL_PORT = 465</span><br><span class="line">MAIL_USE_SSL = True</span><br><span class="line">MAIL_USERNAME = os.environ.get(&apos;MAIL_USERNAME&apos;)</span><br><span class="line">MAIL_PASSWORD = os.environ.get(&apos;MAIL_PASSWORD&apos;)</span><br></pre></td></tr></table></figure>
+<h4 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"> 1 #user  nobody;</span><br><span class="line"> 2 worker_processes  1;#推荐worker数为cpu核数，避免cpu不必要的上下文切换</span><br><span class="line"> 3 </span><br><span class="line"> 4 </span><br><span class="line"> 5 events &#123;</span><br><span class="line"> 6     #表示每个worker进程所能建立连接的最大值</span><br><span class="line"> 7     #一个nginx最大的连接数max=worker_connections*worker_processes;</span><br><span class="line"> 8     #对于http请求本地资源最大并发数量为max</span><br><span class="line"> 9     #如果http作为反向代理，最大并发数为max/2。因为每个并发会建立与客户端的连接和与后端服务的连接，会占用两个连接。</span><br><span class="line">10     worker_connections  1024;</span><br><span class="line">11 &#125;</span><br><span class="line">12 </span><br><span class="line">13 http &#123;</span><br><span class="line">14     include       mime.types;</span><br><span class="line">15     default_type  application/octet-stream;</span><br><span class="line">16 </span><br><span class="line">17     log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">18                       &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">19                       &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</span><br><span class="line">20 </span><br><span class="line">21     #access_log  logs/access.log  main;</span><br><span class="line">22 </span><br><span class="line">23     sendfile        on;</span><br><span class="line">24 </span><br><span class="line">25     keepalive_timeout  65;</span><br><span class="line">26 </span><br><span class="line">27     server &#123;</span><br><span class="line">28         listen       80;</span><br><span class="line">29         server_name  localhost;</span><br><span class="line">30 </span><br><span class="line">31         #charset koi8-r;</span><br><span class="line">32 </span><br><span class="line">33         access_log  logs/host.access.log  main;</span><br><span class="line">34 </span><br><span class="line">35         location / &#123;</span><br><span class="line">36             root   html;</span><br><span class="line">37             index  index.html index.htm;</span><br><span class="line">38         &#125;</span><br><span class="line">39 </span><br><span class="line">40         # serve static files(css|js|image..)</span><br><span class="line">41         #</span><br><span class="line">42         location ~ ^/(images|javascript|js|css|flash|media|static)/  &#123;</span><br><span class="line">43           root        E:\svn\web;</span><br><span class="line">44           access_log  off;</span><br><span class="line">45           expires     30d;</span><br><span class="line">46         &#125;</span><br><span class="line">47 </span><br><span class="line">48         #error_page  404              /404.html;</span><br><span class="line">49 </span><br><span class="line">50         # redirect server error pages to the static page /50x.html</span><br><span class="line">51         #</span><br><span class="line">52         error_page   500 502 503 504  /50x.html;</span><br><span class="line">53         location = /50x.html &#123;</span><br><span class="line">54             root   html;</span><br><span class="line">55         &#125;</span><br><span class="line">56 </span><br><span class="line">57     &#125;</span><br><span class="line">58 </span><br><span class="line">59 &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flask/" rel="tag"># flask</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017-12-24-linux-kernel/" rel="next" title="linux内核设计与实现">
+                <i class="fa fa-chevron-left"></i> linux内核设计与实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/xor-list/" rel="prev" title="异或链表">
+                异或链表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lankstra</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lankstra.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://lansheng.me/flask-web/';
+          this.page.identifier = 'flask-web/';
+          this.page.title = 'flask框架的使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lankstra.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
