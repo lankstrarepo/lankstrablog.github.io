@@ -77,29 +77,18 @@
 
 
 
-<meta name="description" content="详解红黑树的插入与删除">
+<meta name="description" content="发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。xor linked list">
 <meta name="keywords" content="algorithm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="红黑树的插入与删除">
-<meta property="og:url" content="http://lansheng.me/2017-11-12-red-black-tree/index.html">
+<meta property="og:title" content="异或链表">
+<meta property="og:url" content="http://lansheng.me/2018-7-9-xor-list/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="详解红黑树的插入与删除">
+<meta property="og:description" content="发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。xor linked list">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://lansheng.me/images/rbtree.png">
-<meta property="og:image" content="http://lansheng.me/images/u-red.png">
-<meta property="og:image" content="http://lansheng.me/images/u-black.png">
-<meta property="og:image" content="http://lansheng.me/images/u-black2.png">
-<meta property="og:image" content="http://lansheng.me/images/rb_delete.png">
-<meta property="og:image" content="http://lansheng.me/images/rb_delete2.png">
-<meta property="og:image" content="http://lansheng.me/images/rb_delete3.png">
-<meta property="og:image" content="http://lansheng.me/images/rb_delete4.png">
-<meta property="og:image" content="http://lansheng.me/images/rb-delete5.png">
-<meta property="og:image" content="http://lansheng.me/images/rb-delete6.png">
-<meta property="og:updated_time" content="2018-07-02T05:54:35.103Z">
+<meta property="og:updated_time" content="2018-08-20T05:24:04.699Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="红黑树的插入与删除">
-<meta name="twitter:description" content="详解红黑树的插入与删除">
-<meta name="twitter:image" content="http://lansheng.me/images/rbtree.png">
+<meta name="twitter:title" content="异或链表">
+<meta name="twitter:description" content="发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。xor linked list">
 
 
 
@@ -129,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://lansheng.me/2017-11-12-red-black-tree/"/>
+  <link rel="canonical" href="http://lansheng.me/2018-7-9-xor-list/"/>
 
 
 
 
 
-  <title>红黑树的插入与删除 | Lankstra's blog</title>
+  <title>异或链表 | Lankstra's blog</title>
   
 
 
@@ -252,7 +241,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2017-11-12-red-black-tree/">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2018-7-9-xor-list/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lankstra">
@@ -269,7 +258,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">红黑树的插入与删除</h1>
+          <h1 class="post-title" itemprop="name headline">异或链表</h1>
         
 
         <div class="post-meta">
@@ -281,8 +270,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-12T00:00:00+08:00">
-                2017-11-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">
+                2018-07-09
               </time>
             
 
@@ -322,9 +311,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017-11-12-red-black-tree/#comments" itemprop="discussionUrl">
+                <a href="/2018-7-9-xor-list/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017-11-12-red-black-tree/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-7-9-xor-list/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,34 +341,11 @@
       
 
       
-        <p>详解红黑树的插入与删除<br><a id="more"></a><br>红黑树的性质:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.节点是红色或黑色</span><br><span class="line">2.根是黑色</span><br><span class="line">3.所有叶子都是黑色（叶子是NIL节点）</span><br><span class="line">4.从每个叶子到根的所有路径上不能有两个连续的红色节点 *</span><br><span class="line">5.从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点 *</span><br></pre></td></tr></table></figure></p>
-<p>这是一颗红黑树：</p>
-<p><img src="/images/rbtree.png" alt=""></p>
-<h4 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h4><p>红黑树也是二叉查找树，因此查找操作与普通二叉查找树操作相同。红黑树插入和删除操作会导致不再匹配红黑树性质，需要进行颜色变更和旋转调整红黑树，使其恢复性质。</p>
-<h4 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1）如果是空树则插入根节点并标黑，结束</span><br><span class="line">2）树不为空，插入节点后标红</span><br><span class="line">	a）如果插入节点的父节点是黑色，结束</span><br><span class="line">	b）插入节点的父节点是红色（违反性质4）</span><br><span class="line">		1.叔父节点是黑色或NIL，旋转操作，重新着色，结束</span><br><span class="line">		2.叔父节点是红色，将父节点和叔父节点染黑，祖父节点染红，并重新检查</span><br></pre></td></tr></table></figure>
-<p>我们分析当插入节点N后，父节点为红色时的情况。（违背红黑树性质4）</p>
-<p>1.叔父节点是红色。将父节点和叔父节点染黑，祖父节点染红，从祖父节点检查是否违背性质4，递归进行 1) 2)</p>
-<p><img src="/images/u-red.png" alt=""></p>
-<p>2.叔父节点是黑色（或NIL），插入节点是其父节点的右儿子。对P、N进行左旋操作。进行3)</p>
-<p><img src="/images/u-black.png" alt=""></p>
-<p>3.叔父节点是黑色（或NIL），插入节点是其父节点的左儿子。对G、P进行右旋操作，P、G颜色对换。</p>
-<p><img src="/images/u-black2.png" alt=""></p>
-<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1）如果要删除的节点有两个非空儿子，可以转换成有0个或1个非空子节点</span><br><span class="line">2）如果删除节点是红色，则删除(路径上黑色节点数不变，不影响红黑树性质)</span><br><span class="line">3）如果删除节点是黑色带红色子节点，则删黑色节点，子节点替代被删节点并染黑</span><br><span class="line">4）如果删除节点是黑色并且儿子节点为黑色--&gt;复杂情况</span><br></pre></td></tr></table></figure>
-<p>1) 2) 3)的操作较简单。</p>
-<p>对于情况4），将节点删除后用黑色子节点替换，此时如果要保持路径上黑节点数不变，可以认为该节点带有双重黑色的性质，称为<em>双黑</em>。</p>
-<p>(假设图中1 2 3 4 5 6节点为NIL，删除N节点后用NIL替换，并带有双重黑色)</p>
-<p><img src="/images/rb_delete.png" alt=""></p>
-<p>下面讨论情况4）的N节点删除：</p>
-<p>1.当兄弟节点S为红色。对P、S节点进行左旋，对换颜色。此时尚未完成，后续需要继续调整3 4 5。</p>
-<p><img src="/images/rb_delete2.png" alt=""></p>
-<p>2.N的父亲、兄弟和侄子都是黑色。这种情况需要将兄弟节点S染红，P变为双重黑色节点，向上传递。</p>
-<p><img src="/images/rb_delete3.png" alt=""></p>
-<p>3.N的父节点为红色，兄弟节点及侄子节点都为黑色。这种情况需要交换P和S的颜色，并不影响不通过N的路径上黑色节点的数量，但在N的路径上增加了一个黑色节点，补充了被删除的黑色节点，此时N的双重黑色可以去掉。</p>
-<p><img src="/images/rb_delete4.png" alt=""></p>
-<p>4.兄弟节点是黑色，近侄节点为红，远侄节点为黑。这种情况对SL和S做右旋转，交换颜色。此时所有路径黑色节点数不变，后续情形5.</p>
-<p><img src="/images/rb-delete5.png" alt=""></p>
-<p>5.兄弟节点为黑色，远侄节点为红色。这种情况下对P、S进行左旋转，交换颜色，并染黑S右节点（旋转前的远侄节点）</p>
-<p><img src="/images/rb-delete6.png" alt=""></p>
+        <p>发现了一个小技巧，双向链表的节点中只使用一个指针域实现双向链表。<br><a href="https://zh.wikipedia.org/wiki/%E5%BC%82%E6%88%96%E9%93%BE%E8%A1%A8" target="_blank" rel="noopener">xor linked list </a><br><a id="more"></a><br>异或链表（英语：XOR linked list）是数据结构里面的一种链式存储结构,可以在降低空间复杂度的情况下达到和双向链表一样的目的，使得在任何一个结点都能方便地访问它的前驱结点和后继结点。</p>
+<p>概述<br>普通双向链表的每个结点有三个域 ，分别存储着前一个结点的地址、后一个点的地址，以及数据<br> …  A———–&gt;B—————-&gt;C——————&gt;D—————-&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;–&gt;  next –&gt;  next  –&gt;  next  –&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;-  prev &lt;–  prev  &lt;–  prev  &lt;–</p>
+<p>异或链表通过异或操作（这里用⊕表示）把前一个结点的地址和后一个结点的地址变成一个地址<br> …  A————–&gt;B——————&gt;C——————–&gt;D—————-&gt;E  …<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;–&gt;  A⊕C     <->    B⊕D     <->      C⊕E  <-></-></-></-></p>
+<pre><code>link(B) = addr(A)⊕addr(C), link(C) = addr(B)⊕addr(D), …
+</code></pre><p>当从左往右遍历的时候，如果当前结点是C，指针域是内容是B⊕D,通过和前一个结点B的地址做异或操作就能得到下一个结点D的地址，如此重复便能遍历整个链表。</p>
 
       
     </div>
@@ -410,8 +376,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017-10-29-linux-data_struct/" rel="next" title="linux内核使用的数据结构">
-                <i class="fa fa-chevron-left"></i> linux内核使用的数据结构
+              <a href="/2018-1-24-flask-web/" rel="next" title="flask框架的使用">
+                <i class="fa fa-chevron-left"></i> flask框架的使用
               </a>
             
           </div>
@@ -419,10 +385,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017-11-25-C++11_14/" rel="prev" title="C++11/14特性">
-                C++11/14特性 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -609,9 +571,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://lansheng.me/2017-11-12-red-black-tree/';
-          this.page.identifier = '2017-11-12-red-black-tree/';
-          this.page.title = '红黑树的插入与删除';
+          this.page.url = 'http://lansheng.me/2018-7-9-xor-list/';
+          this.page.identifier = '2018-7-9-xor-list/';
+          this.page.title = '异或链表';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://lankstra.disqus.com/embed.js';
