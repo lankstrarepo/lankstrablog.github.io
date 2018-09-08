@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-08T14:54:30.829Z">
+<meta property="og:updated_time" content="2018-09-08T15:10:04.419Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LVS及负载均衡">
 <meta name="twitter:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
@@ -341,27 +341,32 @@
       
 
       
-        <p>LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。<br><a id="more"></a><br>使用集群技术和Linux操作系统实现一个高性能、高可用的服务器.</p>
-<p>可伸缩网络服务的几种结构，它们都需要一个前端的负载调度器（或者多个进行主从备份）。我们先分析实现虚拟网络服务的主要技术，指出IP负载均衡技术是在负载调度器的实现技术中效率最高的。在已有的IP负载均衡技术中，主要有通过网络地址转换（Network Address Translation）将一组服务器构成一个高性能的、高可用的虚拟服务器，我们称之为VS/NAT技术（Virtual Server via Network Address Translation）。在分析VS/NAT的缺点和网络服务的非对称性的基础上，我们提出了通过IP隧道实现虚拟服务器的方法VS/TUN （Virtual Server via IP Tunneling），和通过直接路由实现虚拟服务器的方法VS/DR（Virtual Server via Direct Routing），它们可以极大地提高系统的伸缩性。VS/NAT、VS/TUN和VS/DR技术是LVS集群中实现的三种IP负载均衡技术。</p>
-<p>1,轮叫（Round Robin）简称RR</p>
-<p>   调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载。</p>
-<p>2,加权轮叫（Weighted Round Robin） 简称WRR</p>
-<p>   调度器通过”加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。 这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
-<p>3,最少链接（Least Connections）简称LC</p>
-<p>  调度器通过”最少连接”调度算法动态地将网络请求调度到已建立的链接数最少的服务器上。 如果集群系统的真实服务器具有相近的系统性能，采用”最小连接”调度算法可以较好地均衡负载。</p>
-<p>4,加权最少链接（Weighted Least Connections）简称WLC</p>
-<p>  在集群系统中的服务器性能差异较大的情况下，调度器采用”加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
-<p>5,基于局部性的最少链接（Locality-Based Least Connections）简称LBLC</p>
-<p>  “基于局部性的最少链接” 调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器 是可用的且没有超载，将请求发送到该服务器；若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用”最少链接”的原则选出一个可用的服务 器，将请求发送到该服务器。</p>
-<p>6,带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）简称LBLCR</p>
-<p>  “带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。它与LBLC算法的不同之处是它要维护从一个 目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射。该算法根据请求的目标IP地址找出该目标IP地址对应的服务 器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器，若服务器超载；则按”最小连接”原则从这个集群中选出一 台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改， 将最忙的服务器从服务器组中删除，以降低复制的 程度。</p>
-<p>7,目标地址散列调度（Destination Hashing）简称DH</p>
-<p>   算法也是针对目标IP地址的负载均衡，但它是一种静态映射算法，通过一个散列（Hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
-<p>8,源地址散列调度（Source Hashing）简称SH</p>
-<p> 算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它采用的散列函数与目标地址散列调度算法的相同。除了将请求的目标IP地址换成请求的源IP地址外，它的算法流程与目标地址散列调度算法的基本相似。在实际应用中，源地址散列调度和目标地址散列调度可以结合使用在防火墙集群中，它们可以保证整个系统的唯一出入口。 </p>
-<p>9,最短的期望的延迟（shortest expected delay scheduling）简称sed<br>   基于wlc算法，举例说明<br>  ABC三台机器分别权重123，连接数也分别是123，name如果使用WLC算法的话一个新请求 进入时他可能会分给ABC中任意一个，使用SED算法后会进行这样一个运算.<br>   A:(1+1)/2<br>   B:(1+2)/2<br>   C:(1+3)/3<br>   根据运算结果，把连接交给C</p>
-<p>10,最少队列调度（never queue scheduling）简称nq</p>
-<p> 无需列队，如果有台realserver的连接数=0 就直接分配过去，不需要进行sed运算 .</p>
+        <p>LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。<br><a id="more"></a></p>
+<h3 id="负载均衡集群"><a href="#负载均衡集群" class="headerlink" title="负载均衡集群"></a>负载均衡集群</h3><p>使用集群技术和Linux操作系统实现一个高性能、高可用的服务器。<br>负载均衡集群指使用多台提供相同服务的服务器组成集群系统，提高服务的并发处理能力。负载均衡集群的前端使用一个调度器，将客户端请求平均分配到后端的服务器中，同时调度器可能还具有后端服务器状态检测的功能，将故障的服务器自动下线，使得集群具有一定的容错能力。</p>
+<p>根据工作在的协议层划分可划分为：</p>
+<ul>
+<li>四层负载均衡：根据请求报文中的目标地址和端口进行调度</li>
+<li>七层负载均衡：根据请求报文的内容进行调度，这种调度属于「代理」的方式</li>
+</ul>
+<p>根据软硬件划分：</p>
+<ul>
+<li>硬件负载均衡：<br>  F5 的 BIG-IP<br>  Citrix 的 NetScaler<br>这类硬件负载均衡器通常能同时提供四层和七层负载均衡，但同时也价格不菲</li>
+<li>软件负载均衡：<br>  TCP 层：LVS，HaProxy，Nginx<br>  基于 HTTP 协议：Haproxy，Nginx，ATS（Apache Traffic Server），squid，varnish<br>  基于 MySQL 协议：mysql-proxy</li>
+</ul>
+<h3 id="LVS"><a href="#LVS" class="headerlink" title="LVS"></a>LVS</h3><p>LVS 是一个工作在四层的负载均衡器，它的实现和 iptables/netfilter 类似，工作在内核空间的 TCP/IP 协议栈上，LVS 工作在 INPUT Hook Funtion 上，并在 INPUT 设置附加规则，一旦客户端请求的是集群服务，LVS 会强行修改请求报文，将报文发往 POSTROUTING，转发至后端的主机。</p>
+<h4 id="LVS的工作模型"><a href="#LVS的工作模型" class="headerlink" title="LVS的工作模型"></a>LVS的工作模型</h4><ul>
+<li>VS/NAT<br>  在IP负载均衡技术中，主要有通过网络地址转换（Network Address Translation）将一组服务器构成一个高性能的、高可用的虚拟服务器，我们称之为VS/NAT技术（Virtual Server via Network Address Translation）。</li>
+<li>VS/TUN<br>  通过IP隧道实现虚拟服务器的方法VS/TUN （Virtual Server via IP Tunneling）。</li>
+<li>VS/DR<br>  和通过直接路由实现虚拟服务器的方法VS/DR（Virtual Server via Direct Routing）。</li>
+</ul>
+<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><h4 id="轮叫（Round-Robin）简称RR"><a href="#轮叫（Round-Robin）简称RR" class="headerlink" title="轮叫（Round Robin）简称RR"></a>轮叫（Round Robin）简称RR</h4><p>   调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载。</p>
+<h4 id="加权轮叫（Weighted-Round-Robin）-简称WRR"><a href="#加权轮叫（Weighted-Round-Robin）-简称WRR" class="headerlink" title="加权轮叫（Weighted Round Robin） 简称WRR"></a>加权轮叫（Weighted Round Robin） 简称WRR</h4><p>   调度器通过”加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。 这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
+<h4 id="最少链接（Least-Connections）简称LC"><a href="#最少链接（Least-Connections）简称LC" class="headerlink" title="最少链接（Least Connections）简称LC"></a>最少链接（Least Connections）简称LC</h4><p>  调度器通过”最少连接”调度算法动态地将网络请求调度到已建立的链接数最少的服务器上。 如果集群系统的真实服务器具有相近的系统性能，采用”最小连接”调度算法可以较好地均衡负载。</p>
+<h4 id="加权最少链接（Weighted-Least-Connections）简称WLC"><a href="#加权最少链接（Weighted-Least-Connections）简称WLC" class="headerlink" title="加权最少链接（Weighted Least Connections）简称WLC"></a>加权最少链接（Weighted Least Connections）简称WLC</h4><p>  在集群系统中的服务器性能差异较大的情况下，调度器采用”加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
+<h4 id="基于局部性的最少链接（Locality-Based-Least-Connections）简称LBLC"><a href="#基于局部性的最少链接（Locality-Based-Least-Connections）简称LBLC" class="headerlink" title="基于局部性的最少链接（Locality-Based Least Connections）简称LBLC"></a>基于局部性的最少链接（Locality-Based Least Connections）简称LBLC</h4><p>  “基于局部性的最少链接” 调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器 是可用的且没有超载，将请求发送到该服务器；若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用”最少链接”的原则选出一个可用的服务 器，将请求发送到该服务器。</p>
+<h4 id="带复制的基于局部性最少链接（Locality-Based-Least-Connections-with-Replication）简称LBLCR"><a href="#带复制的基于局部性最少链接（Locality-Based-Least-Connections-with-Replication）简称LBLCR" class="headerlink" title="带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）简称LBLCR"></a>带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）简称LBLCR</h4><p>  “带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。它与LBLC算法的不同之处是它要维护从一个 目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射。该算法根据请求的目标IP地址找出该目标IP地址对应的服务 器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器，若服务器超载；则按”最小连接”原则从这个集群中选出一 台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改， 将最忙的服务器从服务器组中删除，以降低复制的 程度。</p>
+<h4 id="目标地址散列调度（Destination-Hashing）简称DH"><a href="#目标地址散列调度（Destination-Hashing）简称DH" class="headerlink" title="目标地址散列调度（Destination Hashing）简称DH"></a>目标地址散列调度（Destination Hashing）简称DH</h4><p>   算法也是针对目标IP地址的负载均衡，但它是一种静态映射算法，通过一个散列（Hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
+<h4 id="源地址散列调度（Source-Hashing）简称SH"><a href="#源地址散列调度（Source-Hashing）简称SH" class="headerlink" title="源地址散列调度（Source Hashing）简称SH"></a>源地址散列调度（Source Hashing）简称SH</h4><p> 算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它采用的散列函数与目标地址散列调度算法的相同。除了将请求的目标IP地址换成请求的源IP地址外，它的算法流程与目标地址散列调度算法的基本相似。在实际应用中，源地址散列调度和目标地址散列调度可以结合使用在防火墙集群中，它们可以保证整个系统的唯一出入口。 </p>
 
       
     </div>
