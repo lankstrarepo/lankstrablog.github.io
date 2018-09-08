@@ -85,10 +85,14 @@
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-08T15:10:04.419Z">
+<meta property="og:image" content="http://lansheng.me/images/lvs-dr.png">
+<meta property="og:image" content="http://lansheng.me/images/lvs-tun.png">
+<meta property="og:image" content="http://lansheng.me/images/lvs-nat.png">
+<meta property="og:updated_time" content="2018-09-08T15:25:54.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LVS及负载均衡">
 <meta name="twitter:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
+<meta name="twitter:image" content="http://lansheng.me/images/lvs-dr.png">
 
 
 
@@ -354,10 +358,16 @@
 <li>软件负载均衡：<br>  TCP 层：LVS，HaProxy，Nginx<br>  基于 HTTP 协议：Haproxy，Nginx，ATS（Apache Traffic Server），squid，varnish<br>  基于 MySQL 协议：mysql-proxy</li>
 </ul>
 <h3 id="LVS"><a href="#LVS" class="headerlink" title="LVS"></a>LVS</h3><p>LVS 是一个工作在四层的负载均衡器，它的实现和 iptables/netfilter 类似，工作在内核空间的 TCP/IP 协议栈上，LVS 工作在 INPUT Hook Funtion 上，并在 INPUT 设置附加规则，一旦客户端请求的是集群服务，LVS 会强行修改请求报文，将报文发往 POSTROUTING，转发至后端的主机。</p>
-<h4 id="LVS的工作模型"><a href="#LVS的工作模型" class="headerlink" title="LVS的工作模型"></a>LVS的工作模型</h4><ul>
-<li>VS/NAT<br>  在IP负载均衡技术中，主要有通过网络地址转换（Network Address Translation）将一组服务器构成一个高性能的、高可用的虚拟服务器，我们称之为VS/NAT技术（Virtual Server via Network Address Translation）。</li>
-<li>VS/TUN<br>  通过IP隧道实现虚拟服务器的方法VS/TUN （Virtual Server via IP Tunneling）。</li>
-<li>VS/DR<br>  和通过直接路由实现虚拟服务器的方法VS/DR（Virtual Server via Direct Routing）。</li>
+<h3 id="LVS的工作模型"><a href="#LVS的工作模型" class="headerlink" title="LVS的工作模型"></a>LVS的工作模型</h3><h4 id="VS-DR"><a href="#VS-DR" class="headerlink" title="VS/DR"></a>VS/DR</h4><p>和通过直接路由实现虚拟服务器的方法VS/DR（Virtual Server via Direct Routing）。LVS收到客户端的报文，修改目的MAC地址到RealServer。RealServer处理报文后以VIP为源IP地址返回数据给客户端。<br><img src="/images/lvs-dr.png" alt="lvs/dr"></p>
+<h4 id="VS-TUN"><a href="#VS-TUN" class="headerlink" title="VS/TUN"></a>VS/TUN</h4><p>通过IP隧道实现虚拟服务器的方法VS/TUN （Virtual Server via IP Tunneling）。<br><img src="/images/lvs-tun.png" alt="lvs/tun"></p>
+<h4 id="VS-NAT"><a href="#VS-NAT" class="headerlink" title="VS/NAT"></a>VS/NAT</h4><p>在IP负载均衡技术中，主要有通过网络地址转换（Network Address Translation）将一组服务器构成一个高性能的、高可用的虚拟服务器，称之为VS/NAT技术（Virtual Server via Network Address Translation）。VS/NAT模式进行两次NAT转换，在LVS收到客户端报文后，修改报文的目的IP地址(DNAT)，发往后端服务器RealServer。RealServer处理报文，返回数据给LVS，LVS修改报文的源地址(SNAT)，发往客户端。<br><img src="/images/lvs-nat.png" alt="lvs/nat"></p>
+<h4 id="VS-FULLNAT"><a href="#VS-FULLNAT" class="headerlink" title="VS/FULLNAT"></a>VS/FULLNAT</h4><p>FULLNAT 由淘宝研发，目前还没有加入至 CentOS 可用的内核中，使用时需要向内核打补丁。<br>类似于 DNAT，它修改请求报文的源地址为 DIP，目标地址为 RIP 来实现转发。对于响应报文，源地址修改为 VIP，目标地址修改为 CIP 来实现转发。</p>
+<p>特点：</p>
+<ul>
+<li>RIP，DIP 可以使用私有地址</li>
+<li>RIP 和 DIP 可以不再同一网络中，且 RIP 的网关不需要指向 DIP</li>
+<li>支持端口映射</li>
+<li>请求和响应报文都经由 Director</li>
 </ul>
 <h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><h4 id="轮叫（Round-Robin）简称RR"><a href="#轮叫（Round-Robin）简称RR" class="headerlink" title="轮叫（Round Robin）简称RR"></a>轮叫（Round Robin）简称RR</h4><p>   调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载。</p>
 <h4 id="加权轮叫（Weighted-Round-Robin）-简称WRR"><a href="#加权轮叫（Weighted-Round-Robin）-简称WRR" class="headerlink" title="加权轮叫（Weighted Round Robin） 简称WRR"></a>加权轮叫（Weighted Round Robin） 简称WRR</h4><p>   调度器通过”加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。 这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
