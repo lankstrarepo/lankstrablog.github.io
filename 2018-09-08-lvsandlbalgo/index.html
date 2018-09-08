@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="LVS,load balance,linux," />
+  <meta name="keywords" content="linux,LVS,load balance," />
 
 
 
@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="lankstra">
-<meta name="keywords" content="LVS,load balance,linux">
+<meta name="description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
+<meta name="keywords" content="linux,LVS,load balance">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LVS及负载均衡算法">
+<meta property="og:title" content="LVS及负载均衡">
 <meta property="og:url" content="http://lansheng.me/2018-09-08-lvsandlbalgo/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="lankstra">
+<meta property="og:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-08T13:59:00.214Z">
+<meta property="og:updated_time" content="2018-09-08T14:54:30.829Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LVS及负载均衡算法">
-<meta name="twitter:description" content="lankstra">
+<meta name="twitter:title" content="LVS及负载均衡">
+<meta name="twitter:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
 
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <title>LVS及负载均衡算法 | Lankstra's blog</title>
+  <title>LVS及负载均衡 | Lankstra's blog</title>
   
 
 
@@ -258,7 +258,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LVS及负载均衡算法</h1>
+          <h1 class="post-title" itemprop="name headline">LVS及负载均衡</h1>
         
 
         <div class="post-meta">
@@ -341,7 +341,28 @@
       
 
       
-        
+        <p>LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。<br><a id="more"></a><br>使用集群技术和Linux操作系统实现一个高性能、高可用的服务器.</p>
+<p>可伸缩网络服务的几种结构，它们都需要一个前端的负载调度器（或者多个进行主从备份）。我们先分析实现虚拟网络服务的主要技术，指出IP负载均衡技术是在负载调度器的实现技术中效率最高的。在已有的IP负载均衡技术中，主要有通过网络地址转换（Network Address Translation）将一组服务器构成一个高性能的、高可用的虚拟服务器，我们称之为VS/NAT技术（Virtual Server via Network Address Translation）。在分析VS/NAT的缺点和网络服务的非对称性的基础上，我们提出了通过IP隧道实现虚拟服务器的方法VS/TUN （Virtual Server via IP Tunneling），和通过直接路由实现虚拟服务器的方法VS/DR（Virtual Server via Direct Routing），它们可以极大地提高系统的伸缩性。VS/NAT、VS/TUN和VS/DR技术是LVS集群中实现的三种IP负载均衡技术。</p>
+<p>1,轮叫（Round Robin）简称RR</p>
+<p>   调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载。</p>
+<p>2,加权轮叫（Weighted Round Robin） 简称WRR</p>
+<p>   调度器通过”加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。 这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
+<p>3,最少链接（Least Connections）简称LC</p>
+<p>  调度器通过”最少连接”调度算法动态地将网络请求调度到已建立的链接数最少的服务器上。 如果集群系统的真实服务器具有相近的系统性能，采用”最小连接”调度算法可以较好地均衡负载。</p>
+<p>4,加权最少链接（Weighted Least Connections）简称WLC</p>
+<p>  在集群系统中的服务器性能差异较大的情况下，调度器采用”加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
+<p>5,基于局部性的最少链接（Locality-Based Least Connections）简称LBLC</p>
+<p>  “基于局部性的最少链接” 调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器 是可用的且没有超载，将请求发送到该服务器；若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用”最少链接”的原则选出一个可用的服务 器，将请求发送到该服务器。</p>
+<p>6,带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）简称LBLCR</p>
+<p>  “带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。它与LBLC算法的不同之处是它要维护从一个 目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射。该算法根据请求的目标IP地址找出该目标IP地址对应的服务 器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器，若服务器超载；则按”最小连接”原则从这个集群中选出一 台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改， 将最忙的服务器从服务器组中删除，以降低复制的 程度。</p>
+<p>7,目标地址散列调度（Destination Hashing）简称DH</p>
+<p>   算法也是针对目标IP地址的负载均衡，但它是一种静态映射算法，通过一个散列（Hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
+<p>8,源地址散列调度（Source Hashing）简称SH</p>
+<p> 算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它采用的散列函数与目标地址散列调度算法的相同。除了将请求的目标IP地址换成请求的源IP地址外，它的算法流程与目标地址散列调度算法的基本相似。在实际应用中，源地址散列调度和目标地址散列调度可以结合使用在防火墙集群中，它们可以保证整个系统的唯一出入口。 </p>
+<p>9,最短的期望的延迟（shortest expected delay scheduling）简称sed<br>   基于wlc算法，举例说明<br>  ABC三台机器分别权重123，连接数也分别是123，name如果使用WLC算法的话一个新请求 进入时他可能会分给ABC中任意一个，使用SED算法后会进行这样一个运算.<br>   A:(1+1)/2<br>   B:(1+2)/2<br>   C:(1+3)/3<br>   根据运算结果，把连接交给C</p>
+<p>10,最少队列调度（never queue scheduling）简称nq</p>
+<p> 无需列队，如果有台realserver的连接数=0 就直接分配过去，不需要进行sed运算 .</p>
+
       
     </div>
     
@@ -358,11 +379,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
             <a href="/tags/LVS/" rel="tag"># LVS</a>
           
             <a href="/tags/load-balance/" rel="tag"># load balance</a>
-          
-            <a href="/tags/linux/" rel="tag"># linux</a>
           
         </div>
       
@@ -572,7 +593,7 @@
         var disqus_config = function () {
           this.page.url = 'http://lansheng.me/2018-09-08-lvsandlbalgo/';
           this.page.identifier = '2018-09-08-lvsandlbalgo/';
-          this.page.title = 'LVS及负载均衡算法';
+          this.page.title = 'LVS及负载均衡';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://lankstra.disqus.com/embed.js';
