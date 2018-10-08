@@ -93,12 +93,12 @@
 <meta property="og:image" content="http://lansheng.me/images/page_mem.png">
 <meta property="og:image" content="http://lansheng.me/images/buddy_system.png">
 <meta property="og:image" content="http://lansheng.me/images/mem_map.png">
-<meta property="og:image" content="http://lansheng.me/images/process_mem.png">
 <meta property="og:image" content="http://lansheng.me/images/dir.jpg">
 <meta property="og:image" content="http://lansheng.me/images/layers.jpg">
 <meta property="og:image" content="http://lansheng.me/images/hard_link.jpg">
+<meta property="og:image" content="http://lansheng.me/images/process_mem.png">
 <meta property="og:image" content="http://lansheng.me/images/address_space.gif">
-<meta property="og:updated_time" content="2018-10-08T16:53:29.247Z">
+<meta property="og:updated_time" content="2018-10-08T16:56:47.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux内核设计与实现">
 <meta name="twitter:description" content="linux内核设计与实现">
@@ -540,19 +540,6 @@
 <li>kmem_cache_free：释放一个对象</li>
 </ul>
 <h5 id="虚拟内存映射"><a href="#虚拟内存映射" class="headerlink" title="虚拟内存映射"></a>虚拟内存映射</h5><p><img src="/images/mem_map.png" alt="mem_map"></p>
-<h5 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h5><p>每个进程都有一个32位或64位的地址空间，取决于体系结构。 一个进程的地址空间与另一个进程的地址空间即使有相同的内存地址，也彼此互不相干，对于这种共享地址空间的进程称之为线程。一个进程可寻址4GB的虚拟内存（32位地址空间中），但不是所有虚拟地址都有权访问。对于进程可访问的地址空间称为内存区域。每个内存区域都具有对相关进程的可读、可写、可执行属性等相关权限设置。</p>
-<p>内存区域可包含的对象：</p>
-<ul>
-<li>代码段(text section)： 可执行文件代码</li>
-<li>数据段(data section)： 可执行文件的已初始化全局变量（静态分配的变量和全局变量）。</li>
-<li>bss段：程序中未初始化的全局变量，零页映射（页面的信息全部为0值）。</li>
-<li>进程用户空间栈的零页映射（进程的内核栈独立存在并由内核维护）</li>
-<li>每一个诸如C库或动态连接程序等共享库的代码段、数据段和bss也会被载入进程的地址空间</li>
-<li>任何内存映射文件</li>
-<li>任何共享内存段</li>
-<li>任何匿名的内存映射（比如由malloc()分配的内存）</li>
-</ul>
-<p><img src="/images/process_mem.png" alt="process_mem"></p>
 <h4 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h4><p>虚拟文件系统（VFS），作为内核子系统，为用户空间提供了文件和文件系统相关的接口。</p>
 <h5 id="目录模型"><a href="#目录模型" class="headerlink" title="目录模型"></a>目录模型</h5><p><img src="/images/dir.jpg" alt="dir"></p>
 <h5 id="VFS层次"><a href="#VFS层次" class="headerlink" title="VFS层次"></a>VFS层次</h5><p>VFS（Virtual Filesystem Switch）</p>
@@ -593,7 +580,20 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/* Filesystem information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span>		*<span class="title">fs</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Open file information: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span>		*<span class="title">files</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> users; <span class="comment">//用户数目</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> lock;  <span class="comment">//保护该结构体的锁</span></span><br><span class="line">	<span class="keyword">seqcount_t</span> seq;</span><br><span class="line">	<span class="keyword">int</span> umask; <span class="comment">//掩码</span></span><br><span class="line">	<span class="keyword">int</span> in_exec; <span class="comment">//当前正在执行的文件</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">path</span> <span class="title">root</span>, <span class="title">pwd</span>;</span> <span class="comment">//根目录路径、当前工作目录路径</span></span><br><span class="line">&#125; __randomize_layout;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> &#123;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * read mostly part</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">atomic_t</span> count;</span><br><span class="line">	<span class="keyword">bool</span> resize_in_progress;</span><br><span class="line">	<span class="keyword">wait_queue_head_t</span> resize_wait;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> __<span class="title">rcu</span> *<span class="title">fdt</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> <span class="title">fdtab</span>;</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * written part on a separate cache line in SMP</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">	<span class="keyword">spinlock_t</span> file_lock ____cacheline_aligned_in_smp;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> next_fd;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> close_on_exec_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> open_fds_init[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> full_fds_bits_init[<span class="number">1</span>];</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file</span> __<span class="title">rcu</span> * <span class="title">fd_array</span>[<span class="title">NR_OPEN_DEFAULT</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>files_struct结构体由进程描述符files指向。fd_array数组指针指向已打开的文件对象。如果一个进程所打开文件超过NR_OPEN_DEFAULT，内核将分配一个新数组，并将fdt指向它。</p>
 <p>fs_struct由进程描述符中fs指向。</p>
-<h4 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h4><p>内存描述符mm_struct。</p>
+<h4 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h4><p>每个进程都有一个32位或64位的地址空间，取决于体系结构。 一个进程的地址空间与另一个进程的地址空间即使有相同的内存地址，也彼此互不相干，对于这种共享地址空间的进程称之为线程。一个进程可寻址4GB的虚拟内存（32位地址空间中），但不是所有虚拟地址都有权访问。对于进程可访问的地址空间称为内存区域。每个内存区域都具有对相关进程的可读、可写、可执行属性等相关权限设置。</p>
+<p>内存区域可包含的对象：</p>
+<ul>
+<li>代码段(text section)： 可执行文件代码</li>
+<li>数据段(data section)： 可执行文件的已初始化全局变量（静态分配的变量和全局变量）。</li>
+<li>bss段：程序中未初始化的全局变量，零页映射（页面的信息全部为0值）。</li>
+<li>进程用户空间栈的零页映射（进程的内核栈独立存在并由内核维护）</li>
+<li>每一个诸如C库或动态连接程序等共享库的代码段、数据段和bss也会被载入进程的地址空间</li>
+<li>任何内存映射文件</li>
+<li>任何共享内存段</li>
+<li>任何匿名的内存映射（比如由malloc()分配的内存）</li>
+</ul>
+<p><img src="/images/process_mem.png" alt="process_mem"></p>
+<p>内存描述符mm_struct。</p>
 <h5 id="虚拟内存区域"><a href="#虚拟内存区域" class="headerlink" title="虚拟内存区域"></a>虚拟内存区域</h5><p>vm_area_struct (Virtual memory areas, VMAs)</p>
 <p><img src="/images/address_space.gif" alt="address_space"></p>
 
