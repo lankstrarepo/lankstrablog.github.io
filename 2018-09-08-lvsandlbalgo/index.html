@@ -88,7 +88,11 @@
 <meta property="og:image" content="http://lansheng.me/images/lvs-dr.png">
 <meta property="og:image" content="http://lansheng.me/images/lvs-tun.png">
 <meta property="og:image" content="http://lansheng.me/images/lvs-nat.png">
-<meta property="og:updated_time" content="2018-09-08T15:33:41.822Z">
+<meta property="og:image" content="http://lansheng.me/images/DR.png">
+<meta property="og:image" content="http://lansheng.me/images/NAT.png">
+<meta property="og:image" content="http://lansheng.me/images/FNAT.png">
+<meta property="og:image" content="http://lansheng.me/images/conn_tab.png">
+<meta property="og:updated_time" content="2018-12-05T16:48:30.380Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LVS及负载均衡">
 <meta name="twitter:description" content="LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。项目在1998年5月由章文嵩博士成立，是中国国内最早出现的自由软件项目之一。">
@@ -390,6 +394,11 @@
 <h4 id="加权最少链接（Weighted-Least-Connections）WLC"><a href="#加权最少链接（Weighted-Least-Connections）WLC" class="headerlink" title="加权最少链接（Weighted Least Connections）WLC"></a>加权最少链接（Weighted Least Connections）WLC</h4><p>  在集群系统中的服务器性能差异较大的情况下，调度器采用”加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
 <h4 id="基于局部性的最少链接（Locality-Based-Least-Connections）LBLC"><a href="#基于局部性的最少链接（Locality-Based-Least-Connections）LBLC" class="headerlink" title="基于局部性的最少链接（Locality-Based Least Connections）LBLC"></a>基于局部性的最少链接（Locality-Based Least Connections）LBLC</h4><p>  “基于局部性的最少链接” 调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器 是可用的且没有超载，将请求发送到该服务器；若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用”最少链接”的原则选出一个可用的服务 器，将请求发送到该服务器。</p>
 <h4 id="带复制的基于局部性最少链接（Locality-Based-Least-Connections-with-Replication）LBLCR"><a href="#带复制的基于局部性最少链接（Locality-Based-Least-Connections-with-Replication）LBLCR" class="headerlink" title="带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）LBLCR"></a>带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）LBLCR</h4><p>  “带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。它与LBLC算法的不同之处是它要维护从一个 目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射。该算法根据请求的目标IP地址找出该目标IP地址对应的服务 器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器，若服务器超载；则按”最小连接”原则从这个集群中选出一 台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改， 将最忙的服务器从服务器组中删除，以降低复制的 程度。</p>
+<h3 id="lvs代码解析"><a href="#lvs代码解析" class="headerlink" title="lvs代码解析"></a>lvs代码解析</h3><h4 id="LVS-DR"><a href="#LVS-DR" class="headerlink" title="LVS/DR"></a>LVS/DR</h4><p><img src="/images/DR.png" alt="DR"></p>
+<h4 id="LVS-NAT"><a href="#LVS-NAT" class="headerlink" title="LVS/NAT"></a>LVS/NAT</h4><p><img src="/images/NAT.png" alt="NAT"></p>
+<h4 id="LVS-FNAT"><a href="#LVS-FNAT" class="headerlink" title="LVS/FNAT"></a>LVS/FNAT</h4><p><img src="/images/FNAT.png" alt="FNAT"></p>
+<h4 id="连接表"><a href="#连接表" class="headerlink" title="连接表"></a>连接表</h4><p>连接由源地址，源端口，目的地址，目的端口组成：<code>&lt;s_addr, s_port, d_addr, d_port&gt;</code><br>连接入方向索引<code>in_idx</code>：<code>client -&gt; lvs</code><br>连接出方向索引<code>out_idx</code>：<code>rs -&gt; lvs</code><br><code>ipvs</code>连接<code>ip_vs_conn</code>：<br><code>ipvs</code>连接索引<code>ip_vs_conn_idx</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -+--&gt; in_idx</span><br><span class="line">    |</span><br><span class="line">    +--&gt; out_idx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/conn_tab.png" alt="conn_tab"></p>
 
       
     </div>
