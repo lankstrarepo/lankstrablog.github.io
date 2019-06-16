@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="ML/DL,bp," />
+  <meta name="keywords" content="math,probability," />
 
 
 
@@ -77,21 +77,18 @@
 
 
 
-<meta name="description" content="神经网络学习">
-<meta name="keywords" content="ML&#x2F;DL,bp">
+<meta name="description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
+<meta name="keywords" content="math,probability">
 <meta property="og:type" content="article">
-<meta property="og:title" content="神经网络与反向传播算法">
-<meta property="og:url" content="http://lansheng.me/2017-06-15-neural-net/index.html">
+<meta property="og:title" content="正态分布推导">
+<meta property="og:url" content="http://lansheng.me/2019-06-15-gauss-distribution/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="神经网络学习">
+<meta property="og:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://lansheng.me/images/neuron.png">
-<meta property="og:image" content="http://lansheng.me/images/perceptron.png">
-<meta property="og:updated_time" content="2018-07-03T16:25:39.556Z">
+<meta property="og:updated_time" content="2019-06-15T04:07:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="神经网络与反向传播算法">
-<meta name="twitter:description" content="神经网络学习">
-<meta name="twitter:image" content="http://lansheng.me/images/neuron.png">
+<meta name="twitter:title" content="正态分布推导">
+<meta name="twitter:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
 
 
 
@@ -121,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://lansheng.me/2017-06-15-neural-net/"/>
+  <link rel="canonical" href="http://lansheng.me/2019-06-15-gauss-distribution/"/>
 
 
 
 
 
-  <title>神经网络与反向传播算法 | Lankstra's blog</title>
+  <title>正态分布推导 | Lankstra's blog</title>
   
 
 
@@ -254,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2017-06-15-neural-net/">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2019-06-15-gauss-distribution/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lankstra">
@@ -271,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">神经网络与反向传播算法</h1>
+          <h1 class="post-title" itemprop="name headline">正态分布推导</h1>
         
 
         <div class="post-meta">
@@ -283,8 +280,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-15T00:00:00+08:00">
-                2017-06-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-15T00:00:00+08:00">
+                2019-06-15
               </time>
             
 
@@ -324,9 +321,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017-06-15-neural-net/#comments" itemprop="discussionUrl">
+                <a href="/2019-06-15-gauss-distribution/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017-06-15-neural-net/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019-06-15-gauss-distribution/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -354,22 +351,13 @@
       
 
       
-        <p>神经网络学习<br><a id="more"></a></p>
-<h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络中最基本的成分是神经元(neuron)模型。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的点位；如果某神经元的点位超过了一个“阈值”(threshold)，那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。  </p>
-<h3 id="M-P神经元模型"><a href="#M-P神经元模型" class="headerlink" title="M-P神经元模型"></a>M-P神经元模型</h3><p>神经元接收到来自$n$个其他神经元传递过来的输入信号$x_i$，这些输入信号通过带权重$w_i$的连接进行传递，神经元接收到的总输入值将与神经元的阈值进行比较，然后通过激活函数处理以产生神经元的输出。  </p>
-<div style="text-align:center"><br><img src="/images/neuron.png"><br>$$y = f(\sum_{i=1}^nw_ix_i - θ)$$<br></div>
-
-<h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>阶跃函数</p>
-<div style="text-align:center"><br>$$f(x) = \begin{cases} 1, &amp; x \geq 0 \\<br>0, &amp; x &lt; 0 \\<br>\end{cases} $$<br></div><br>单极性sigmoid函数<br><div style="text-align:center">$$f(x) = \frac{1}{1+e^{-x}}$$</div><br>双极性sigmoid函数<br><div style="text-align:center">$$f(x) = tanh(x) = \frac{1 - e^{-x}}{1+e^{-x}}$$</div>
-
-<h3 id="感知机与多层网络"><a href="#感知机与多层网络" class="headerlink" title="感知机与多层网络"></a>感知机与多层网络</h3><p><div style="text-align:center"><img src="/images/perceptron.png"></div><br>感知机(Perceptron)由两层神经元组成，输入层接收外部输入信号后传递给输出层，输出层是M-P神经元。<br>感知机能容易地实现逻辑与、或、非运算。感知机的输出$y=f(\sum_{i}w_ix_i-θ)$，假定$f$是阶跃函数，有</p>
-<ul>
-<li>与运算$(x_1∩x_2)$:令$w_1=w_2=1,θ=2$,则$y=f(1\cdot x_1+1\cdot x_2-2)$,仅在$x_1=x_2=1$时，$y=1$;</li>
-<li>或运算$(x_1∪x_2)$:令$w_1=w_2=1,θ=0.5$,则$y=f(1\cdot x_1+1\cdot x_2-0.5)$,当$x_1=1$或$x_2=1$时，$y=1$;</li>
-<li>非运算$(┐x_1)$:令$w_1=-0.6,w_2=0,θ=-0.5$,则$y=f(-0.6\cdot x_1+0\cdot x_2+0.5)$,当$x_1=1$时，$y=0$;当$x_1=0$时，$y=1$.</li>
-</ul>
-<p>当给定训练数据集，权重$w_i(i=1,2,….,n)$以及阈值$θ$可以通过学习得到。对于训练样例$(\textbf{x},y)$,若当前感知机的输出为$\hat{y}$,则感知机权重的调整为:<br>$$w_i←w_i+Δw_i$$ $$Δw_i=\eta(y-\hat{y})x_i$$<br>其中$\eta\in(0,1)$称为学习率(learning rate).<br>要解决非线性可分问题，需要考虑使用多层功能神经元。输出层与输入层之间的一层神经元，被称为隐层或隐含层(hidden layer),隐含层和输出层神经元都是拥有激活函数的功能神经元。  </p>
-<h3 id="误差逆传播算法"><a href="#误差逆传播算法" class="headerlink" title="误差逆传播算法"></a>误差逆传播算法</h3><p>多层网络的学习能力比单层感知机强很多，要训练多层网络，需要更强大的学习算法。误差逆传播（error BackPropagation,简称BP）算法就是典型。现实任务中使用神经网络时，大多是在使用BP算法进行训练。<br>给定训练集$D={(x_1,y_1),(x_2,y_2),…,(x_m,y_m)},x_i∈R^d,y_i∈R^l$,即输入实例由d各属性描述，输出l维实值向量。</p>
+        <h3 id="正态分布："><a href="#正态分布：" class="headerlink" title="正态分布："></a>正态分布：</h3><p>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}<br>$$<br><a id="more"></a></p>
+<h3 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h3><p><strong>出发点：误差分布导出的极大似然估计=算数平均值</strong></p>
+<p>设真值$\theta,x_1,\cdots,x_n$ 为$n$次独立测量值，每次测量误差为$e_i=x_i-\theta$, 假设误差$e_i$ 的密度函数为$f(e)$, 则测量值的联合概率为$n$个误差的联合概率：</p>
+<p>$$<br>L(\theta)=L(\theta;x_1,\cdots,x_n)=f(e_1)\cdots f(e_n)=f(x_1-\theta)\cdots f(x_n-\theta)<br>$$<br>求极大似然估计，两边取对数：<br>$$<br>ln(L(\theta))=\sum_{i=1}^nlnf(x_i-\theta)=0<br>$$<br>两边同时求导：<br>$$<br>\frac{dln(L(\theta))}{d\theta}=\sum_{i=1}^{n}\frac{f’(x_i-\theta)}{f(x_i-\theta)}=0<br>$$<br>令$g(x)=\frac{f’(x)}{f(x)}$ :<br>$$<br>\sum_{i=1}^{n}g(x_i-\theta)=0<br>$$</p>
+<p>由于高斯假设极大似然估计的解就是算数平均$\overline x$, 带入上式：<br>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=0<br>$$<br>$(5)$式中取$n=2$ :<br>$$<br>g(x_1-\overline x)+g(x_2-\overline x)=0<br>$$<br>此时，$x_1-\overline x=-(x_2-\overline x)$ 且$x_1,x_2$ 是任意的：<br>$$<br>g(-x)=g(x)<br>$$<br>$(5)$式中取$n=m+1$, 并且要求$x_1=\cdots=x_m=-x, x_{m+1}=mx$, 则有<br>$$<br>\overline x=\frac{-x-x-x\cdots+mx}{n}=0<br>$$</p>
+<p>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=\sum_{i=1}^{m}g(x_i)+g(x_{m+1})=mg(-x)+g(mx)<br>$$</p>
+<p>根据$(8)$, 有<br>$$<br>mg(x)=g(mx)<br>$$<br>满足$(10)$的唯一函数是$g(x)=cx$, 积分解出：<br>$$<br>f(x)=Me^{\frac{1}{2}cx^2}<br>$$<br>由$\int_{-\infty}^{+\infty}f(x)=1$, 有$c&lt;0$,取$c=-\frac{1}{\sigma^2}$,则有$M=\frac{1}{\sqrt{2\pi}\sigma}$, 所以<br>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}}<br>$$</p>
 
       
     </div>
@@ -387,9 +375,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ML-DL/" rel="tag"># ML/DL</a>
+            <a href="/tags/math/" rel="tag"># math</a>
           
-            <a href="/tags/bp/" rel="tag"># bp</a>
+            <a href="/tags/probability/" rel="tag"># probability</a>
           
         </div>
       
@@ -402,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016-10-11-kmp-algo/" rel="next" title="kmp算法">
-                <i class="fa fa-chevron-left"></i> kmp算法
+              <a href="/2018-09-09-consistent-hashing/" rel="next" title="一致性哈希">
+                <i class="fa fa-chevron-left"></i> 一致性哈希
               </a>
             
           </div>
@@ -411,10 +399,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017-08-06-sock5-proto/" rel="prev" title="socks5协议">
-                socks5协议 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -601,9 +585,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://lansheng.me/2017-06-15-neural-net/';
-          this.page.identifier = '2017-06-15-neural-net/';
-          this.page.title = '神经网络与反向传播算法';
+          this.page.url = 'http://lansheng.me/2019-06-15-gauss-distribution/';
+          this.page.identifier = '2019-06-15-gauss-distribution/';
+          this.page.title = '正态分布推导';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://lankstra.disqus.com/embed.js';
