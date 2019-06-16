@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-16T08:48:18.745Z">
+<meta property="og:updated_time" content="2019-06-16T08:49:37.713Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正态分布推导">
 <meta name="twitter:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
@@ -357,7 +357,7 @@
 <p>$$<br>L(\theta)=L(\theta;x_1,\cdots,x_n)=f(e_1)\cdots f(e_n)=f(x_1-\theta)\cdots f(x_n-\theta) \tag{1}<br>$$<br>求极大似然估计，两边取对数：<br>$$<br>ln(L(\theta))=\sum_{i=1}^nlnf(x_i-\theta)=0 \tag{2}<br>$$<br>两边同时求导：<br>$$<br>\frac{dln(L(\theta))}{d\theta}=\sum_{i=1}^{n}\frac{f’(x_i-\theta)}{f(x_i-\theta)}=0 \tag{3}<br>$$<br>令$g(x)=\frac{f’(x)}{f(x)}$ :<br>$$<br>\sum_{i=1}^{n}g(x_i-\theta)=0 \tag{4}<br>$$</p>
 <p>由于高斯假设极大似然估计的解就是算数平均$\overline x$, 带入上式：<br>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=0 \tag{5}<br>$$<br>$(5)$式中取$n=2$ :<br>$$<br>g(x_1-\overline x)+g(x_2-\overline x)=0 \tag{6}<br>$$<br>此时，$x_1-\overline x=-(x_2-\overline x)$ 且$x_1,x_2$ 是任意的：<br>$$<br>g(-x)=g(x) \tag{7}<br>$$<br>$(5)$式中取$n=m+1$, 并且要求$x_1=\cdots=x_m=-x, x_{m+1}=mx$, 则有<br>$$<br>\overline x=\frac{-x-x-x\cdots+mx}{n}=0 \tag{8}<br>$$</p>
 <p>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=\sum_{i=1}^{m}g(x_i)+g(x_{m+1})=mg(-x)+g(mx) \tag{9}<br>$$</p>
-<p>根据$(7),(9)$, 有<br>$$<br>mg(x)=g(mx) \tag{10}<br>$$<br>满足$(10)$的唯一函数是$g(x)=cx$, 积分解出：<br>$$<br>f(x)=Me^{\frac{1}{2}cx^2}<br>$$<br>由$\int_{-\infty}^{+\infty}f(x)=1$, 有$c&lt;0$,取$c=-\frac{1}{\sigma^2}$,则有$M=\frac{1}{\sqrt{2\pi}\sigma}$, 所以<br>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}}<br>$$</p>
+<p>根据$(7),(9)$, 有<br>$$<br>mg(x)=g(mx) \tag{10}<br>$$<br>满足$(10)$的唯一函数是$g(x)=cx$, 积分解出：<br>$$<br>f(x)=Me^{\frac{1}{2}cx^2} \tag{11}<br>$$<br>由$\int_{-\infty}^{+\infty}f(x)=1​$, 有$c&lt;0​$,取$c=-\frac{1}{\sigma^2}​$,则有$M=\frac{1}{\sqrt{2\pi}\sigma}​$, 所以<br>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}} \tag{12}<br>$$</p>
 
       
     </div>
