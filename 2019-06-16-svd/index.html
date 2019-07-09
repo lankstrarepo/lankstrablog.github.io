@@ -77,18 +77,20 @@
 
 
 
-<meta name="description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
+<meta name="description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
 <meta name="keywords" content="math,probability">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正态分布推导">
-<meta property="og:url" content="http://lansheng.me/2019-06-15-gauss-distribution/index.html">
+<meta property="og:title" content="SVD分解">
+<meta property="og:url" content="http://lansheng.me/2019-06-16-svd/index.html">
 <meta property="og:site_name" content="Lankstra&#39;s blog">
-<meta property="og:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
+<meta property="og:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-16T08:49:37.713Z">
+<meta property="og:image" content="c:/Users/mario/Desktop/code/svd_pic.png">
+<meta property="og:updated_time" content="2019-07-09T00:28:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正态分布推导">
-<meta name="twitter:description" content="正态分布：$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$">
+<meta name="twitter:title" content="SVD分解">
+<meta name="twitter:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
+<meta name="twitter:image" content="c:/Users/mario/Desktop/code/svd_pic.png">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://lansheng.me/2019-06-15-gauss-distribution/"/>
+  <link rel="canonical" href="http://lansheng.me/2019-06-16-svd/"/>
 
 
 
 
 
-  <title>正态分布推导 | Lankstra's blog</title>
+  <title>SVD分解 | Lankstra's blog</title>
   
 
 
@@ -251,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2019-06-15-gauss-distribution/">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.me/2019-06-16-svd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lankstra">
@@ -268,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">正态分布推导</h1>
+          <h1 class="post-title" itemprop="name headline">SVD分解</h1>
         
 
         <div class="post-meta">
@@ -280,8 +282,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-15T00:00:00+08:00">
-                2019-06-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-16T00:00:00+08:00">
+                2019-06-16
               </time>
             
 
@@ -321,9 +323,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019-06-15-gauss-distribution/#comments" itemprop="discussionUrl">
+                <a href="/2019-06-16-svd/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019-06-15-gauss-distribution/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019-06-16-svd/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -351,13 +353,20 @@
       
 
       
-        <h3 id="正态分布："><a href="#正态分布：" class="headerlink" title="正态分布："></a>正态分布：</h3><p>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}<br>$$<br><a id="more"></a></p>
-<h3 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h3><p><strong>出发点：误差分布导出的极大似然估计=算数平均值</strong></p>
-<p>设真值$\theta,x_1,\cdots,x_n$ 为$n$次独立测量值，每次测量误差为$e_i=x_i-\theta$, 假设误差$e_i$ 的密度函数为$f(e)$, 则测量值的联合概率为$n$个误差的联合概率：</p>
-<p>$$<br>L(\theta)=L(\theta;x_1,\cdots,x_n)=f(e_1)\cdots f(e_n)=f(x_1-\theta)\cdots f(x_n-\theta) \tag{1}<br>$$<br>求极大似然估计，两边取对数：<br>$$<br>ln(L(\theta))=\sum_{i=1}^nlnf(x_i-\theta)=0 \tag{2}<br>$$<br>两边同时求导：<br>$$<br>\frac{dln(L(\theta))}{d\theta}=\sum_{i=1}^{n}\frac{f’(x_i-\theta)}{f(x_i-\theta)}=0 \tag{3}<br>$$<br>令$g(x)=\frac{f’(x)}{f(x)}$ :<br>$$<br>\sum_{i=1}^{n}g(x_i-\theta)=0 \tag{4}<br>$$</p>
-<p>由于高斯假设极大似然估计的解就是算数平均$\overline x$, 带入上式：<br>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=0 \tag{5}<br>$$<br>$(5)$式中取$n=2$ :<br>$$<br>g(x_1-\overline x)+g(x_2-\overline x)=0 \tag{6}<br>$$<br>此时，$x_1-\overline x=-(x_2-\overline x)$ 且$x_1,x_2$ 是任意的：<br>$$<br>g(-x)=g(x) \tag{7}<br>$$<br>$(5)$式中取$n=m+1$, 并且要求$x_1=\cdots=x_m=-x, x_{m+1}=mx$, 则有<br>$$<br>\overline x=\frac{-x-x-x\cdots+mx}{n}=0 \tag{8}<br>$$</p>
-<p>$$<br>\sum_{i=1}^{n}g(x_i-\overline x)=\sum_{i=1}^{m}g(x_i)+g(x_{m+1})=mg(-x)+g(mx) \tag{9}<br>$$</p>
-<p>根据$(7),(9)$, 有<br>$$<br>mg(x)=g(mx) \tag{10}<br>$$<br>满足$(10)$的唯一函数是$g(x)=cx$, 积分解出：<br>$$<br>f(x)=Me^{\frac{1}{2}cx^2} \tag{11}<br>$$<br>由$\int_{-\infty}^{+\infty}f(x)=1​$, 有$c&lt;0​$,取$c=-\frac{1}{\sigma^2}​$,则有$M=\frac{1}{\sqrt{2\pi}\sigma}​$, 所以<br>$$<br>f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}} \tag{12}<br>$$</p>
+        <p>奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。<br><a id="more"></a></p>
+<h3 id="特征值与特征向量"><a href="#特征值与特征向量" class="headerlink" title="特征值与特征向量"></a>特征值与特征向量</h3><p>特征值与特征向量的定义：<br>$$<br>Av=\lambda v \tag{1}<br>$$<br>其中$A$是一个$n\times n$的实对称矩阵，$v$是一个$n$维向量，则$\lambda$是矩阵$A$的一个特征值，而$x$是矩阵$A$的特征值$\lambda$所对应的特征向量。</p>
+<p>将矩阵$A$进行特征分解，求出矩阵$A$的$n$个特征值$\lambda_1\leq\lambda_2\leq\cdots\leq\lambda_n$，以及这$n$个特征值所对应的特征向量${q_1,q_2,\cdots q_n}$，如果这$n$个特征向量线性无关，那么矩阵$A$就可通过以下分解得到：<br>$$<br>A=Q\Lambda Q^{-1} \tag{2}<br>$$<br>其中$Q$是$n\times n$方阵，第$i$列为$A$的特征向量$q_i$。$\Lambda$是对角矩阵，其对角线上的元素为对应特征值$\Lambda_{ii}=\lambda_i$。</p>
+<p>任意的$N\times N$实对称矩阵都有$N$个线性无关的特征向量。并且这些特征向量都可以正交单位化而得到一组正交且模为1的向量。即满足$\left|q_i\right|<em>2=1$，或者说$q</em>{i}^{T}q_i=1$，满足:<br>$$<br>Q^TQ=I \tag{3}<br>$$</p>
+<p>$$<br>Q^T=Q^{-1} \tag{4}<br>$$</p>
+<p>其中$Q$为酉矩阵。</p>
+<p>矩阵分解表达式可写为：<br>$$<br>A=Q\Lambda Q^T \tag{5}<br>$$</p>
+<h3 id="SVD分解"><a href="#SVD分解" class="headerlink" title="SVD分解"></a>SVD分解</h3><p>SVD也是对矩阵的分解，但是并不要求分解的矩阵是方阵。<br>$$<br>A=U\Sigma V^T \tag{6}<br>$$<br>其中$A$为$m\times n$的矩阵，$U$是$m\times m$的矩阵，$\Sigma$是一个$m\times n$的矩阵，除了对角线元素外都是0，主对角线上的每个元素为奇异值，$V$是一个$n\times n$的矩阵。$U$与$V$都是酉矩阵，即满足$U^TU=I$，$V^TV=I$。</p>
+<p><img src="C:\Users\mario\Desktop\code\svd_pic.png" alt=""></p>
+<p>将矩阵$A$的转置乘$A$，可得$n\times n$的方阵$A^TA$。求方阵的特征值：<br>$$<br>(A^TA)v_i=\lambda_iv_i<br>$$</p>
+<p>将矩阵$A$乘 $A$的转置，可得$m\times m$的方阵$AA^T$。求方阵的特征值：<br>$$<br>(AA^T)u_i=\lambda_iu_i<br>$$<br>由$(3) (4)$可得：<br>$$<br>A^T=V\Sigma^TU^T<br>$$</p>
+<p>$$<br>A^TA=V\Sigma^TU^TU\Sigma V^T=V\Sigma^2V^T \tag{9}<br>$$</p>
+<p>由$(9)$可知，$A^TA$是SVD中的$V$矩阵。</p>
+<p>同理可得到$AA^T$是SVD中的$U$矩阵。<br>$$<br>A=U\Sigma V^T =&gt; AV=U\Sigma V^TV=&gt;AV=U\Sigma=&gt;Av_i=\sigma_iu_i=&gt;\sigma_i=A\frac{v_i}{u_i}<br>$$<br>特征值矩阵等于奇异值矩阵的平方，满足如下关系：<br>$$<br>\sigma_i=\sqrt\lambda_i<br>$$</p>
 
       
     </div>
@@ -390,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018-09-09-consistent-hashing/" rel="next" title="一致性哈希">
-                <i class="fa fa-chevron-left"></i> 一致性哈希
+              <a href="/2019-06-15-gauss-distribution/" rel="next" title="正态分布推导">
+                <i class="fa fa-chevron-left"></i> 正态分布推导
               </a>
             
           </div>
@@ -399,10 +408,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019-06-16-svd/" rel="prev" title="SVD分解">
-                SVD分解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -589,9 +594,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://lansheng.me/2019-06-15-gauss-distribution/';
-          this.page.identifier = '2019-06-15-gauss-distribution/';
-          this.page.title = '正态分布推导';
+          this.page.url = 'http://lansheng.me/2019-06-16-svd/';
+          this.page.identifier = '2019-06-16-svd/';
+          this.page.title = 'SVD分解';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://lankstra.disqus.com/embed.js';
