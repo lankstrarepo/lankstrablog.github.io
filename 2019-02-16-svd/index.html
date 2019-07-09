@@ -85,12 +85,12 @@
 <meta property="og:site_name" content="Lankstra&#39;s blog">
 <meta property="og:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="c:/Users/mario/Desktop/code/svd_pic.png">
-<meta property="og:updated_time" content="2019-07-09T14:58:17.534Z">
+<meta property="og:image" content="http://lansheng.me/images/svd_pic.png">
+<meta property="og:updated_time" content="2019-07-09T15:07:29.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVD分解">
 <meta name="twitter:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
-<meta name="twitter:image" content="c:/Users/mario/Desktop/code/svd_pic.png">
+<meta name="twitter:image" content="http://lansheng.me/images/svd_pic.png">
 
 
 
@@ -361,7 +361,7 @@
 <p>其中$Q$为酉矩阵。</p>
 <p>矩阵分解表达式可写为：<br>$$<br>A=Q\Lambda Q^T \tag{5}<br>$$</p>
 <h3 id="SVD分解"><a href="#SVD分解" class="headerlink" title="SVD分解"></a>SVD分解</h3><p>SVD也是对矩阵的分解，但是并不要求分解的矩阵是方阵。<br>$$<br>A=U\Sigma V^T \tag{6}<br>$$<br>其中$A$为$m\times n$的矩阵，$U$是$m\times m$的矩阵，$\Sigma$是一个$m\times n$的矩阵，除了对角线元素外都是0，主对角线上的每个元素为奇异值，$V$是一个$n\times n$的矩阵。$U$与$V$都是酉矩阵，即满足$U^TU=I$，$V^TV=I$。</p>
-<p><img src="C:\Users\mario\Desktop\code\svd_pic.png" alt=""></p>
+<p><img src="/images/svd_pic.png" alt=""></p>
 <p>将矩阵$A$的转置乘$A$，可得$n\times n$的方阵$A^TA$。求方阵的特征值：<br>$$<br>(A^TA)v_i=\lambda_iv_i<br>$$</p>
 <p>将矩阵$A$乘 $A$的转置，可得$m\times m$的方阵$AA^T$。求方阵的特征值：<br>$$<br>(AA^T)u_i=\lambda_iu_i<br>$$<br>由$(3) (4)$可得：<br>$$<br>A^T=V\Sigma^TU^T<br>$$</p>
 <p>$$<br>A^TA=V\Sigma^TU^TU\Sigma V^T=V\Sigma^2V^T \tag{9}<br>$$</p>
