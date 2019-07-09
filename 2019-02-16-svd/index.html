@@ -86,7 +86,7 @@
 <meta property="og:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="c:/Users/mario/Desktop/code/svd_pic.png">
-<meta property="og:updated_time" content="2019-07-09T00:34:56.065Z">
+<meta property="og:updated_time" content="2019-07-09T14:58:17.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVD分解">
 <meta name="twitter:description" content="奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。">
@@ -356,7 +356,7 @@
         <p>奇异值分解(Singular Value Decomposition)是线性代数中一种重要的矩阵分解，在信号处理、统计学、机器学习等领域有重要应用。<br><a id="more"></a></p>
 <h3 id="特征值与特征向量"><a href="#特征值与特征向量" class="headerlink" title="特征值与特征向量"></a>特征值与特征向量</h3><p>特征值与特征向量的定义：<br>$$<br>Av=\lambda v \tag{1}<br>$$<br>其中$A$是一个$n\times n$的实对称矩阵，$v$是一个$n$维向量，则$\lambda$是矩阵$A$的一个特征值，而$x$是矩阵$A$的特征值$\lambda$所对应的特征向量。</p>
 <p>将矩阵$A$进行特征分解，求出矩阵$A$的$n$个特征值$\lambda_1\leq\lambda_2\leq\cdots\leq\lambda_n$，以及这$n$个特征值所对应的特征向量${q_1,q_2,\cdots q_n}$，如果这$n$个特征向量线性无关，那么矩阵$A$就可通过以下分解得到：<br>$$<br>A=Q\Lambda Q^{-1} \tag{2}<br>$$<br>其中$Q$是$n\times n$方阵，第$i$列为$A$的特征向量$q_i$。$\Lambda$是对角矩阵，其对角线上的元素为对应特征值$\Lambda_{ii}=\lambda_i$。</p>
-<p>任意的$N\times N$实对称矩阵都有$N$个线性无关的特征向量。并且这些特征向量都可以正交单位化而得到一组正交且模为1的向量。即满足$\left|q_i\right|<em>2=1$，或者说$q</em>{i}^{T}q_i=1$，满足:<br>$$<br>Q^TQ=I \tag{3}<br>$$</p>
+<p>任意的$N\times N$实对称矩阵都有$N$个线性无关的特征向量。并且这些特征向量都可以正交单位化而得到一组正交且模为1的向量。即满足$\Vert q_i\Vert_2=1$，或者说$q_{i}^{T}q_i=1$，满足：<br>$$<br>Q^TQ=I \tag{3}<br>$$</p>
 <p>$$<br>Q^T=Q^{-1} \tag{4}<br>$$</p>
 <p>其中$Q$为酉矩阵。</p>
 <p>矩阵分解表达式可写为：<br>$$<br>A=Q\Lambda Q^T \tag{5}<br>$$</p>
