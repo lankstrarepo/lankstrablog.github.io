@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="https://secure.gravatar.com/avatar/b3c7fcdb5ce311f9dccfab0032775efb?s=80?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="assembly," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AT&amp;amp;T与Intel汇编代码格式在unix与linux系统中，更多采用了AT&amp;amp;T格式的汇编。两者区别:  AT&amp;amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。       AT&amp;amp;T格式 Intel格式     pushl %eax push eax     在AT&amp;amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要">
+<meta name="keywords" content="assembly">
+<meta property="og:type" content="article">
+<meta property="og:title" content="x86_64汇编">
+<meta property="og:url" content="http://lansheng.pro/2017-09-21-x86-assembly/index.html">
+<meta property="og:site_name" content="Lankstra&#39;s blog">
+<meta property="og:description" content="AT&amp;amp;T与Intel汇编代码格式在unix与linux系统中，更多采用了AT&amp;amp;T格式的汇编。两者区别:  AT&amp;amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。       AT&amp;amp;T格式 Intel格式     pushl %eax push eax     在AT&amp;amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://lansheng.pro/images/register_map.png">
+<meta property="og:image" content="http://lansheng.pro/images/call_frame.png">
+<meta property="og:image" content="http://lansheng.pro/images/return_frame.png">
+<meta property="og:updated_time" content="2021-11-28T09:47:29.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="x86_64汇编">
+<meta name="twitter:description" content="AT&amp;amp;T与Intel汇编代码格式在unix与linux系统中，更多采用了AT&amp;amp;T格式的汇编。两者区别:  AT&amp;amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。       AT&amp;amp;T格式 Intel格式     pushl %eax push eax     在AT&amp;amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要">
+<meta name="twitter:image" content="http://lansheng.pro/images/register_map.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","oll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lansheng.pro/2017-09-21-x86-assembly/"/>
+
+
+
+
+
+  <title>x86_64汇编 | Lankstra's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+          
+        <span class="site-title">Lankstra's blog</span>
+         
+      </a>
+    </div>
+      
+        <p class="site-subtitle">lankstra</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="http://www.github.com/lankstra" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lansheng.pro/2017-09-21-x86-assembly/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lankstra">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lankstra's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">x86_64汇编</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-21T00:00:00+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/binary/" itemprop="url" rel="index">
+                    <span itemprop="name">binary</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017-09-21-x86-assembly/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017-09-21-x86-assembly/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="AT-amp-T与Intel汇编代码格式"><a href="#AT-amp-T与Intel汇编代码格式" class="headerlink" title="AT&amp;T与Intel汇编代码格式"></a>AT&amp;T与Intel汇编代码格式</h2><p>在unix与linux系统中，更多采用了AT&amp;T格式的汇编。两者区别:</p>
+<ol>
+<li>AT&amp;T格式汇编，寄存器名要加上’%’作为前缀；而Intel汇编不需要。  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>AT&amp;T格式</th>
+<th>Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pushl %eax</td>
+<td>push eax</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>在AT&amp;T格式汇编中，用’$’前缀表示一个立即操作数；而在Intel格式中，不需要加前缀。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">pushl $1</td>
+<td style="text-align:left">push 1</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>AT&amp;T 和 Intel 格式中的源操作数和目标操作数的位置正好相反。在 Intel 汇编格式中，目标操作数在源操作数的左边；而在 AT&amp;T 汇编格式中，目标操作数在源操作数的右边。例如：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">addl $1, %eax</td>
+<td style="text-align:left">add eax, 1</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li>在 AT&amp;T 汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀’b’、’w’、’l’分别表示操作数为字节（byte，8 比特）、字（word，16 比特）和长字（long，32比特）；而在 Intel 汇编格式中，操作数的字长是用 “byte ptr” 和 “word ptr” 等前缀来表示的。例如：  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">movb val, %al</td>
+<td style="text-align:left">mov al, byte ptr val</td>
+</tr>
+</tbody>
+</table>
+<ol start="5">
+<li>在 AT&amp;T 汇编格式中，内存操作数的寻址方式是<br><code>section:disp(base, index, scale)</code><br>而在 Intel 汇编格式中，内存操作数的寻址方式为：<br><code>section:[base + index*scale + disp]</code><br>由于 Linux 工作在保护模式下，用的是 32 位线性地址，所以在计算地址时不用考虑段基址和偏移量，而是采用如下的地址计算方法：<br><code>disp + base + index * scale</code>  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AT&amp;T 格式</th>
+<th style="text-align:left">Intel格式</th>
+<th style="text-align:left">C语言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">movl -4(%ebp), %eax</td>
+<td style="text-align:left">mov eax, [ebp - 4]</td>
+<td style="text-align:left">eax = *(ebp - 4)</td>
+</tr>
+<tr>
+<td style="text-align:left">movl array(, %eax, 4), %eax</td>
+<td style="text-align:left">mov eax, [eax*4 + array]</td>
+<td style="text-align:left">eax = *(eax*4 + array)</td>
+</tr>
+<tr>
+<td style="text-align:left">movw array(%ebx, %eax, 4), %cx</td>
+<td style="text-align:left">mov cx, [ebx + 4*eax + array]</td>
+<td style="text-align:left">cx = *(eax*4 + ebx + array)</td>
+</tr>
+<tr>
+<td style="text-align:left">movb $4, %fs:(%eax)</td>
+<td style="text-align:left">mov fs:eax, 4</td>
+<td style="text-align:left">-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><p>X86中原有8个32位通用寄存器%eax，%ebx，%ecx，%edx，%esi，%edi，%ebp，%esp, 在X86_64中<br>分别被扩展为64位，并且多了8个寄存器。因此X86_64的寄存器如下：</p>
+<table>
+<thead>
+<tr>
+<th>8-byte reg</th>
+<th>Bytes 0-3</th>
+<th>Bytes 0-1</th>
+<th>Byte 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%rax</td>
+<td>%eax</td>
+<td>%ax</td>
+<td>%al</td>
+</tr>
+<tr>
+<td>%rcx</td>
+<td>%ecx</td>
+<td>%cx</td>
+<td>%cl</td>
+</tr>
+<tr>
+<td>%rdx</td>
+<td>%edx</td>
+<td>%dx</td>
+<td>%dl</td>
+</tr>
+<tr>
+<td>%rbx</td>
+<td>%ebx</td>
+<td>%bx</td>
+<td>%bl</td>
+</tr>
+<tr>
+<td>%rsi</td>
+<td>%esi</td>
+<td>%si</td>
+<td>%sil</td>
+</tr>
+<tr>
+<td>%rdi</td>
+<td>%edi</td>
+<td>%di</td>
+<td>%dil</td>
+</tr>
+<tr>
+<td>%rsp</td>
+<td>%esp</td>
+<td>%sp</td>
+<td>%spl</td>
+</tr>
+<tr>
+<td>%rbp</td>
+<td>%ebp</td>
+<td>%bp</td>
+<td>%bpl</td>
+</tr>
+<tr>
+<td>%r8</td>
+<td>%r8d</td>
+<td>%r8w</td>
+<td>%r8b</td>
+</tr>
+<tr>
+<td>%r9</td>
+<td>%r9d</td>
+<td>%r9w</td>
+<td>%r9b</td>
+</tr>
+<tr>
+<td>%r10</td>
+<td>%r10d</td>
+<td>%r10w</td>
+<td>%r10b</td>
+</tr>
+<tr>
+<td>%r11</td>
+<td>%r11d</td>
+<td>%r11w</td>
+<td>%r11b</td>
+</tr>
+<tr>
+<td>%r12</td>
+<td>%r12d</td>
+<td>%r12w</td>
+<td>%r12b</td>
+</tr>
+<tr>
+<td>%r13</td>
+<td>%r13d</td>
+<td>%r13w</td>
+<td>%r13b</td>
+</tr>
+<tr>
+<td>%r14</td>
+<td>%r14d</td>
+<td>%r14w</td>
+<td>%r14b</td>
+</tr>
+<tr>
+<td>%r15</td>
+<td>%r15d</td>
+<td>%r15w</td>
+<td>%r15b</td>
+</tr>
+</tbody>
+</table>
+<h2 id="x64指令"><a href="#x64指令" class="headerlink" title="x64指令"></a>x64指令</h2><h3 id="指令后缀"><a href="#指令后缀" class="headerlink" title="指令后缀"></a>指令后缀</h3><p>大多数指令，如 <code>mov</code>，使用后缀来表示操作数的大小。例如，将一个四字从 <code>%rax</code> 移动到 <code>%rbx</code> 使用指令 <code>movq %rax, %rbx</code> 。 一些指令，如 <code>ret</code>，不使用后缀，因为没有必要。其他的，例如 <code>movs</code> 和 <code>movz</code> 会使用两个后缀，因为它们将第一个后缀类型的操作数转换为第二个后缀类型的操作数。因此，将 <code>%al</code> 中的字节转换为 <code>%ebx</code> 中带有零扩展名的双字的程序是 <code>movzbl %al, %ebx</code> 。</p>
+<ul>
+<li>“byte” 一个一字节整数 (后缀 b)</li>
+<li>“word” 一个一字(2字节)整数 (后缀 w)</li>
+<li>“doubleword” 一个双字(4字节)整数 (后缀 l)</li>
+<li>“quadword” 一个四字(8字节)的整数 (后缀 q)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">C声明</th>
+<th style="text-align:left">AT&amp;T后缀</th>
+<th style="text-align:left">大小(字节)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">char</td>
+<td style="text-align:left">b</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">short</td>
+<td style="text-align:left">w</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left">int</td>
+<td style="text-align:left">l</td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left">long/void*</td>
+<td style="text-align:left">q</td>
+<td style="text-align:left">8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="移动指令"><a href="#移动指令" class="headerlink" title="移动指令"></a>移动指令</h3><p><code>MOV S, D</code> 将操作数S存入操作数D。S为源D为目的。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mov $0x1, %rax</td>
+<td>将立即数0x1存入寄存器rax</td>
+</tr>
+<tr>
+<td>mov $0x0, -0x24(%rbp)</td>
+<td>将立即数存入以rbp为基址-0x24的内存</td>
+</tr>
+<tr>
+<td>mov %rax, %r12</td>
+<td>将寄存器rax的值存入寄存器r12</td>
+</tr>
+<tr>
+<td>mov %rax, (%r12)</td>
+<td>将寄存器rax的值存入r12寄存器保存的内存地址中</td>
+</tr>
+<tr>
+<td>mov (%rbx), %rdi</td>
+<td>将寄存器rbx中保存的内存地址中的值存入寄存器rdi</td>
+</tr>
+<tr>
+<td>mov %rax, 0x68(%rbx)</td>
+<td>将寄存器rax的值存入以rbx为基址+0x68的内存中</td>
+</tr>
+<tr>
+<td>mov 0x2c(%r14), %rax</td>
+<td>将以寄存器r14为基址+0x2c的内存中的值存入rax寄存器</td>
+</tr>
+<tr>
+<td>movq/movl/movw/movb</td>
+<td>操作数分别限定为qword/long/word/byte</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>movz指令(无符号扩展)</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>movezbl (%rsi), %edx</td>
+<td>movz from byte to dword; 将rsi保存的内存地址中的值从byte做0扩展到dword并存入edx寄存器</td>
+</tr>
+<tr>
+<td>movezwl %dx, %edx</td>
+<td>movz from word to dword; 将dx寄存器的值从word做0扩展到dword存入edx</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>movs指令(有符号扩展)</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>movesbl %dl, %edx</td>
+<td>movs from byte to dword; 将dl保存的值从byte做符号扩展到dword并存入edx寄存器</td>
+</tr>
+<tr>
+<td>movswl (%r12), %eax</td>
+<td>movs from word to dword; 将r12寄存器保存的地址中值从word做符号扩展到dword存入eax</td>
+</tr>
+</tbody>
+</table>
+<h3 id="算数指令"><a href="#算数指令" class="headerlink" title="算数指令"></a>算数指令</h3><table>
+<thead>
+<tr>
+<th>单目指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>inc D</td>
+<td>自增1</td>
+</tr>
+<tr>
+<td>dec D</td>
+<td>自减1</td>
+</tr>
+<tr>
+<td>neg D</td>
+<td>算数取负</td>
+</tr>
+<tr>
+<td>not D</td>
+<td>位运算取反</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>二进制指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>leaq S, D</td>
+<td>加载S有效的地址到D(返回间接操作数的地址)</td>
+</tr>
+<tr>
+<td>add S, D</td>
+<td>将S与D相加并存入D</td>
+</tr>
+<tr>
+<td>sub S, D</td>
+<td>将S与D相减</td>
+</tr>
+<tr>
+<td>imul S, D</td>
+<td>将S与D相乘</td>
+</tr>
+<tr>
+<td>xor S, D</td>
+<td>位运算异或</td>
+</tr>
+<tr>
+<td>or S, D</td>
+<td>位运算或</td>
+</tr>
+<tr>
+<td>and S, D</td>
+<td>位运算与</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>移位指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sal/shl k, D</td>
+<td>左移k位</td>
+</tr>
+<tr>
+<td>sar k, D</td>
+<td>算数右移k位</td>
+</tr>
+<tr>
+<td>shr k, D</td>
+<td>逻辑右移k位</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>特殊算数指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imulq S</td>
+<td>%rax与S的有符号相乘，结果保存在%rdx:%rax</td>
+</tr>
+<tr>
+<td>mulq S</td>
+<td>%rax与S的无符号相乘，结果保存在%rdx:%rax</td>
+</tr>
+<tr>
+<td>idivq S</td>
+<td>有符号相除，%rdx:%rax除以S，结果保存在%rax，余数保存在%rdx</td>
+</tr>
+<tr>
+<td>divq S</td>
+<td>无符号相除，%rdx:%rax除以S，结果保存在%rax，余数保存在%rax</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>比较指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmp S2, S1</td>
+<td>根据S1-S2的结果设置标志位寄存器</td>
+</tr>
+<tr>
+<td>test S2, S1</td>
+<td>根据S1&amp;S2的结果设置标志位寄存器</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>跳转指令</th>
+<th>解释</th>
+<th>标志位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jmp label</td>
+<td>跳转到</td>
+<td>-</td>
+</tr>
+<tr>
+<td>jmp *operand</td>
+<td>跳转到指定位置</td>
+<td>-</td>
+</tr>
+<tr>
+<td>je/jz label</td>
+<td>跳转如果相等/为0</td>
+<td>ZF</td>
+</tr>
+<tr>
+<td>jne/jnz label</td>
+<td>跳转如果不相等/不为0</td>
+<td>~ZF</td>
+</tr>
+<tr>
+<td>js label</td>
+<td>跳转如果是负</td>
+<td>SF</td>
+</tr>
+<tr>
+<td>jns label</td>
+<td>跳转如果不是负</td>
+<td>~SF</td>
+</tr>
+<tr>
+<td>jg/jnle label</td>
+<td>跳转如果大于(有符号)</td>
+<td>~(SF^0F)&amp;~ZF</td>
+</tr>
+<tr>
+<td>jge/jnl label</td>
+<td>跳转如果大于或等于(有符号)</td>
+<td>~(SF^0F)</td>
+</tr>
+<tr>
+<td>jl/jnge label</td>
+<td>跳转如果小于(有符号)</td>
+<td>SF^0F</td>
+</tr>
+<tr>
+<td>jle/jng label</td>
+<td>跳转如果小于等于</td>
+<td>(SF^OF)&#124;ZF</td>
+</tr>
+<tr>
+<td>ja/jnbe label</td>
+<td>跳转如果大于(无符号)</td>
+<td>~CF&amp;~ZF</td>
+</tr>
+<tr>
+<td>jae/jnb label</td>
+<td>跳转如果大于或等于(无符号)</td>
+<td>~CF</td>
+</tr>
+<tr>
+<td>jb/jnae label</td>
+<td>跳转如果小于(无符号)</td>
+<td>CF</td>
+</tr>
+<tr>
+<td>jbe/jna label</td>
+<td>跳转如果小于等于(无符号)</td>
+<td>CF&#124;ZF</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>过程指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>call label/*operand</td>
+<td>将返回地址压栈后跳转到label或指定地址</td>
+</tr>
+<tr>
+<td>leave</td>
+<td>设置%rsp为%rbp的值，然后栈顶弹出保存到%rbp</td>
+</tr>
+<tr>
+<td>ret</td>
+<td>从栈顶弹出返回地址并跳转</td>
+</tr>
+</tbody>
+</table>
+<h2 id="调用规则"><a href="#调用规则" class="headerlink" title="调用规则"></a>调用规则</h2><p>GCC中对这些寄存器的调用规则如下：</p>
+<ul>
+<li>%rax 作为函数返回值使用。</li>
+<li>%rsp 栈指针寄存器，指向栈顶</li>
+<li>%rdi，%rsi，%rdx，%rcx，%r8，%r9 用作函数参数，依次对应第1参数，第2参数。。。</li>
+<li>%rbx，%rbp，%r12，%r13，%14，%15 用作数据存储，遵循被调用者使用规则，简单说就是随便用，调用子函数之前要备份它，以防他被修改</li>
+<li>%r10，%r11 用作数据存储，遵循调用者使用规则，简单说就是使用之前要先保存原值</li>
+</ul>
+<div style="text-align:center"><br><img src="/images/register_map.png" width="50%"><br></div>  
+
+<h2 id="栈桢结构与函数调用"><a href="#栈桢结构与函数调用" class="headerlink" title="栈桢结构与函数调用"></a>栈桢结构与函数调用</h2><p>C语言属于面向过程语言，他最大特点就是把一个程序分解成若干过程（函数），比如：入口函数是main，然后调用各个子函数。在对应机器语言中，GCC把过程转化成栈帧（frame），简单的说，每个栈帧对应一个过程。X86-64典型栈帧结构中，由%rbp指向栈帧开始，%rsp指向栈顶。  </p>
+<h3 id="调用时的栈桢："><a href="#调用时的栈桢：" class="headerlink" title="调用时的栈桢："></a>调用时的栈桢：</h3><div style="text-align:center"><br><img src="/images/call_frame.png" width="60%"><br></div>  
+
+<h3 id="返回时的栈桢："><a href="#返回时的栈桢：" class="headerlink" title="返回时的栈桢："></a>返回时的栈桢：</h3><div style="text-align:center"><br><img src="/images/return_frame.png" width="60%"><br></div>  
+
+<p>举个例子:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = i + j;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sum=%d\n"</span>, a+b);</span><br><span class="line">    <span class="keyword">return</span> (a+b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    foo(a, b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">6</span>;</span><br><span class="line">    bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>main:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0000000000400587</span> &lt;main&gt;:</span><br><span class="line">  <span class="number">400587</span>:	<span class="number">55</span>                   	<span class="keyword">push</span>   %rbp</span><br><span class="line">  <span class="number">400588</span>:	<span class="number">48</span> <span class="number">89</span> e5             	<span class="keyword">mov</span>    %rsp,%rbp</span><br><span class="line">  40058b:	<span class="number">48</span> <span class="number">83</span> ec <span class="number">10</span>          	<span class="keyword">sub</span>    <span class="number">$0</span>x10,%rsp</span><br><span class="line">  40058f:	c7 <span class="number">45</span> fc <span class="number">05</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> 	movl   <span class="number">$0</span>x5,-<span class="number">0x4</span>(%rbp)</span><br><span class="line">  <span class="number">400596</span>:	c7 <span class="number">45</span> f8 <span class="number">06</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> 	movl   <span class="number">$0</span>x6,-<span class="number">0x8</span>(%rbp)</span><br><span class="line">  <span class="number">40059d</span>:	b8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>       	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%eax</span><br><span class="line">  4005a2:	e8 b9 ff ff ff       	callq  <span class="number">400560</span> &lt;bar&gt;</span><br><span class="line">  4005a7:	b8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>       	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%eax</span><br><span class="line">  4005ac:	c9                   	leaveq</span><br><span class="line">  4005ad:	c3                   	retq</span><br><span class="line">  4005ae:	<span class="number">66</span> <span class="number">90</span>                	<span class="keyword">xchg</span>   %ax,%ax</span><br></pre></td></tr></table></figure></p>
+<p>foo:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">000000000040051d</span> &lt;foo&gt;:</span><br><span class="line">  <span class="number">40051d</span>:	<span class="number">55</span>                   	<span class="keyword">push</span>   %rbp</span><br><span class="line">  40051e:	<span class="number">48</span> <span class="number">89</span> e5             	<span class="keyword">mov</span>    %rsp,%rbp</span><br><span class="line">  <span class="number">400521</span>:	<span class="number">48</span> <span class="number">83</span> ec <span class="number">20</span>          	<span class="keyword">sub</span>    <span class="number">$0</span>x20,%rsp</span><br><span class="line">  <span class="number">400525</span>:	<span class="number">89</span> <span class="number">7d</span> ec             	<span class="keyword">mov</span>    %edi,-<span class="number">0x14</span>(%rbp)</span><br><span class="line">  <span class="number">400528</span>:	<span class="number">89</span> <span class="number">75</span> e8             	<span class="keyword">mov</span>    %esi,-<span class="number">0x18</span>(%rbp)</span><br><span class="line">  40052b:	8b <span class="number">45</span> e8             	<span class="keyword">mov</span>    -<span class="number">0x18</span>(%rbp),%eax</span><br><span class="line">  40052e:	8b <span class="number">55</span> ec             	<span class="keyword">mov</span>    -<span class="number">0x14</span>(%rbp),%edx</span><br><span class="line">  <span class="number">400531</span>:	<span class="number">01</span> d0                	<span class="keyword">add</span>    %edx,%eax</span><br><span class="line">  <span class="number">400533</span>:	<span class="number">89</span> <span class="number">45</span> fc             	<span class="keyword">mov</span>    %eax,-<span class="number">0x4</span>(%rbp)</span><br><span class="line">  <span class="number">400536</span>:	c7 <span class="number">45</span> f8 <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> 	movl   <span class="number">$0</span>x2,-<span class="number">0x8</span>(%rbp)</span><br><span class="line">  <span class="number">40053d</span>:	8b <span class="number">45</span> f8             	<span class="keyword">mov</span>    -<span class="number">0x8</span>(%rbp),%eax</span><br><span class="line">  <span class="number">400540</span>:	8b <span class="number">55</span> fc             	<span class="keyword">mov</span>    -<span class="number">0x4</span>(%rbp),%edx</span><br><span class="line">  <span class="number">400543</span>:	<span class="number">01</span> d0                	<span class="keyword">add</span>    %edx,%eax</span><br><span class="line">  <span class="number">400545</span>:	<span class="number">89</span> c6                	<span class="keyword">mov</span>    %eax,%esi</span><br><span class="line">  <span class="number">400547</span>:	bf <span class="number">40</span> <span class="number">06</span> <span class="number">40</span> <span class="number">00</span>       	<span class="keyword">mov</span>    <span class="number">$0</span>x400640,%edi</span><br><span class="line">  40054c:	b8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>       	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%eax</span><br><span class="line">  <span class="number">400551</span>:	e8 aa fe ff ff       	callq  <span class="number">400400</span> &lt;printf@plt&gt;</span><br><span class="line">  <span class="number">400556</span>:	8b <span class="number">45</span> f8             	<span class="keyword">mov</span>    -<span class="number">0x8</span>(%rbp),%eax</span><br><span class="line">  <span class="number">400559</span>:	8b <span class="number">55</span> fc             	<span class="keyword">mov</span>    -<span class="number">0x4</span>(%rbp),%edx</span><br><span class="line">  40055c:	<span class="number">01</span> d0                	<span class="keyword">add</span>    %edx,%eax</span><br><span class="line">  40055e:	c9                   	leaveq</span><br><span class="line">  40055f:	c3                   	retq</span><br></pre></td></tr></table></figure></p>
+<p>bar:<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0000000000400560</span> &lt;bar&gt;:</span><br><span class="line">  <span class="number">400560</span>:	<span class="number">55</span>                   	<span class="keyword">push</span>   %rbp</span><br><span class="line">  <span class="number">400561</span>:	<span class="number">48</span> <span class="number">89</span> e5             	<span class="keyword">mov</span>    %rsp,%rbp</span><br><span class="line">  <span class="number">400564</span>:	<span class="number">48</span> <span class="number">83</span> ec <span class="number">10</span>          	<span class="keyword">sub</span>    <span class="number">$0</span>x10,%rsp</span><br><span class="line">  <span class="number">400568</span>:	c7 <span class="number">45</span> fc <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> 	movl   <span class="number">$0</span>x1,-<span class="number">0x4</span>(%rbp)</span><br><span class="line">  40056f:	c7 <span class="number">45</span> f8 <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> 	movl   <span class="number">$0</span>x2,-<span class="number">0x8</span>(%rbp)</span><br><span class="line">  <span class="number">400576</span>:	8b <span class="number">55</span> f8             	<span class="keyword">mov</span>    -<span class="number">0x8</span>(%rbp),%edx</span><br><span class="line">  <span class="number">400579</span>:	8b <span class="number">45</span> fc             	<span class="keyword">mov</span>    -<span class="number">0x4</span>(%rbp),%eax</span><br><span class="line">  40057c:	<span class="number">89</span> d6                	<span class="keyword">mov</span>    %edx,%esi</span><br><span class="line">  40057e:	<span class="number">89</span> c7                	<span class="keyword">mov</span>    %eax,%edi</span><br><span class="line">  <span class="number">400580</span>:	e8 <span class="number">98</span> ff ff ff       	callq  <span class="number">40051d</span> &lt;foo&gt;</span><br><span class="line">  <span class="number">400585</span>:	c9                   	leaveq</span><br><span class="line">  <span class="number">400586</span>:	c3                   	retq</span><br></pre></td></tr></table></figure></p>
+<h2 id="核心转储"><a href="#核心转储" class="headerlink" title="核心转储"></a>核心转储</h2><p>核心文件（core file），也称核心转储（core dump），是操作系统在进程收到某些信号而终止运行时，将此时进程地址空间的内容以及有关进程状态的其他信息写出的一个磁盘文件。<br>构造一个segmentation fault：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = i + j;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">2</span>, c;</span><br><span class="line">        <span class="keyword">char</span> *d = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"sum=%d\n"</span>, a+b);</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;c);</span><br><span class="line">        <span class="keyword">if</span> (c &lt; <span class="number">10</span>)</span><br><span class="line">                <span class="built_in">strcpy</span>(d, (<span class="keyword">char</span> *)&amp;c); <span class="comment">//构造segv</span></span><br><span class="line">        <span class="keyword">return</span> (a+b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行程序，输入小于10的数会在目录下生成一个core转储。如果无法生成，使用命令<code>ulimit -a</code>查看配置，可简单配置<code>ulimit -c unlimited</code>。<br>使用gdb加载core转储：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# gdb asm core.2530</span><br><span class="line">GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-110.el7</span><br><span class="line">Copyright (C) 2013 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type "show copying"</span><br><span class="line">and "show warranty" for details.</span><br><span class="line">This GDB was configured as "x86_64-redhat-linux-gnu".</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;...</span><br><span class="line">Reading symbols from /root/asm...(no debugging symbols found)...done.</span><br><span class="line">[New LWP 2530]</span><br><span class="line">Core was generated by `./asm'.</span><br><span class="line">Program terminated with signal 11, Segmentation fault.</span><br><span class="line"><span class="meta">#</span><span class="bash">0  0x00007f4edd9f0763 <span class="keyword">in</span> __strcpy_sse2_unaligned () from /lib64/libc.so.6</span></span><br><span class="line">Missing separate debuginfos, use: debuginfo-install glibc-2.17-222.el7.x86_64</span><br><span class="line">(gdb) bt</span><br><span class="line"><span class="meta">#</span><span class="bash">0  0x00007f4edd9f0763 <span class="keyword">in</span> __strcpy_sse2_unaligned () from /lib64/libc.so.6</span></span><br><span class="line"><span class="meta">#</span><span class="bash">1  0x000000000040063f <span class="keyword">in</span> foo ()</span></span><br><span class="line"><span class="meta">#</span><span class="bash">2  0x000000000040066e <span class="keyword">in</span> bar ()</span></span><br><span class="line"><span class="meta">#</span><span class="bash">3  0x0000000000400690 <span class="keyword">in</span> main ()</span></span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure></p>
+<p>有时因为编译器优化或隐藏了符号表，看不到完整的调用栈，就需要推导栈信息。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">0  0x00007f4edd9f0763 <span class="keyword">in</span> ?? ()</span></span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure></p>
+<p>使用<code>info register</code>查看寄存器信息：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">(gdb) info reg</span><br><span class="line">rax            0x0	0</span><br><span class="line">rbx            0x0	0</span><br><span class="line">rcx            0x7f4edd9f0760	139976702363488</span><br><span class="line">rdx            0x1	1</span><br><span class="line">rsi            0x7ffd494f4d2c	140725833387308</span><br><span class="line">rdi            0x0	0</span><br><span class="line">rbp            0x7ffd494f4d40	0x7ffd494f4d40</span><br><span class="line">rsp            0x7ffd494f4d08	0x7ffd494f4d08</span><br><span class="line">r8             0x7f4eddd1d060	139976705691744</span><br><span class="line">r9             0x0	0</span><br><span class="line">r10            0x7ffd494f4760	140725833385824</span><br><span class="line">r11            0x7f4eddad93e0	139976703316960</span><br><span class="line">r12            0x4004e0	4195552</span><br><span class="line">r13            0x7ffd494f4e60	140725833387616</span><br><span class="line">r14            0x0	0</span><br><span class="line">r15            0x0	0</span><br><span class="line">rip            0x7f4edd9f0763	0x7f4edd9f0763 &lt;__strcpy_sse2_unaligned+883&gt;</span><br><span class="line">eflags         0x10202	[ IF RF ]</span><br><span class="line">cs             0x33	51</span><br><span class="line">ss             0x2b	43</span><br><span class="line">ds             0x0	0</span><br><span class="line">es             0x0	0</span><br><span class="line">fs             0x0	0</span><br><span class="line">gs             0x0	0</span><br></pre></td></tr></table></figure></p>
+<p>查看<code>rbp</code>寄存器的内容。因为栈是向低地址增长，所以查看<code>rbp</code>可以看到之前调用的栈桢信息。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x /32x $rbp</span><br><span class="line">0x7ffd494f4d40:	0x00007ffd494f4d60	0x000000000040066e</span><br><span class="line">0x7ffd494f4d50:	0x0000000000000000	0x0000000100000002</span><br><span class="line">0x7ffd494f4d60:	0x00007ffd494f4d80	0x0000000000400690</span><br><span class="line">0x7ffd494f4d70:	0x00007ffd494f4e60	0x0000000500000006</span><br><span class="line">0x7ffd494f4d80:	0x0000000000000000	0x00007f4edd978445</span><br><span class="line">0x7ffd494f4d90:	0x0000000000000000	0x00007ffd494f4e68</span><br><span class="line">0x7ffd494f4da0:	0x0000000100000000	0x0000000000400670</span><br><span class="line">0x7ffd494f4db0:	0x0000000000000000	0x23b9366563a7f68a</span><br><span class="line">0x7ffd494f4dc0:	0x00000000004004e0	0x00007ffd494f4e60</span><br><span class="line">0x7ffd494f4dd0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffd494f4de0:	0xdc43a4fbf887f68a	0xdd248d4a645df68a</span><br><span class="line">0x7ffd494f4df0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffd494f4e00:	0x0000000000000000	0x00007f4eddd32b03</span><br><span class="line">0x7ffd494f4e10:	0x00007f4eddf46150	0x0000000000000003</span><br><span class="line">0x7ffd494f4e20:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffd494f4e30:	0x00000000004004e0	0x00007ffd494f4e60</span><br></pre></td></tr></table></figure></p>
+<p>当前<code>rbp</code>的地址是0x7ffd494f4d40,<code>rbp</code>所保存的是上一栈桢的<code>rbp</code>地址，也就是上一栈桢的<code>rbp</code>地址是0x00007ffd494f4d60。再往高地址看，0x000000000040066e地址保存的是上一栈桢的下个指令地址，也就是当执行完这个函数调用返回后，下一个执行的指令是0x000000000040066e，即<code>bar()</code>函数在执行完<code>call foo()</code>之后的下一条指令。上一栈桢的<code>rbp</code>0x00007ffd494f4d60保存的是上上一栈桢的<code>rbp</code>0x00007ffd494f4d80，<code>rbp</code>往高地址增长的第一个地址是0x0000000000400690，即<code>main()</code>函数在执行完<code>call bar()</code>之后的下一条指令。<br>按照栈桢的结构推导出程序的运行顺序：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x00007f4edd9f0763</span></span><br><span class="line"><span class="number">0x000000000040066e</span></span><br><span class="line"><span class="number">0x0000000000400690</span></span><br></pre></td></tr></table></figure></p>
+<p>好像少了一个函数？可以看看<code>rsp</code>里放了什么东西<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x /<span class="number">8</span>x <span class="number">0x7ffee6a0d748</span></span><br><span class="line"><span class="number">0x7ffee6a0d748</span>:	<span class="number">0x000000000040063f</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x7ffee6a0d758</span>:	<span class="number">0x0000000100000002</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x7ffee6a0d768</span>:	<span class="number">0x0000000300000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x7ffee6a0d778</span>:	<span class="number">0x0000000300000002</span>	<span class="number">0x00007ffee6a0d7a0</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到已经在调用<code>strcpy</code>前将返回地址0x000000000040063f压栈了。</p>
+<p>maps文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ps -ef| grep asm</span><br><span class="line">root      2530  2254  0 00:17 pts/1    00:00:00 ./asm</span><br><span class="line">root      2532  2449  0 00:17 pts/0    00:00:00 grep --color=auto asm</span><br><span class="line">[root@localhost ~]# cat /proc/2530/maps</span><br><span class="line">00400000-00401000 r-xp 00000000 fd:00 9424600                            /root/asm</span><br><span class="line">00600000-00601000 r--p 00000000 fd:00 9424600                            /root/asm</span><br><span class="line">00601000-00602000 rw-p 00001000 fd:00 9424600                            /root/asm</span><br><span class="line">7f4edd956000-7f4eddb19000 r-xp 00000000 fd:00 82351                      /usr/lib64/libc-2.17.so</span><br><span class="line">7f4eddb19000-7f4eddd18000 ---p 001c3000 fd:00 82351                      /usr/lib64/libc-2.17.so</span><br><span class="line">7f4eddd18000-7f4eddd1c000 r--p 001c2000 fd:00 82351                      /usr/lib64/libc-2.17.so</span><br><span class="line">7f4eddd1c000-7f4eddd1e000 rw-p 001c6000 fd:00 82351                      /usr/lib64/libc-2.17.so</span><br><span class="line">7f4eddd1e000-7f4eddd23000 rw-p 00000000 00:00 0</span><br><span class="line">7f4eddd23000-7f4eddd45000 r-xp 00000000 fd:00 82344                      /usr/lib64/ld-2.17.so</span><br><span class="line">7f4eddf37000-7f4eddf3a000 rw-p 00000000 00:00 0</span><br><span class="line">7f4eddf41000-7f4eddf44000 rw-p 00000000 00:00 0</span><br><span class="line">7f4eddf44000-7f4eddf45000 r--p 00021000 fd:00 82344                      /usr/lib64/ld-2.17.so</span><br><span class="line">7f4eddf45000-7f4eddf46000 rw-p 00022000 fd:00 82344                      /usr/lib64/ld-2.17.so</span><br><span class="line">7f4eddf46000-7f4eddf47000 rw-p 00000000 00:00 0</span><br><span class="line">7ffd494d6000-7ffd494f7000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffd4955f000-7ffd49561000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/assembly/" rel="tag"># assembly</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017-08-06-sock5-proto/" rel="next" title="socks5协议">
+                <i class="fa fa-chevron-left"></i> socks5协议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017-10-29-linux-data_struct/" rel="prev" title="linux内核使用的数据结构">
+                linux内核使用的数据结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lankstra</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lankstra.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://lansheng.pro/2017-09-21-x86-assembly/';
+          this.page.identifier = '2017-09-21-x86-assembly/';
+          this.page.title = 'x86_64汇编';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lankstra.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
